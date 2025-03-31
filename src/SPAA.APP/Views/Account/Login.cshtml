@@ -1,0 +1,37 @@
+﻿@model Projeto.App.ViewModels.RegisterViewModel
+
+<h2>teste</h2>
+
+<form asp-action="Register" method="post">
+    <div>
+        <label asp-for="Matricula"></label>
+        <input asp-for="Matricula" />
+        <span asp-validation-for="Matricula"></span>
+    </div>
+    <div>
+        <label asp-for="Nome"></label>
+        <input asp-for="Nome" />
+        <span asp-validation-for="Nome"></span>
+    </div>
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <label asp-for="SemestreEntrada"></label>
+        <input asp-for="SemestreEntrada" />
+        <span asp-validation-for="SemestreEntrada"></span>
+    </div>
+    <div>
+        <label asp-for="Senha"></label>
+        <input asp-for="Senha" type="password" />
+        <span asp-validation-for="Senha"></span>
+    </div>
+    <div>
+        <label asp-for="ConfirmacaoSenha"></label>
+        <input asp-for="ConfirmacaoSenha" type="password" />
+        <span asp-validation-for="ConfirmacaoSenha"></span>
+    </div>
+    <button type="submit">Registrar</button>
+</form>

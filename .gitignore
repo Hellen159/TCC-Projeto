@@ -1,0 +1,63 @@
+# Binário e arquivos temporários
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+*.vspscc
+*.vssscc
+
+# Configuração do Visual Studio
+.vs/
+*.suo
+*.user
+*.csproj.user
+*.dbmdl
+*.sln.docstates
+
+# Arquivos gerados pelo NuGet
+packages/
+project.lock.json
+project.assets.json
+*.nupkg
+*.snupkg
+.nuget/
+
+# Configuração do Rider (JetBrains)
+.idea/
+
+# Configuração do Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# Configuração de build
+BuildOutput/
+Publish/
+dist/
+Debug/
+Release/
+
+# Arquivos de log
+*.log
+*.tlog
+
+# Configuração de usuário e cache
+*.userprefs
+*.rsuser
+*.suo
+*.user
+*.swp
+*.sln.cache
+
+# Banco de dados local (caso use LocalDB)
+App_Data/*.mdf
+App_Data/*.ldf
+
+# Arquivos do Docker (caso tenha)
+docker-compose.override.yml
+**/docker-compose.*.yml
+
+# Secrets (caso tenha um .NET user-secrets configurado)
+secrets.json
