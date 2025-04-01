@@ -156,11 +156,8 @@ namespace SPAA.Data.Migrations
 
             modelBuilder.Entity("SPAA.Business.Models.Aluno", b =>
                 {
-                    b.Property<int>("Matricula")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Matricula"));
+                    b.Property<string>("Matricula")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
