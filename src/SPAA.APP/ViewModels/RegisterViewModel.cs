@@ -28,7 +28,7 @@ namespace Projeto.App.ViewModels
 
         [Required]
         [Display(Name = "Matricula")]
-        public int Matricula { get; set; }
+        public string Matricula { get; set; }
 
         [Required]
         [Display(Name = "Semestre de entrada")]

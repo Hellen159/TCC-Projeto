@@ -22,42 +22,35 @@ public class AccountController : Controller
         return View();
     }
 
-    [HttpGet]
-    public IActionResult Login()
-    {
-        return View();
-    }
-        
-
     [HttpPost]
-    public async Task<IActionResult> Register(RegisterViewModel model)
+    public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
     {
         if (ModelState.IsValid)
         {
-            //var existingUser = await _applicationUserRepository.FindByEmailAsync(model.Email);
+            //var existingUser = await _applicationUserRepository.FindByEmailAsync(registerViewModel.Email);
             //if (existingUser != null)
             //{
-            //    ModelState.AddModelError("Email", "Este email já está em uso.");
-            //    return View(model);
+            //    registerViewModelState.AddregisterViewModelError("Email", "Este email já está em uso.");
+            //    return View(registerViewModel);
             //}
 
             // 1. Criar o ApplicationUser
             var user = new ApplicationUser
             {
-                UserName = model.Email,
-                Email = model.Email
+                UserName = registerViewModel.Matricula,
+                Email = registerViewModel.Email
             };
 
-            var result = await _applicationUserRepository.CriarApplicationUser(user, model.Senha); // Chamar serviço para criar o usuário
+            var result = await _applicationUserRepository.RegistrarApplicationUser(user, registerViewModel.Senha); // Chamar serviço para criar o usuário
 
             if (result.Succeeded)
             {
                 // 2. Criar o Aluno
                 var aluno = new Aluno
                 {
-                    Matricula = model.Matricula,
-                    Nome = model.Nome,
-                    SemestreEntrada = model.SemestreEntrada,
+                    Matricula = registerViewModel.Matricula,
+                    Nome = registerViewModel.Nome,
+                    SemestreEntrada = registerViewModel.SemestreEntrada,
                     UserId = user.Id // Relacionamento entre o Aluno e o ApplicationUser
                 };
 
@@ -65,11 +58,11 @@ public class AccountController : Controller
                 await _alunoRepository.CriarAluno(aluno); // Chamar serviço para criar o aluno
 
                 // Redireciona ou faz algo após o sucesso
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Login", "Account");
             }
             else
             {
-                // Adiciona erros ao ModelState
+                // Adiciona erros ao registerViewModelState
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
@@ -78,6 +71,33 @@ public class AccountController : Controller
 
         }
 
-        return View(model); // Se o modelo não for válido, retorna a view com os erros.
+        return View(registerViewModel); // Se o modelo não for válido, retorna a view com os erros.
+    }
+
+    [HttpGet]
+    public IActionResult Login()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Login(LoginViewModel loginViewModel)
+    {
+        var result = await _applicationUserRepository.LogarApplicationUser(loginViewModel.Matricula, loginViewModel.Senha);
+        if (result.Succeeded)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
+        ModelState.AddModelError("", "Login inválido");
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Logout()
+    {
+        await _applicationUserRepository.LogoutApplicationUser();
+        return RedirectToAction("Login", "Account");
     }
 }
+

@@ -8,7 +8,7 @@ namespace SPAA.Business.Models
 {
     public class Aluno
     {
-        public int Matricula { get; set; }
+        public string Matricula { get; set; }
         public string Nome { get; set; }
         public string SemestreEntrada { get; set; }
 

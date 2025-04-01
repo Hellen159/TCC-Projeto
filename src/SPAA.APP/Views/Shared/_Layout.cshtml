@@ -14,15 +14,20 @@
             <div class="container-fluid">
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav ms-auto ">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Registro</a>
-                        </li>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li>@User.Identity.Name</li>
+                                <li>
+                                    <form asp-action="Logout" asp-controller="Account" method="post">
+                                        <button type="submit">Logout</button>
+                                    </form>
+                                </li>
+                            }
+                            else
+                            {
+                                <li><a asp-action="Login" asp-controller="Account">Login</a></li>
+                                <li><a asp-action="Register" asp-controller="Account">Register</a></li>
+                            }
                     </ul>
                 </div>
             </div>
