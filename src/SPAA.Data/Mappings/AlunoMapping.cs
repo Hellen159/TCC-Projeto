@@ -17,11 +17,11 @@ namespace SPAA.Data.Mappings
 
             builder.Property(x => x.Nome)
                 .IsRequired()
-                .HasColumnType("varchar(100)");
+                .HasColumnType("varchar(150)");
 
             builder.Property(x => x.SemestreEntrada)
                 .IsRequired()
-                .HasColumnType("varchar(6)");
+                .HasColumnType("varchar(7)");
         }
     }
 }

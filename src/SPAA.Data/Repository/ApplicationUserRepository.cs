@@ -14,7 +14,7 @@ namespace SPAA.Data.Repository
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public ApplicationUserRepository(UserManager<ApplicationUser> userManager, 
+        public ApplicationUserRepository(UserManager<ApplicationUser> userManager,
                                          SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
@@ -36,6 +36,33 @@ namespace SPAA.Data.Repository
         public async Task LogoutApplicationUser()
         {
             await _signInManager.SignOutAsync();
+        }
+
+        public async Task<IdentityResult> RemoverApplicationUser(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                throw new Exception("Usuário não encontrado.");
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+            return result;
+        }
+
+        public async Task<ApplicationUser> ObterPorEmail(string email)
+        {
+            return await _userManager.FindByEmailAsync(email);
+        }
+
+        public async Task<string> GerarTokenResetSenha(ApplicationUser user)
+        {
+            return await _userManager.GeneratePasswordResetTokenAsync(user);
+        }
+
+        public async Task<IdentityResult> ResetarSenha(ApplicationUser user, string token, string novaSenha)
+        {
+            return await _userManager.ResetPasswordAsync(user, token, novaSenha);
         }
     }
 }

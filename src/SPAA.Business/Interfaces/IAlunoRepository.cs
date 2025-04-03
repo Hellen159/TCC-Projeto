@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace SPAA.Business.Interfaces
 {
-    public interface IAlunoRepository 
+    public interface IAlunoRepository : IRepository<Aluno, string>
     {
-        Task CriarAluno(Aluno aluno);
+        Task<string> ObterIdentityUserIdPorMatricula(string matricula);
     }
 }

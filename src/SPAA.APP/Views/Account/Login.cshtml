@@ -1,6 +1,6 @@
 ﻿@model Projeto.App.ViewModels.LoginViewModel
 
-<h2>teste</h2>
+<h2>Login</h2>
 
 <form asp-action="Login" method="post">
     <div>
@@ -14,4 +14,24 @@
         <span asp-validation-for="Senha"></span>
     </div>
     <button type="submit">Entrar</button>
+    <p>Esqueceu sua senha? <a asp-action="ForgotPassword" asp-controller="Account">Clique aqui</a> para redefinir.</p>
 </form>
+
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Verifica se há uma mensagem de sucesso no TempData -->
+@if (TempData["MensagemSucesso"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Cadastro realizado!',
+            text: '@TempData["MensagemSucesso"]',
+            confirmButtonText: 'OK'
+        });
+    </script>
+}

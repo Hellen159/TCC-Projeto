@@ -161,11 +161,11 @@ namespace SPAA.Data.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(150)");
 
                     b.Property<string>("SemestreEntrada")
                         .IsRequired()
-                        .HasColumnType("varchar(6)");
+                        .HasColumnType("varchar(7)");
 
                     b.Property<string>("UserId")
                         .IsRequired()

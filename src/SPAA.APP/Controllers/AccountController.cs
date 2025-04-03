@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Projeto.App.ViewModels;
+using SPAA.App.ViewModels;
 using SPAA.Business.Interfaces;
 using SPAA.Business.Models;
 
@@ -8,12 +9,16 @@ public class AccountController : Controller
 {
     private readonly IAlunoRepository _alunoRepository;
     private readonly IApplicationUserRepository _applicationUserRepository;
+    private readonly IEmailService _emailService;
 
     public AccountController(IAlunoRepository alunoRepository,
-                             IApplicationUserRepository applicationUserRepository)
+                             IApplicationUserRepository applicationUserRepository,
+                             IEmailService emailService)
     {
         _alunoRepository = alunoRepository;
         _applicationUserRepository = applicationUserRepository;
+        _emailService = emailService;
+
     }
 
     [HttpGet]
@@ -25,54 +30,74 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
     {
-        if (ModelState.IsValid)
-        {
-            //var existingUser = await _applicationUserRepository.FindByEmailAsync(registerViewModel.Email);
-            //if (existingUser != null)
-            //{
-            //    registerViewModelState.AddregisterViewModelError("Email", "Este email já está em uso.");
-            //    return View(registerViewModel);
-            //}
+        if (!ModelState.IsValid)
+            return View(registerViewModel);
 
-            // 1. Criar o ApplicationUser
+        try
+        {
+            // Verificação de duplicidade de e-mail
+            var userExistente = await _applicationUserRepository.ObterPorEmail(registerViewModel.Email);
+            if (userExistente != null)
+            {
+                ModelState.AddModelError("Email", "Esse e-mail já está registrado.");
+                return View(registerViewModel);
+            }
+
+            // Verificação de duplicidade de matrícula
+            var alunoExistente = await _alunoRepository.ObterPorId(registerViewModel.Matricula);
+            if (alunoExistente != null)
+            {
+                ModelState.AddModelError("Matricula", "Essa matrícula já pertence a outro usuário.");
+                return View(registerViewModel);
+            }
+
+            // Criação do usuário
             var user = new ApplicationUser
             {
-                UserName = registerViewModel.Matricula,
+                UserName = registerViewModel.Matricula.ToString(),
                 Email = registerViewModel.Email
             };
 
-            var result = await _applicationUserRepository.RegistrarApplicationUser(user, registerViewModel.Senha); // Chamar serviço para criar o usuário
+            var result = await _applicationUserRepository.RegistrarApplicationUser(user, registerViewModel.Senha);
 
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                // 2. Criar o Aluno
-                var aluno = new Aluno
-                {
-                    Matricula = registerViewModel.Matricula,
-                    Nome = registerViewModel.Nome,
-                    SemestreEntrada = registerViewModel.SemestreEntrada,
-                    UserId = user.Id // Relacionamento entre o Aluno e o ApplicationUser
-                };
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError(string.Empty, error.Description);
+                return View(registerViewModel);
+            }
 
-                // 3. Salvar o Aluno no banco de dados
-                await _alunoRepository.CriarAluno(aluno); // Chamar serviço para criar o aluno
+            // Criação do aluno vinculado ao usuário
+            var aluno = new Aluno
+            {
+                Matricula = registerViewModel.Matricula,
+                Nome = registerViewModel.Nome,
+                SemestreEntrada = $"{registerViewModel.SemestreEntrada}/{registerViewModel.AnoEntrada}",
+                UserId = user.Id
+            };
 
-                // Redireciona ou faz algo após o sucesso
+            try
+            {
+                await _alunoRepository.Adicionar(aluno);
+
+                // TempData para passar a mensagem de sucesso
+                TempData["MensagemSucesso"] = "Cadastro realizado com sucesso!";
                 return RedirectToAction("Login", "Account");
             }
-            else
+            catch (Exception ex)
             {
-                // Adiciona erros ao registerViewModelState
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
+                await _applicationUserRepository.RemoverApplicationUser(user.Id);
+                ModelState.AddModelError(string.Empty, $"Erro ao salvar o aluno no banco de dados: {ex.Message}");
+                return View(registerViewModel);
             }
-
         }
-
-        return View(registerViewModel); // Se o modelo não for válido, retorna a view com os erros.
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, $"Erro durante o cadastro: {ex.Message}");
+            return View(registerViewModel);
+        }
     }
+
 
     [HttpGet]
     public IActionResult Login()
@@ -98,6 +123,77 @@ public class AccountController : Controller
     {
         await _applicationUserRepository.LogoutApplicationUser();
         return RedirectToAction("Login", "Account");
+    }
+
+    [HttpGet]
+    public IActionResult ForgotPassword()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+    {
+        if (!ModelState.IsValid)
+            return View(model);
+
+        var user = await _applicationUserRepository.ObterPorEmail(model.Email);
+        if (user == null)
+        {
+            // Não revelar se o usuário não existe
+            TempData["MensagemSucesso"] = "Se o e-mail estiver cadastrado, você receberá um link de redefinição de senha.";
+            return RedirectToAction("Login");
+        }
+
+        var token = await _applicationUserRepository.GerarTokenResetSenha(user);
+
+        var callbackUrl = Url.Action(
+            nameof(ResetPassword),
+            "Account",
+            new { token, email = user.Email },
+            protocol: HttpContext.Request.Scheme);
+
+        // Enviar e-mail com o link de redefinição (você pode usar um serviço de e-mail)
+        await _emailService.EnviarEmailAsync(user.Email, "Redefinição de Senha",
+            $"Clique no link para redefinir sua senha: <a href='{callbackUrl}'>Redefinir Senha</a>");
+
+        TempData["MensagemSucesso"] = "Se o e-mail estiver cadastrado, você receberá um link de redefinição de senha.";
+        return RedirectToAction("Login");
+    }
+
+    [HttpGet]
+    public IActionResult ResetPassword(string token, string email)
+    {
+        var model = new ResetPasswordViewModel { Token = token, Email = email };
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+    {
+        if (!ModelState.IsValid)
+            return View(model);
+
+        var user = await _applicationUserRepository.ObterPorEmail(model.Email);
+        if (user == null)
+        {
+            TempData["MensagemErro"] = "Usuário não encontrado.";
+            return RedirectToAction("Login");
+        }
+
+        var result = await _applicationUserRepository.ResetarSenha(user, model.Token, model.Senha);
+        if (result.Succeeded)
+        {
+            TempData["MensagemSucesso"] = "Senha redefinida com sucesso!";
+            return RedirectToAction("Login");
+        }
+
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError(string.Empty, error.Description);
+        }
+
+        return View(model);
     }
 }
 
