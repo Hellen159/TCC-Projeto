@@ -12,8 +12,8 @@ using SPAA.Data.Context;
 namespace SPAA.Data.Migrations
 {
     [DbContext(typeof(MeuDbContext))]
-    [Migration("20250330234634_initial")]
-    partial class initial
+    [Migration("20250401020824_inicial")]
+    partial class inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
