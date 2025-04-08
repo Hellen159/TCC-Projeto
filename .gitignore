@@ -61,3 +61,5 @@ docker-compose.override.yml
 
 # Secrets (caso tenha um .NET user-secrets configurado)
 secrets.json
+
+**/Migrations/

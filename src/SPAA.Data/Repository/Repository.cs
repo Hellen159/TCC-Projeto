@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SPAA.Data.Repository
 {
-    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public abstract class Repository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : class, new()
     {
         protected readonly MeuDbContext _context;
         protected readonly DbSet<TEntity> DbSet;
@@ -20,18 +20,37 @@ namespace SPAA.Data.Repository
             DbSet = context.Set<TEntity>();
         }
 
-        public async Task Adicionar(TEntity entity)
+        public async Task<bool> Adicionar(TEntity entity)
         {
             DbSet.Add(entity);
             await SaveChanges();
+            return true;
         }
+
+        public async Task<TEntity> ObterPorId(TKey codigo)
+        {
+            return await DbSet.FindAsync(codigo);
+        }
+
+        public async Task Remover(TKey codigo)
+        {
+            var entity = await ObterPorId(codigo);
+            if (entity == null)
+                throw new InvalidOperationException("Entidade não encontrada.");
+
+            DbSet.Remove(entity);
+            await SaveChanges();
+        }
+
         public async Task<int> SaveChanges()
         {
             return await _context.SaveChangesAsync();
         }
+
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _context?.Dispose();
         }
+
     }
 }
