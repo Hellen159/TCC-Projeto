@@ -4,6 +4,7 @@ using SPAA.Business.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,15 +14,33 @@ namespace SPAA.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Aluno> builder)
         {
-            builder.HasKey(x => x.Matricula);
+            builder.ToTable("alunos");
 
-            builder.Property(x => x.Nome)
+            builder.HasKey(a => a.Matricula);
+
+            builder.Property(a => a.Matricula)
+                .HasColumnName("matricula");
+
+            builder.Property(a => a.NomeAluno)
                 .IsRequired()
+                .HasColumnName("nome")
                 .HasColumnType("varchar(150)");
 
-            builder.Property(x => x.SemestreEntrada)
+            builder.Property(a => a.SemestreEntrada)
                 .IsRequired()
+                .HasColumnName("semestre_entrada")
                 .HasColumnType("varchar(7)");
+
+            builder.Property(a => a.HistoricoAnexado)
+                .HasColumnName("historico_anexado")
+                .HasColumnType("TINYINT(0)");
+
+            builder.Property(a => a.CodigoUser)
+            .HasColumnName("user_id");
+
+            builder.HasOne(a => a.User)
+                .WithOne(u => u.Aluno)
+                .HasForeignKey<Aluno>(a => a.CodigoUser);
         }
     }
 }
