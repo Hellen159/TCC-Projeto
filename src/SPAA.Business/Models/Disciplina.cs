@@ -8,16 +8,15 @@ namespace SPAA.Business.Models
 {
     public class Disciplina
     {
+        public int Id { get; set; }
         public string CodigoDisciplina { get; set; }
         public string NomeDisciplina { get; set; }
         public int CargaHoraria { get; set; }
 
-        //relacao com tipoDisciplina
-        public int CodigoTipoDisciplina { get; set; }
-        public TipoDisciplina TipoDisciplina { get; set; }
+        public string Curriculo { get; set; }
 
-        //relacao com curso 
+        public int CodigoTipoDisciplina { get; set; }
+
         public int CodigoCurso { get; set; }
-        public Curso Curso { get; set; }
     }
 }

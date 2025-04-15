@@ -16,9 +16,9 @@
         @TempData["MensagemSucesso"]
     </div>
 }
-@if (TempData["MensagemErro"] != null)
+@if (TempData["ErrorMessage"] != null)
 {
     <div class="alert alert-danger">
-        @TempData["MensagemErro"]
+        @TempData["ErrorMessage"]
     </div>
 }

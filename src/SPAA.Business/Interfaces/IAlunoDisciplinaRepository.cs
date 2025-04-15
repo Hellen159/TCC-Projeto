@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace SPAA.Business.Interfaces
 {
-    public interface IDisciplinaRepository : IRepository<Disciplina, string>
+    public interface IAlunoDisciplinaRepository : IRepository<AlunoDisciplina, string>
     {
-        Task<Disciplina> ObterDisciplinaPorCodigo(string codigoDisciplina);
+        Task<(bool isValid, string mensagem)> ConsumirHistoricoPdf(IFormFile pdf, string matricula);
+
     }
 }

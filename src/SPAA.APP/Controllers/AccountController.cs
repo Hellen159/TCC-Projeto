@@ -72,7 +72,7 @@ public class AccountController : Controller
             {
                 Matricula = registerViewModel.Matricula,
                 NomeAluno = registerViewModel.Nome,
-                SemestreEntrada = $"{registerViewModel.SemestreEntrada}/{registerViewModel.AnoEntrada}",
+                SemestreEntrada = $"{registerViewModel.AnoEntrada}.{registerViewModel.SemestreEntrada}",
                 CodigoUser = user.Id
             };
 

@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SPAA.APP.Models;
+using SPAA.Business.Interfaces;
+using SPAA.Data.Context;
 using System.Diagnostics;
 
 namespace SPAA.APP.Controllers
@@ -7,22 +9,32 @@ namespace SPAA.APP.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IAlunoRepository _alunoRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+
+        public HomeController(ILogger<HomeController> logger,
+                               IAlunoRepository alunoRepository)
         {
             _logger = logger;
+            _alunoRepository = alunoRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            // Verifica se o usuário está autenticado
             if (!User.Identity.IsAuthenticated)
             {
-                // Redireciona para a página de login se não autenticado
                 return RedirectToAction("Login", "Account");
             }
 
+            var userId = User.Identity.Name;
+            var verificaHistorico = await _alunoRepository.AlunoJaAnexouHistorico(userId);
+            if (verificaHistorico == false)
+            {
+                return RedirectToAction("UploadHistorico", "Upload"); 
+            }
+
             return View();
+
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

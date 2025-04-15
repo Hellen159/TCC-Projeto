@@ -15,7 +15,12 @@ namespace SPAA.Data.Mappings
         {
             builder.ToTable("disciplinas");
 
-            builder.HasKey(d => d.CodigoDisciplina);
+            builder.HasKey(d => d.Id);
+
+            builder.Property(d => d.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("id")
+                .IsRequired();
 
             builder.Property(d => d.CodigoDisciplina)
                 .ValueGeneratedNever()
@@ -34,14 +39,9 @@ namespace SPAA.Data.Mappings
 
             builder.Property(d => d.CodigoCurso)
                 .HasColumnName("cd_curso");
-
-            builder.HasOne(d => d.TipoDisciplina)
-                .WithMany()
-                .HasForeignKey(d => d.CodigoTipoDisciplina);
-
-            builder.HasOne(d => d.Curso)
-                .WithMany()
-                .HasForeignKey(d => d.CodigoCurso);
+            
+            builder.Property(d => d.Curriculo)
+                .HasColumnName("curriculo");
         }
     }
 }

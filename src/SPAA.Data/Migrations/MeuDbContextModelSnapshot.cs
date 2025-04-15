@@ -157,26 +157,62 @@ namespace SPAA.Data.Migrations
             modelBuilder.Entity("SPAA.Business.Models.Aluno", b =>
                 {
                     b.Property<string>("Matricula")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("matricula");
 
-                    b.Property<string>("Nome")
+                    b.Property<string>("CodigoUser")
                         .IsRequired()
-                        .HasColumnType("varchar(150)");
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("user_id");
+
+                    b.Property<sbyte>("HistoricoAnexado")
+                        .HasColumnType("TINYINT(0)")
+                        .HasColumnName("historico_anexado");
+
+                    b.Property<string>("NomeAluno")
+                        .IsRequired()
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("nome");
 
                     b.Property<string>("SemestreEntrada")
                         .IsRequired()
-                        .HasColumnType("varchar(7)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("varchar(7)")
+                        .HasColumnName("semestre_entrada");
 
                     b.HasKey("Matricula");
 
-                    b.HasIndex("UserId")
+                    b.HasIndex("CodigoUser")
                         .IsUnique();
 
-                    b.ToTable("Alunos");
+                    b.ToTable("alunos", (string)null);
+                });
+
+            modelBuilder.Entity("SPAA.Business.Models.AlunoDisciplina", b =>
+                {
+                    b.Property<string>("Matricula")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("matricula");
+
+                    b.Property<string>("CodigoDisciplina")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("codigo_disciplina");
+
+                    b.Property<string>("Semestre")
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("semestre");
+
+                    b.Property<string>("Situacao")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("situacao");
+
+                    b.HasKey("Matricula", "CodigoDisciplina", "Semestre");
+
+                    b.ToTable("alunos_disciplinas", (string)null);
                 });
 
             modelBuilder.Entity("SPAA.Business.Models.ApplicationUser", b =>
@@ -243,6 +279,123 @@ namespace SPAA.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("SPAA.Business.Models.Curso", b =>
+                {
+                    b.Property<int>("CodigoCurso")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("cd_curso");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("CodigoCurso"));
+
+                    b.Property<int>("CargaHorariaObrigatoria")
+                        .HasColumnType("int")
+                        .HasColumnName("carga_horaria_obrigatoria");
+
+                    b.Property<int>("CargaHorariaOptativa")
+                        .HasColumnType("int")
+                        .HasColumnName("carga_horaria_optativa");
+
+                    b.Property<string>("NomeCurso")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("nome");
+
+                    b.HasKey("CodigoCurso");
+
+                    b.ToTable("cursos", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            CodigoCurso = 1,
+                            CargaHorariaObrigatoria = 0,
+                            CargaHorariaOptativa = 0,
+                            NomeCurso = "comum"
+                        },
+                        new
+                        {
+                            CodigoCurso = 2,
+                            CargaHorariaObrigatoria = 0,
+                            CargaHorariaOptativa = 0,
+                            NomeCurso = "software"
+                        });
+                });
+
+            modelBuilder.Entity("SPAA.Business.Models.Disciplina", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CargaHoraria")
+                        .HasColumnType("int")
+                        .HasColumnName("carga_horaria");
+
+                    b.Property<int>("CodigoCurso")
+                        .HasColumnType("int")
+                        .HasColumnName("cd_curso");
+
+                    b.Property<string>("CodigoDisciplina")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("cd_disciplina");
+
+                    b.Property<int>("CodigoTipoDisciplina")
+                        .HasColumnType("int")
+                        .HasColumnName("cd_tipo_disciplina");
+
+                    b.Property<string>("Curriculo")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("curriculo");
+
+                    b.Property<string>("NomeDisciplina")
+                        .IsRequired()
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("nome");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("disciplinas", (string)null);
+                });
+
+            modelBuilder.Entity("SPAA.Business.Models.TipoDisciplina", b =>
+                {
+                    b.Property<int>("CodigoTipoDisiciplina")
+                        .HasColumnType("int")
+                        .HasColumnName("cd_tipo_disciplina");
+
+                    b.Property<string>("NomeTipoDisciplina")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("nome");
+
+                    b.HasKey("CodigoTipoDisiciplina");
+
+                    b.ToTable("tipos_disciplinas", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            CodigoTipoDisiciplina = 1,
+                            NomeTipoDisciplina = "Obrigatoria"
+                        },
+                        new
+                        {
+                            CodigoTipoDisiciplina = 2,
+                            NomeTipoDisciplina = "Optativa"
+                        },
+                        new
+                        {
+                            CodigoTipoDisiciplina = 3,
+                            NomeTipoDisciplina = "ModuloLivre"
+                        });
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -298,7 +451,7 @@ namespace SPAA.Data.Migrations
                 {
                     b.HasOne("SPAA.Business.Models.ApplicationUser", "User")
                         .WithOne("Aluno")
-                        .HasForeignKey("SPAA.Business.Models.Aluno", "UserId")
+                        .HasForeignKey("SPAA.Business.Models.Aluno", "CodigoUser")
                         .IsRequired();
 
                     b.Navigation("User");
