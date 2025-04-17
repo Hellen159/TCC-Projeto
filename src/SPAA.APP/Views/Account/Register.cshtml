@@ -1,15 +1,18 @@
 ﻿@model Projeto.App.ViewModels.RegisterViewModel
 @section Styles {
-    <link rel="stylesheet" href="~/css/register.css" />
+    <link rel="stylesheet" href="~/css/auth.css" />
 }
 
 @{
     ViewData["Title"] = "Registro";
 }
 
-
-<div class="register-container">
-    <div class="register-box">
+<div class="auth-container">
+    <div class="logoSpaa">
+        <img src="~/assets/unbflag.svg" alt="Imagem da Logo da UnB" />
+        <h2 class="subtitle">Sistema de Planejamento<br />Acadêmico Assistido</h2>
+    </div>"
+    <div class="auth-box">
         <h1 class="logo">SPAA</h1>
         <h2 class="subtitle">Universidade de Brasília</h2>
         <h3 class="form-title">Formulário de Registro</h3>
@@ -17,51 +20,49 @@
 
         <form method="post" asp-action="Register">
             <div class="form-group">
-                <label asp-for="Nome"></label>
-                <input asp-for="Nome" />
+                <input asp-for="Nome" placeholder="Nome completo" />
                 <span asp-validation-for="Nome"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email"></label>
-                <input asp-for="Email" />
+                <input asp-for="Email" placeholder="Email institucional" />
                 <span asp-validation-for="Email"></span>
             </div>
+            <div class="form-row">
                 <div class="form-group">
-        <label asp-for="SemestreEntrada"></label>
-        <select asp-for="SemestreEntrada" class="form-control">
-            <option value="01">01</option>
-            <option value="02">02</option>
-        </select>
-        <span asp-validation-for="SemestreEntrada" class="text-danger"></span>
-    </div>
+                    <select asp-for="SemestreEntrada" class="form-control">
+                        <option value="">Semestre de entrada</option>
+                        <option value="01">01</option>
+                        <option value="02">02</option>
+                    </select>
+                    <span asp-validation-for="SemestreEntrada" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label asp-for="AnoEntrada"></label>
-        <select asp-for="AnoEntrada" class="form-control">
-            @for (int ano = 2025; ano >= 2015; ano--)
-            {
-                <option value="@ano">@ano</option>
-            }
-        </select>
-        <span asp-validation-for="AnoEntrada" class="text-danger"></span>
-    </div>
+                <div class="form-group">
+                    <select asp-for="AnoEntrada" class="form-control">
+                        <option value="">Ano de entrada</option>
+                        @for (int ano = 2025; ano >= 2015; ano--)
+                        {
+                            <option value="@ano">@ano</option>
+                        }
+                    </select>
+                    <span asp-validation-for="AnoEntrada" class="text-danger"></span>
+                </div>
+            </div>
+
             <div class="form-group">
-                <label asp-for="Senha"></label>
-                <input asp-for="Senha" type="password" />
+                <input asp-for="Senha" type="password" placeholder="Senha" />
                 <span asp-validation-for="Senha"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ConfirmacaoSenha"></label>
-                <input asp-for="ConfirmacaoSenha" type="password" />
+                <input asp-for="ConfirmacaoSenha" type="password" placeholder="Confirmar senha" />
                 <span asp-validation-for="ConfirmacaoSenha"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Matricula"></label>
-                <input asp-for="Matricula" />
+                <input asp-for="Matricula" placeholder="Matrícula" />
                 <span asp-validation-for="Matricula"></span>
             </div>
 
-            <button type="submit">Registrar</button>
+            <button type="submit"> <img src="~/assets/buttomLoginRegister.svg" alt="Ícone de usuário" class="icon" /> Registrar</button>
         </form>
     </div>
-<div>
+</div>
