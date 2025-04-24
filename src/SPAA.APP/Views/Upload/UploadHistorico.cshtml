@@ -1,0 +1,24 @@
+﻿@model SPAA.App.ViewModels.UploadHistoricoViewModel
+
+<h2>Importar Histórico Acadêmico</h2>
+
+<form asp-action="UploadHistorico" method="post" enctype="multipart/form-data">
+    <div>
+        <label for="historico">Anexar Histórico:</label>
+        <input type="file" id="historico" name="historico" accept=".pdf" required />
+    </div>
+    <button type="submit">Enviar</button>
+</form>
+
+@if (TempData["MensagemSucesso"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["MensagemSucesso"]
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}

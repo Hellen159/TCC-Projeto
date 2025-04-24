@@ -8,8 +8,14 @@ using System.Threading.Tasks;
 
 namespace SPAA.Business.Interfaces
 {
-    public interface IApplicationUserRepository 
+    public interface IApplicationUserRepository
     {
-        Task<IdentityResult> CriarApplicationUser(ApplicationUser user, string password);
+        Task<IdentityResult> RegistrarApplicationUser(ApplicationUser user, string password);
+        Task<SignInResult> LogarApplicationUser(string username, string password);
+        Task LogoutApplicationUser();
+        Task<IdentityResult> RemoverApplicationUser(string userId);
+        Task<ApplicationUser> ObterPorEmail(string email);
+        Task<string> GerarTokenResetSenha(ApplicationUser user);
+        Task<IdentityResult> ResetarSenha(ApplicationUser user, string token, string novaSenha);
     }
 }

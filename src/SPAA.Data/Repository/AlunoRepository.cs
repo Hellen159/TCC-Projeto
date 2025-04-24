@@ -1,4 +1,5 @@
-﻿using SPAA.Business.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using SPAA.Business.Interfaces;
 using SPAA.Business.Models;
 using SPAA.Data.Context;
 using System;
@@ -9,24 +10,33 @@ using System.Threading.Tasks;
 
 namespace SPAA.Data.Repository
 {
-    public class AlunoRepository : IAlunoRepository
+    public class AlunoRepository : Repository<Aluno, string>, IAlunoRepository 
     {
-        private readonly MeuDbContext _context;
+        public AlunoRepository(MeuDbContext context) : base(context) { }
 
-        public AlunoRepository(MeuDbContext context)
+        public async Task<bool> AlunoJaAnexouHistorico(string matricula)
         {
-            _context = context;
+
+            var entidade = await ObterPorId(matricula);
+
+            if (entidade.HistoricoAnexado == false)
+            {
+                return false;
+            }
+
+            return true;
         }
 
-        public async Task CriarAluno(Aluno aluno)
+        public async Task<string> ObterIdentityUserIdPorMatricula(string matricula)
         {
-            _context.Alunos.Add(aluno);
-            await _context.SaveChangesAsync();
-        }
+            var entidade = await ObterPorId(matricula);
 
-        public void Dispose()
-        {
-            throw new NotImplementedException();
+            if (entidade is Aluno aluno)
+            {
+                return aluno.User.Id;
+            }
+
+            throw new Exception("Entidade não encontrada ou não é um Aluno.");
         }
     }
 }
