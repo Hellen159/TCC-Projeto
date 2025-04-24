@@ -50,7 +50,7 @@ namespace SPAA.Data.Repository
                 if (entradas.Any())
                 {
                     DbSet.AddRange(entradas);
-                    await SaveChanges(); 
+                    await SaveChanges();
                 }
 
                 if (codigosNaoEncontrados.Any())
