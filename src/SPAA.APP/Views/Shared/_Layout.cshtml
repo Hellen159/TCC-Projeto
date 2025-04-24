@@ -1,47 +1,61 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var isAuthenticated = User.Identity.IsAuthenticated; // Para verificar se elevai estar logado e mudar o header
+    var currentPath = Context.Request.Path.ToString().ToLower();
+    var linkDestino = currentPath.Contains("login") ? "/Account/Register" :
+                      currentPath.Contains("register") ? "/Account/Login" :
+                      "/Account/Login";
+
+    var textoLink = currentPath.Contains("login") ? "Registre-se" :
+                    currentPath.Contains("register") ? "Login" :
+                    "Login / Registre-se";
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - SPAA.APP</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SPAA.APP.styles.css" asp-append-version="true" />
+    @RenderSection("Styles", required: false)
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav ms-auto ">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Registro</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+
+    <header class="custom-header">
+        <nav class="header-content">
+            <a href="#sobre" class="header-link">Sobre-nós</a>
+            <a href="#docs" class="header-link">Documentação</a>
+
+            @if (!isAuthenticated)
+            {
+                <a href="@linkDestino" class="header-button">
+                    <img src="~/assets/buttomLoginRegister.svg" alt="Ícone de usuário" class="icon" />
+                    @textoLink
+                </a>
+            }
+            else
+            {
+                <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
+                    <button type="submit" class="header-button" style="background:none; border:none; padding:0;">
+                        <img src="~/assets/buttomLoginRegister.svg" alt="Ícone de usuário" class="icon" />
+                        Sair
+                    </button>
+                </form>
+            }
         </nav>
     </header>
+
+
     <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        @RenderBody()
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - SPAA.APP - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
