@@ -1,0 +1,160 @@
+html {
+    margin: 0;
+}
+
+body {
+    width: 100% !important;
+    background: linear-gradient(to right, #fff, #f6f6f6);
+    margin: 0;
+}
+
+.container {
+    max-width: 100%;
+    padding: 0 !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
+
+.login-container {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    grid-template-areas: "esq dir";
+    align-items: center;
+    margin-top: 4%;
+    box-sizing: border-box;
+}
+
+.login-box {
+    width: 100%;
+    padding: 2rem;
+    display: flex;
+    grid-area: dir;
+    flex-direction: column;
+    margin-right: 2rem;
+}
+
+.logoSpaa {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    grid-area: esq;
+    text-align: center;
+    gap: 1rem;
+}
+
+    .logoSpaa img {
+        max-width: 60%;
+        height: auto;
+    }
+
+    .logoSpaa .subtitle {
+        font-weight: bold;
+        font-size: 2rem;
+        color: #435FA0;
+        text-shadow: 2px 2px 2.5px rgba(0, 0, 0, 0.5);
+        text-align: center;
+        margin-top: 0.5rem;
+    }
+
+
+.logo {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: -0.5rem;
+    color: #435FA0;
+    letter-spacing: 5px;
+}
+
+.subtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    color: #435FA0;
+    letter-spacing: 3px;
+}
+
+.form-title {
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+    color: #000;
+    font-weight: bold;
+}
+
+.login-link {
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+}
+
+    .login-link a {
+        color: black;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+form {
+    display: grid;
+    gap: 0.5rem;
+    justify-items: center;
+    width: 100%;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+    .form-group label {
+        margin-bottom: 0.25rem;
+        font-weight: 500;
+        color: #000000e6;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-control {
+        padding: 0.75rem;
+        border: 1px solid #000000;
+        border-radius: 0.35rem;
+        font-size: 0.7rem;
+        width: 100%;
+        color: #000000e6;
+        box-sizing: border-box;
+    }
+
+    .form-group span {
+        font-size: 0.8rem;
+        color: red;
+        margin-top: 0.25rem;
+    }
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+    .form-row .form-group {
+        flex: 1;
+    }
+
+button[type="submit"] {
+    margin-top: 0.5rem;
+    padding: 0.8rem 1.2rem;
+    max-width: 50%;
+    background-color: #435FA0;
+    color: white;
+    border: none;
+    border-radius: 2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    button[type="submit"]:hover {
+        background-color: aquamarine;
+    }

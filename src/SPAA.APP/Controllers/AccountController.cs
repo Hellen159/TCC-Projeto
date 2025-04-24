@@ -108,13 +108,19 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel loginViewModel)
     {
+        if (!ModelState.IsValid)
+        {
+            return View(loginViewModel);
+        }
+
         var result = await _applicationUserRepository.LogarApplicationUser(loginViewModel.Matricula, loginViewModel.Senha);
+
         if (result.Succeeded)
         {
             return RedirectToAction("Index", "Home");
         }
 
-        ModelState.AddModelError("", "Login inválido");
+        TempData["MensagemErro"] = "Usuário ou senha incorretos.";
         return View();
     }
 

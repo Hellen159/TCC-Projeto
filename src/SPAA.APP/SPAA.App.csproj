@@ -7,6 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\js - Cópia\**" />
+    <Content Remove="wwwroot\js - Cópia\**" />
+    <EmbeddedResource Remove="wwwroot\js - Cópia\**" />
+    <None Remove="wwwroot\js - Cópia\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\assets\buttomRegistrar.svg" />
+    <Content Remove="wwwroot\css\login.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="automapper.extensions.microsoft.dependencyinjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.13" />
