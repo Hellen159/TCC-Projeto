@@ -396,6 +396,49 @@ namespace SPAA.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("SPAA.Business.Models.Turma", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Capacidade")
+                        .HasColumnType("int")
+                        .HasColumnName("capacidade");
+
+                    b.Property<string>("CodigoDisciplina")
+                        .IsRequired()
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("cd_disciplina");
+
+                    b.Property<string>("CodigoTurma")
+                        .IsRequired()
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("cd_turma");
+
+                    b.Property<string>("Horario")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("horario");
+
+                    b.Property<string>("NomeProfessor")
+                        .IsRequired()
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("nome_professor");
+
+                    b.Property<string>("Semestre")
+                        .IsRequired()
+                        .HasColumnType("varchar(7)")
+                        .HasColumnName("semestre");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("turmas", (string)null);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
