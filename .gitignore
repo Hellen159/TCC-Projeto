@@ -24,6 +24,7 @@ project.assets.json
 *.nupkg
 *.snupkg
 .nuget/
+**/[Mm]igrations/
 
 # Configuração do Rider (JetBrains)
 .idea/
