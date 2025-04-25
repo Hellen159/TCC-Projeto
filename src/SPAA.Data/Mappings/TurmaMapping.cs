@@ -47,10 +47,10 @@ namespace SPAA.Data.Mappings
                 .HasColumnName("horario")
                 .HasColumnType("varchar(20)");
 
-            builder.HasOne(t => t.Disciplina)  // Relacionamento com Disciplina
-                .WithMany(d => d.Turmas)  // Disciplina pode ter muitas Turmas
-                .HasForeignKey(t => t.CodigoDisciplina)  // Chave estrangeira em Turma
-                .HasPrincipalKey(d => d.CodigoDisciplina);  // Relacionamento com Codigo da Disciplina
+            //builder.HasOne(t => t.Disciplina)  // Relacionamento com Disciplina
+            //    .WithMany(d => d.Turmas)  // Disciplina pode ter muitas Turmas
+            //    .HasForeignKey(t => t.CodigoDisciplina)  // Chave estrangeira em Turma
+            //    .HasPrincipalKey(d => d.CodigoDisciplina);  // Relacionamento com Codigo da Disciplina
         }
     }
 }
