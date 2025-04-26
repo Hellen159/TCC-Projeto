@@ -208,3 +208,15 @@ button[type="submit"] {
 .modal-text {
     margin-bottom: 0.5rem;
 }
+
+
+
+.modal-header .btn-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.modal-header h5 {
+    margin-top: 3rem; /* deixa o título mais pra baixo */
+}
