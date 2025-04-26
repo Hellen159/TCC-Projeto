@@ -71,9 +71,9 @@ public class AccountController : Controller
             var aluno = new Aluno
             {
                 Matricula = registerViewModel.Matricula,
-                Nome = registerViewModel.Nome,
-                SemestreEntrada = $"{registerViewModel.SemestreEntrada}/{registerViewModel.AnoEntrada}",
-                UserId = user.Id
+                NomeAluno = registerViewModel.Nome,
+                SemestreEntrada = $"{registerViewModel.AnoEntrada}.{registerViewModel.SemestreEntrada}",
+                CodigoUser = user.Id
             };
 
             try
@@ -108,13 +108,19 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel loginViewModel)
     {
+        if (!ModelState.IsValid)
+        {
+            return View(loginViewModel);
+        }
+
         var result = await _applicationUserRepository.LogarApplicationUser(loginViewModel.Matricula, loginViewModel.Senha);
+
         if (result.Succeeded)
         {
             return RedirectToAction("Index", "Home");
         }
 
-        ModelState.AddModelError("", "Login inválido");
+        TempData["MensagemErro"] = "Usuário ou senha incorretos.";
         return View();
     }
 

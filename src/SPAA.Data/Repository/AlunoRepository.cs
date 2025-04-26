@@ -14,6 +14,19 @@ namespace SPAA.Data.Repository
     {
         public AlunoRepository(MeuDbContext context) : base(context) { }
 
+        public async Task<bool> AlunoJaAnexouHistorico(string matricula)
+        {
+
+            var entidade = await ObterPorId(matricula);
+
+            if (entidade.HistoricoAnexado == false)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public async Task<string> ObterIdentityUserIdPorMatricula(string matricula)
         {
             var entidade = await ObterPorId(matricula);

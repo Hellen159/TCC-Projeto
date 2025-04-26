@@ -10,5 +10,6 @@ namespace SPAA.Business.Interfaces
     public interface IAlunoRepository : IRepository<Aluno, string>
     {
         Task<string> ObterIdentityUserIdPorMatricula(string matricula);
+        Task<bool> AlunoJaAnexouHistorico(string matricula);
     }
 }

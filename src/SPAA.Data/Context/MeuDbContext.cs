@@ -9,6 +9,10 @@ namespace SPAA.Data.Context
         public MeuDbContext(DbContextOptions<MeuDbContext> options) : base(options) { }
 
         public DbSet<Aluno> Alunos { get; set; }
+        public DbSet<Disciplina> Disciplinas { get; set; }
+        public DbSet<TipoDisciplina> TipoDisciplinas{ get; set; }
+        public DbSet<Curso> Cursos { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
