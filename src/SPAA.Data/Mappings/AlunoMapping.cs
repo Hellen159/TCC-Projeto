@@ -19,7 +19,9 @@ namespace SPAA.Data.Mappings
             builder.HasKey(a => a.Matricula);
 
             builder.Property(a => a.Matricula)
-                .HasColumnName("matricula");
+                .HasColumnName("matricula")
+                .HasColumnType("varchar(9)");
+
 
             builder.Property(a => a.NomeAluno)
                 .IsRequired()
@@ -36,7 +38,9 @@ namespace SPAA.Data.Mappings
                 .HasColumnType("TINYINT(0)");
 
             builder.Property(a => a.CodigoUser)
-            .HasColumnName("user_id");
+            .HasColumnName("user_id")
+            .HasColumnType("varchar(255)");
+
 
             builder.HasOne(a => a.User)
                 .WithOne(u => u.Aluno)

@@ -1,13 +1,14 @@
-﻿@model SPAA.App.ViewModels.UploadHistoricoViewModel
+﻿@model SPAA.App.ViewModels.ConfirmarExclusaoViewModel
 
-<h2>Importar Histórico Acadêmico</h2>
+<h2>Confirmar Exclusão de Conta</h2>
 
-<form asp-action="UploadHistorico" method="post" enctype="multipart/form-data">
+<form asp-action="ExcluirConta" method="post">
     <div>
-        <label for="historico">Anexar Histórico:</label>
-        <input type="file" id="historico" name="historico" accept=".pdf" required />
+        <label for="Matricula">Digite sua Matrícula para Confirmar:</label>
+        <input type="text" id="Matricula" name="Matricula" />
+        <span asp-validation-for="Matricula" class="text-danger"></span>
     </div>
-    <button type="submit">Enviar</button>
+    <button type="submit">Confirmar Exclusão</button>
 </form>
 
 @if (TempData["MensagemSucesso"] != null)

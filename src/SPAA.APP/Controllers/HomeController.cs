@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SPAA.APP.Models;
 using SPAA.Business.Interfaces;
@@ -6,6 +7,7 @@ using System.Diagnostics;
 
 namespace SPAA.APP.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -26,9 +28,8 @@ namespace SPAA.APP.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var userId = User.Identity.Name;
-            var verificaHistorico = await _alunoRepository.AlunoJaAnexouHistorico(userId);
-            if (verificaHistorico == false)
+            var alunoJaAnexouHistorico = await _alunoRepository.AlunoJaAnexouHistorico(User.Identity.Name);
+            if (alunoJaAnexouHistorico == false)
             {
                 return RedirectToAction("UploadHistorico", "Upload"); 
             }

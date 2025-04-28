@@ -1,6 +1,7 @@
 ﻿using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SPAA.Business.Interfaces;
 using SPAA.Business.Models;
@@ -14,16 +15,19 @@ namespace SPAA.Data.Repository
     {
         private readonly ILogger<AlunoDisciplinaRepository> _logger;
         private readonly IDisciplinaRepository _disciplinaRepository;
+        private readonly IAlunoRepository _alunoRepository;
 
         public AlunoDisciplinaRepository(MeuDbContext context,
                                             ILogger<AlunoDisciplinaRepository> logger,
+                                            IAlunoRepository alunoRepository,
                                             IDisciplinaRepository disciplinaRepository) : base(context)
         {
             _logger = logger;
             _disciplinaRepository = disciplinaRepository;
+            _alunoRepository = alunoRepository;
         }
 
-        public async Task<(bool isValid, string mensagem)> ConsumirHistoricoPdf(IFormFile arquivoPdf, string codigoAluno)
+        public async Task<(bool isValid, string mensagem)> ConsumirHistoricoPdf(IFormFile arquivoPdf, string matricula)
         {
             if (arquivoPdf == null || arquivoPdf.Length == 0)
                 return (false, "Nenhum arquivo enviado.");
@@ -45,22 +49,28 @@ namespace SPAA.Data.Repository
                 if (!disciplinas.Any())
                     return (false, "Formato de histórico inválido ou nenhum dado encontrado.");
 
-                List<AlunoDisciplina> entradas = await ProcessarDisciplinas(codigoAluno, disciplinas, codigosNaoEncontrados);
+                List<AlunoDisciplina> entradas = await ProcessarDisciplinas(matricula, disciplinas, codigosNaoEncontrados);
 
                 if (entradas.Any())
                 {
                     DbSet.AddRange(entradas);
                     await SaveChanges();
                 }
+                
+                var (anexadoComSucesso, mensagemAnexar) = await _alunoRepository.MarcarHistoricoComoAnexado(matricula);
+                if (!anexadoComSucesso)
+                {
+                    return (false, mensagemAnexar);
+                }
 
-                if (codigosNaoEncontrados.Any())
+                if (codigosNaoEncontrados.Any() && anexadoComSucesso)
                 {
                     var codigos = string.Join(", ", codigosNaoEncontrados.Distinct());
-                    var mensagem = $"Histórico processado com sucesso! No entanto, as seguintes disciplinas não foram encontradas no sistema: {codigos}";
+                    var mensagem = $"{mensagemAnexar} No entanto, as seguintes disciplinas não foram encontradas no sistema: {codigos}";
                     return (true, mensagem);
                 }
 
-                return (true, "Histórico processado com sucesso!");
+                return (true, mensagemAnexar);
             }
             catch (Exception ex)
             {
@@ -121,7 +131,7 @@ namespace SPAA.Data.Repository
             return disciplinas;
         }
 
-        private async Task<List<AlunoDisciplina>> ProcessarDisciplinas(string codigoAluno, List<(string semestre, string codigo, string situacao)> disciplinas, List<string> codigosNaoEncontrados)
+        private async Task<List<AlunoDisciplina>> ProcessarDisciplinas(string matricula, List<(string semestre, string codigo, string situacao)> disciplinas, List<string> codigosNaoEncontrados)
         {
             var entradas = new List<AlunoDisciplina>();
 
@@ -130,12 +140,12 @@ namespace SPAA.Data.Repository
                 var disciplina = await _disciplinaRepository.ObterDisciplinaPorCodigo(codigo);
                 if (disciplina != null)
                 {
-                    var entradaExistente = await ObterPorChaveComposta(codigoAluno, codigo, semestre);
+                    var entradaExistente = await ObterPorChaveComposta(matricula, codigo, semestre);
                     if (entradaExistente == null)
                     {
                         var entrada = new AlunoDisciplina
                         {
-                            Matricula = codigoAluno,
+                            Matricula = matricula,
                             CodigoDisciplina = codigo,
                             Semestre = semestre,
                             Situacao = situacao
@@ -168,6 +178,21 @@ namespace SPAA.Data.Repository
         public async Task<AlunoDisciplina> ObterPorChaveComposta(string matricula, string codigoDisciplina, string semestre)
         {
             return await DbSet.FindAsync(matricula, codigoDisciplina, semestre);
+        }
+
+        public async Task<bool> ExcluirDisciplinasDoAluno(string matricula)
+        {
+            var disciplinasDoAluno = await DbSet
+                .Where(ad => ad.Matricula == matricula)
+                .ToListAsync();
+
+            if (!disciplinasDoAluno.Any())
+                return false; 
+
+            DbSet.RemoveRange(disciplinasDoAluno);
+            await SaveChanges();
+
+            return true;
         }
     }
 }
