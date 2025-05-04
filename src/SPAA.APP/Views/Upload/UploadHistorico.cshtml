@@ -1,14 +1,61 @@
 ﻿@model SPAA.App.ViewModels.UploadHistoricoViewModel
 
-<h2>Importar Histórico Acadêmico</h2>
+@{
+    ViewData["LayoutType"] = "formulario";
+}
 
-<form asp-action="UploadHistorico" method="post" enctype="multipart/form-data">
-    <div>
-        <label for="historico">Anexar Histórico:</label>
-        <input type="file" id="historico" name="historico" accept=".pdf" required />
+@section Styles {
+    <link rel="stylesheet" href="~/css/import.css" />
+}
+
+<div>
+    <div class="toplogo">
+        <div class="logoSpaa">
+            <img src="~/assets/unbflag.svg" alt="Imagem da Logo da UnB" />
+        </div>
+        <div>
+            <h1 class="logo">SPAA</h1>
+            <h2 class="subtitle">Universidade de Brasília</h2>
+        </div>
     </div>
-    <button type="submit">Enviar</button>
-</form>
+
+<div class="box import-box">
+    
+
+    <h3 class="import-title">Importação de Histórico Curricular</h3>
+
+    <p class="import-description">
+        Faça o upload do seu Histórico Acadêmico oficial em PDF, gerado pelo SIGAA.
+        Utilizaremos essas informações apenas para processar e estruturar seu plano de acompanhamento acadêmico.
+        Todos os dados enviados são tratados com segurança e não serão compartilhados.
+        Nenhuma modificação será feita em seu histórico — o sistema apenas lê os dados.
+    </p>
+
+        <form asp-action="UploadHistorico" class="form" method="post" enctype="multipart/form-data" id="uploadForm">
+            <div class="mb-3 custom-file-upload">
+                <label class="label" for="historico">Importar Histórico:</label>
+
+                <input type="file" id="historico" name="historico" accept=".pdf" required hidden />
+
+                <button type="button" class="btn-import" onclick="document.getElementById('historico').click()"> <img src="~/assets/buttomAnexo.svg" alt="Ícone de usuário" class="icon" />
+                    Anexar
+                </button>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const input = document.getElementById('historico');
+    const form = document.getElementById('uploadForm');
+
+    input.addEventListener('change', function () {
+        if (this.files.length > 0) {
+            form.submit();
+        }
+    });
+</script>
 
 @if (TempData["MensagemSucesso"] != null)
 {
@@ -22,3 +69,5 @@
         @TempData["ErrorMessage"]
     </div>
 }
+
+
