@@ -14,7 +14,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\FormController.cs" />
+    <Compile Remove="ViewModels\UploadHistoricoViewModel.cs" />
+    <Compile Remove="Views\Upload\UploadForm.cs" />
+    <Compile Remove="Views\Upload\UploadForm.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="wwwroot\assets\buttomRegistrar.svg" />
+    <Content Remove="wwwroot\css\import.cs" />
     <Content Remove="wwwroot\css\login.css" />
   </ItemGroup>
 

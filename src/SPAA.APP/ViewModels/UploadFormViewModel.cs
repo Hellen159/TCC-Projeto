@@ -1,6 +1,6 @@
 ﻿namespace SPAA.App.ViewModels
 {
-    public class UploadFormViewModel
+    public class UploadHistoricoViewModel
     {
         public IFormFile Historico { get; set; }
     }

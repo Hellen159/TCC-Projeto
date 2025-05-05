@@ -1,0 +1,87 @@
+﻿@{
+    ViewData["LayoutType"] = "formulario";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/import.css" />
+    <style>
+        .import-box .form-step {
+            display: none !important;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+            .import-box .form-step.active {
+                display: block !important;
+                opacity: 1;
+            }
+
+        .btn-import {
+            margin-top: 1rem;
+            padding: 0.8rem 1.2rem;
+            background-color: #435FA0;
+            color: white;
+            border: none;
+            border-radius: 2rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn-import:hover {
+                background-color: aquamarine;
+            }
+    </style>
+}
+
+<div>
+    <div class="toplogo">
+        <div class="logoSpaa">
+            <img src="~/assets/unbflag.svg" alt="Imagem da Logo da UnB" />
+        </div>
+        <div>
+            <h1 class="logo">SPAA</h1>
+            <h2 class="subtitle">Universidade de Brasília</h2>
+        </div>
+    </div>
+
+    <div class="box import-box">
+
+        <form class="form" style="text-align: center;" id="multiStepForm">
+
+            <!-- Etapa 1 -->
+            <div class="form-step active" style="display: flex ;flex-direction: column; align-items: center;" id="step1">
+                <h3 class="import-title" style="margin-bottom:1rem;">Formulário de Conhecimento</h3>
+                <p class="import-description">
+                    Este formulário tem como objetivo entender melhor o seu perfil acadêmico e os conhecimentos que você já possui.
+                    <br /><br />
+                    As informações fornecidas nos ajudarão a identificar suas afinidades, experiências e áreas de interesse.
+                </p>
+                <button type="button" class="btn-import" onclick="nextStep()">Próximo</button>
+            </div>
+
+            <!-- Etapa 2 -->
+            <div class="form-step" id="step2">
+                <h3 class="import-title" style="margin-bottom:">Etapa 2: Suas áreas de interesse</h3>
+                <p class="import-description">
+                    Nos diga mais sobre suas preferências acadêmicas.
+                </p>
+                <input type="text" class="form-control" placeholder="Ex: Inteligência Artificial, Redes..." />
+                <button type="submit" class="btn-import">Enviar</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function nextStep() {
+            const step1 = document.getElementById("step1");
+            const step2 = document.getElementById("step2");
+
+            step1.classList.remove("active");
+            step2.classList.add("active");
+        }
+    </script>
+}
