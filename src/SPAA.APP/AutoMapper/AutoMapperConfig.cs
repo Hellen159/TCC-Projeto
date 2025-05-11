@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SPAA.App.ViewModels;
 using SPAA.Business.Models;
 
 namespace SPAA.App.AutoMapper
@@ -7,6 +8,8 @@ namespace SPAA.App.AutoMapper
     {
         public AutoMapperConfig()
         {
+            //mapeando as models para as view models e o reverse é pq é um caminho unico 
+            CreateMap<Disciplina, DisciplinaViewModel>().ReverseMap();
         }
     }
 }

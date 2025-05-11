@@ -14,6 +14,19 @@ namespace SPAA.Data.Repository
     {
         public AlunoRepository(MeuDbContext context) : base(context) { }
 
+        public async Task<bool> AdicionarCurriculoAluno(string matricula, string curriculo)
+        {
+            var aluno = await ObterPorId(matricula);
+
+            if (aluno == null)
+                return (false);
+
+            aluno.CurriculoAluno = curriculo;
+            await Atualizar(aluno);
+
+            return (true);
+        }
+
         public async Task<bool> AlterarNome(string matricula, string NovoNome)
         {
             var aluno = await ObterPorId(matricula);

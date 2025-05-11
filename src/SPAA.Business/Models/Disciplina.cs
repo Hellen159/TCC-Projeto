@@ -11,14 +11,11 @@ namespace SPAA.Business.Models
     {
         public int Id { get; set; }
         public string CodigoDisciplina { get; set; }
+        public string? CodigoEquivalencia { get; set; }
         public string NomeDisciplina { get; set; }
         public int CargaHoraria { get; set; }
 
-        public string Curriculo { get; set; }
-
-        public int CodigoTipoDisciplina { get; set; }
-
-        public int CodigoCurso { get; set; }
+        public string Ativa { get; set; }
 
         [NotMapped]
         public ICollection<Turma> Turmas { get; set; }

@@ -33,6 +33,11 @@ namespace SPAA.Data.Mappings
                 .HasColumnName("semestre_entrada")
                 .HasColumnType("varchar(7)");
 
+            builder.Property(a => a.CurriculoAluno)
+                .IsRequired(false)
+                .HasColumnName("curriculo_aluno")
+                .HasColumnType("varchar(7)");
+
             builder.Property(a => a.HistoricoAnexado)
                 .HasColumnName("historico_anexado")
                 .HasColumnType("TINYINT(0)");

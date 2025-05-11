@@ -12,6 +12,8 @@ namespace SPAA.Business.Interfaces
     {
         Task<(bool isValid, string mensagem)> ConsumirHistoricoPdf(IFormFile pdf, string matricula);
         Task<bool> ExcluirDisciplinasDoAluno(string matricula);
+        Task<List<AlunoDisciplina>> ObterAlunoDisciplinaPorSituacao(string matricula, string situacao);
+        Task<List<string>> ObterCodigosDisciplinasPorSituacao(string matricula, string situacao);
 
     }
 }

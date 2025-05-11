@@ -42,6 +42,7 @@ namespace SPAA.Data.Repository
                 if (curriculoAno != null)
                 {
                     _logger.LogInformation($"Currículo: {curriculoAno}");
+                    await _alunoRepository.AdicionarCurriculoAluno(matricula, curriculoAno);
                 }
 
                 var disciplinas = ExtrairDisciplinasDoTexto(textoFormatado);
@@ -56,7 +57,7 @@ namespace SPAA.Data.Repository
                     DbSet.AddRange(entradas);
                     await SaveChanges();
                 }
-                
+
                 var (anexadoComSucesso, mensagemAnexar) = await _alunoRepository.MarcarHistoricoComoAnexado(matricula);
                 if (!anexadoComSucesso)
                 {
@@ -138,7 +139,8 @@ namespace SPAA.Data.Repository
             foreach (var (semestre, codigo, situacao) in disciplinas)
             {
                 var disciplina = await _disciplinaRepository.ObterDisciplinaPorCodigo(codigo);
-                if (disciplina != null)
+                var disciplinaEquivalente = await _disciplinaRepository.ObterDisciplinaPorCodigoEquivalente(codigo);
+                if (disciplina != null || disciplinaEquivalente != null)
                 {
                     var entradaExistente = await ObterPorChaveComposta(matricula, codigo, semestre);
                     if (entradaExistente == null)
@@ -187,12 +189,28 @@ namespace SPAA.Data.Repository
                 .ToListAsync();
 
             if (!disciplinasDoAluno.Any())
-                return false; 
+                return false;
 
             DbSet.RemoveRange(disciplinasDoAluno);
             await SaveChanges();
 
             return true;
+        }
+
+        public Task<List<AlunoDisciplina>> ObterAlunoDisciplinaPorSituacao(string matricula, string situacao)
+        {
+            return DbSet
+                .Where(ad => ad.Matricula == matricula && ad.Situacao == situacao)
+                .ToListAsync();
+        }
+
+        public Task<List<string>> ObterCodigosDisciplinasPorSituacao(string matricula, string situacao)
+        {
+            return DbSet
+                .Where(ad => ad.Matricula == matricula && ad.Situacao == situacao)
+                .Select(ad => ad.CodigoDisciplina)
+                .Distinct()
+                .ToListAsync();
         }
     }
 }

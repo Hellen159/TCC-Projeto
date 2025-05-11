@@ -1,11 +1,26 @@
-﻿@{
+﻿@using SPAA.App.ViewModels
+@model List<SPAA.App.ViewModels.DisciplinaListaViewModel>
+
+@{
     ViewData["Title"] = "SPAA";
+    var disciplinasAprovadas = ViewData["Aprovadas"] as DisciplinaListaViewModel;
 }
+
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+<!-- Exibe disciplinas aprovadas -->
+@if (ViewData["Aprovadas"] is DisciplinaListaViewModel aprovadas)
+{
+    @await Html.PartialAsync("_ListaDisciplinas", aprovadas)
+}
+
+@if (ViewData["Pendentes"] is DisciplinaListaViewModel pendentes)
+{
+    @await Html.PartialAsync("_ListaDisciplinas", pendentes)
+}
 
 @if (TempData["MensagemSucesso"] != null)
 {

@@ -22,7 +22,7 @@ namespace SPAA.Data.Mappings
             builder.Property(ad => ad.CodigoDisciplina)
                 .IsRequired()
                 .HasMaxLength(20)
-                .HasColumnName("codigo_disciplina");
+                .HasColumnName("cd_disciplina");
 
             builder.Property(ad => ad.Semestre)
                 .IsRequired()

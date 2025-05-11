@@ -56,6 +56,8 @@ namespace SPAA.App.Configurations
             services.AddScoped<IDisciplinaRepository, DisciplinaRepository>();
             services.AddScoped<IAlunoDisciplinaRepository, AlunoDisciplinaRepository>();
             services.AddScoped<ITurmaRepository, TurmaRepository>();
+            services.AddScoped<ICurriculoRepository, CurriculoRepository>();
+
 
             // Configurações de e-mail
             var emailSettings = configuration.GetSection("EmailSettings").Get<EmailSettings>();
