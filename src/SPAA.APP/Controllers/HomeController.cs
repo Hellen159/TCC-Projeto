@@ -64,49 +64,50 @@ namespace SPAA.APP.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        // metodos privados
+        //metodos privados
         private async Task<(DisciplinaListaViewModel Aprovadas, DisciplinaListaViewModel Pendentes)> ObterDisciplinasAlunoAsync(string matricula)
         {
             var dadosAluno = await _alunoRepository.ObterPorId(matricula);
 
             var disciplinasCurriculoObrigatorias = await _curriculoRepository.ObterDisciplinasObrigatoriasPorCurrciulo(dadosAluno.CurriculoAluno, 1);
 
-            var codigos = await _alunoDisciplinaRepository.ObterCodigosDisciplinasPorSituacao(matricula, "APR");
-
-            var disciplinasAprovadas = await _disciplinaRepository
-                .ObterDisciplinasPorCodigosOuEquivalentes(codigos);
-
-            var nomeDisciplinasAprovadas = disciplinasAprovadas
-                .Select(d => d.NomeDisciplina)
-                .Distinct()
-                .ToList();
+            var nomeDisciplinasAprovadas = await _alunoDisciplinaRepository.ObterNomeDisciplinasPorSituacao(matricula, "APR");
 
             var obrigatoriasPendentes = disciplinasCurriculoObrigatorias
                 .Where(d => !nomeDisciplinasAprovadas.Contains(d.NomeDisciplina))
                 .ToList();
 
-            var pendentesViewModel = obrigatoriasPendentes
-                .Select(c => new DisciplinaViewModel
+            var disciplinasAprovadas = disciplinasCurriculoObrigatorias
+                .Where(d => nomeDisciplinasAprovadas.Contains(d.NomeDisciplina))
+                .ToList();
+
+            var disciplinasAprovadasViewModel = disciplinasAprovadas
+                .Select(d => new DisciplinaViewModel
                 {
-                    NomeDisciplina = c.NomeDisciplina
+                    NomeDisciplina = d.NomeDisciplina
                 })
                 .ToList();
 
-            var disciplinaViewModel = _mapper.Map<List<DisciplinaViewModel>>(disciplinasAprovadas);
+            var disciplinasPendentesViewModel = obrigatoriasPendentes
+                .Select(d => new DisciplinaViewModel
+                {
+                    NomeDisciplina = d.NomeDisciplina
+                })
+                .ToList();
 
             var aprovadasViewModel = new DisciplinaListaViewModel
             {
-                Titulo = "Disciplinas concluídas",
-                Disciplinas = disciplinaViewModel
+                Titulo = "Disciplinas Aprovadas",
+                Disciplinas = disciplinasAprovadasViewModel
             };
 
-            var pendentesViewModelResult = new DisciplinaListaViewModel
+            var pendentesViewModel = new DisciplinaListaViewModel
             {
-                Titulo = "Disciplinas pendentes",
-                Disciplinas = pendentesViewModel
+                Titulo = "Disciplinas Pendentes",
+                Disciplinas = disciplinasPendentesViewModel
             };
 
-            return (aprovadasViewModel, pendentesViewModelResult);
+            return (aprovadasViewModel, pendentesViewModel);
         }
 
     }

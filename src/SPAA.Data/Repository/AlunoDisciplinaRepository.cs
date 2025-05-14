@@ -1,11 +1,13 @@
 ﻿using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
+using iText.Kernel.Pdf.Canvas.Parser.Listener;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SPAA.Business.Interfaces;
 using SPAA.Business.Models;
 using SPAA.Data.Context;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -16,6 +18,9 @@ namespace SPAA.Data.Repository
         private readonly ILogger<AlunoDisciplinaRepository> _logger;
         private readonly IDisciplinaRepository _disciplinaRepository;
         private readonly IAlunoRepository _alunoRepository;
+
+        private static readonly string[] SiglasSituacoes = new[] { "APR", "CANC", "DISP", "MATR", "REP", "REPF", "REPMF", "TRANC", "CUMP" };
+        private static readonly Regex semestreAnoRegex = new Regex(@"\b(\d{4})\.(\d{0,2})\b");
 
         public AlunoDisciplinaRepository(MeuDbContext context,
                                             ILogger<AlunoDisciplinaRepository> logger,
@@ -35,26 +40,44 @@ namespace SPAA.Data.Repository
             try
             {
                 List<string> codigosNaoEncontrados = new();
-                string textoFormatado = await ExtrairTextoDoPdf(arquivoPdf);
+                string textoExtraido = await ExtrairTextoDePdf(arquivoPdf);
+                var blocosDisciplinas = ExtrairBlocos(textoExtraido);
+                var listaEquivalencia = ObterEquivalenciasCurriculo(textoExtraido, matricula);
+                var listaAlunoDisciplina = ConverterBlocos(blocosDisciplinas, matricula);
 
-                // Processamento das informações do histórico
-                var curriculoAno = ObterInformacoesCurriculo(textoFormatado);
+                var curriculoAno = ObterInformacoesCurriculo(textoExtraido);
                 if (curriculoAno != null)
                 {
                     _logger.LogInformation($"Currículo: {curriculoAno}");
                     await _alunoRepository.AdicionarCurriculoAluno(matricula, curriculoAno);
                 }
 
-                var disciplinas = ExtrairDisciplinasDoTexto(textoFormatado);
 
-                if (!disciplinas.Any())
+                if (!listaAlunoDisciplina.Any())
                     return (false, "Formato de histórico inválido ou nenhum dado encontrado.");
 
-                List<AlunoDisciplina> entradas = await ProcessarDisciplinas(matricula, disciplinas, codigosNaoEncontrados);
 
-                if (entradas.Any())
+                if (listaAlunoDisciplina.Any())
                 {
-                    DbSet.AddRange(entradas);
+                    DbSet.AddRange(listaAlunoDisciplina);
+                    await SaveChanges();
+                }
+
+                if (listaEquivalencia.Any())
+                {
+                    foreach (var disciplina in listaEquivalencia)
+                    {
+                        bool jaExiste = await DbSet.AnyAsync(d =>
+                            d.Matricula == disciplina.Matricula &&
+                            d.NomeDisicplina == disciplina.NomeDisicplina &&
+                            d.Situacao == "APR");
+
+                        if (!jaExiste)
+                        {
+                            DbSet.Add(disciplina);
+                        }
+                    }
+
                     await SaveChanges();
                 }
 
@@ -62,13 +85,6 @@ namespace SPAA.Data.Repository
                 if (!anexadoComSucesso)
                 {
                     return (false, mensagemAnexar);
-                }
-
-                if (codigosNaoEncontrados.Any() && anexadoComSucesso)
-                {
-                    var codigos = string.Join(", ", codigosNaoEncontrados.Distinct());
-                    var mensagem = $"{mensagemAnexar} No entanto, as seguintes disciplinas não foram encontradas no sistema: {codigos}";
-                    return (true, mensagem);
                 }
 
                 return (true, mensagemAnexar);
@@ -81,101 +97,196 @@ namespace SPAA.Data.Repository
             }
         }
 
-        private async Task<string> ExtrairTextoDoPdf(IFormFile arquivoPdf)
+        public static string NormalizarTexto(string texto)
         {
-            using var stream = arquivoPdf.OpenReadStream();
-            using var reader = new PdfReader(stream);
-            using var document = new PdfDocument(reader);
+            if (string.IsNullOrWhiteSpace(texto))
+                return string.Empty;
 
-            StringBuilder fullText = new StringBuilder();
-            for (int i = 1; i <= document.GetNumberOfPages(); i++)
+            texto = texto.ToUpperInvariant();
+
+            var textoNormalizado = texto.Normalize(NormalizationForm.FormD);
+            var sb = new StringBuilder();
+
+            foreach (var c in textoNormalizado)
             {
-                var page = document.GetPage(i);
-                fullText.Append(PdfTextExtractor.GetTextFromPage(page));
+                var unicodeCategoria = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategoria != UnicodeCategory.NonSpacingMark && c != 'Ç')
+                {
+                    sb.Append(c);
+                }
+                else if (c == 'Ç')
+                {
+                    sb.Append('C');
+                }
             }
 
-            return PadronizarTextoHistorico(fullText.ToString());
+            return sb.ToString().Normalize(NormalizationForm.FormC);
         }
 
         private string ObterInformacoesCurriculo(string texto)
         {
-            var regexCurriculo = new Regex(@"^Currículo:\s*\d+\/\d+\s*-\s*\|\s*(?<ano>\d{4})\.(?<semestre>\d)", RegexOptions.Multiline);
-            var match = regexCurriculo.Match(texto);
+            var idxCurriculo = texto.IndexOf("Currículo:", StringComparison.OrdinalIgnoreCase);
+            if (idxCurriculo < 0)
+                return null;
 
-            if (match.Success)
-            {
-                return $"{match.Groups["ano"].Value}.{match.Groups["semestre"].Value}";
-            }
+            var trecho = texto.Substring(idxCurriculo);
 
-            return null;
+            var match = semestreAnoRegex.Match(trecho);
+            return match.Success ? match.Value : null;
         }
 
-        private List<(string semestre, string codigo, string situacao)> ExtrairDisciplinasDoTexto(string texto)
+        public static async Task<string> ExtrairTextoDePdf(IFormFile arquivoPdf)
         {
-            var regex = new Regex(
-                @"\|\s(?<semestre>\d{4}\.\d).*?(?<codigo>[A-Z]{3,}\d{4}).*?\b(?<situacao>APR|CANC|DISP|MATR|REP|REPF|REPMF|TRANC|CUMP)\b\s?\|",
-                RegexOptions.Compiled
-            );
+            using var memoryStream = new MemoryStream();
+            await arquivoPdf.CopyToAsync(memoryStream);
+            memoryStream.Position = 0;
 
-            var matches = regex.Matches(texto);
-            var disciplinas = new List<(string semestre, string codigo, string situacao)>();
+            var stringBuilder = new StringBuilder();
 
-            foreach (Match match in matches)
+            using var pdfReader = new PdfReader(memoryStream);
+            using var pdfDoc = new PdfDocument(pdfReader);
+
+            for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
             {
-                disciplinas.Add((
-                    match.Groups["semestre"].Value,
-                    match.Groups["codigo"].Value,
-                    match.Groups["situacao"].Value
-                ));
+                var pagina = pdfDoc.GetPage(i);
+                var strategy = new SimpleTextExtractionStrategy();
+                var texto = PdfTextExtractor.GetTextFromPage(pagina, strategy);
+                stringBuilder.AppendLine(texto);
             }
 
+            return stringBuilder.ToString();
+        }
+
+
+        public static List<string> ExtrairBlocos(string texto)
+        {
+            var blocos = new List<string>();
+            var matchesSemestres = semestreAnoRegex.Matches(texto);
+            string padraoSituacoes = string.Join("|", SiglasSituacoes);
+            var regexSituacaoFinal = new Regex(@"\b(" + padraoSituacoes + @")\b");
+
+            for (int i = 0; i < matchesSemestres.Count; i++)
+            {
+                int inicio = matchesSemestres[i].Index;
+                int limiteBusca = (i + 1 < matchesSemestres.Count) ? matchesSemestres[i + 1].Index : texto.Length;
+                string trecho = texto.Substring(inicio, limiteBusca - inicio);
+
+                MatchCollection situacoes = regexSituacaoFinal.Matches(trecho);
+                if (situacoes.Count > 0)
+                {
+                    Match ultimaSituacao = situacoes[^1];
+                    int fim = ultimaSituacao.Index + ultimaSituacao.Length;
+                    string bloco = trecho.Substring(0, fim).Trim();
+                    blocos.Add(bloco);
+                }
+            }
+
+            return blocos;
+        }
+
+        public List<AlunoDisciplina> ConverterBlocos(List<string> blocos, string matricula)
+        {
+            var disciplinas = new List<AlunoDisciplina>();
+
+            foreach (var bloco in blocos)
+            {
+                var disciplina = ProcessarBloco(bloco, matricula);
+                if (disciplina != null)
+                {
+                    disciplinas.Add(disciplina);
+                }
+            }
             return disciplinas;
         }
 
-        private async Task<List<AlunoDisciplina>> ProcessarDisciplinas(string matricula, List<(string semestre, string codigo, string situacao)> disciplinas, List<string> codigosNaoEncontrados)
+        private AlunoDisciplina ProcessarBloco(string bloco, string matricula)
         {
-            var entradas = new List<AlunoDisciplina>();
+            var matchSemestre = semestreAnoRegex.Match(bloco);
 
-            foreach (var (semestre, codigo, situacao) in disciplinas)
+            if (!matchSemestre.Success)
+                return null;
+
+            var ano = matchSemestre.Groups[1].Value;
+            var periodo = matchSemestre.Groups[2].Success ? matchSemestre.Groups[2].Value : "1";
+            var semestre = $"{ano}.{periodo}";
+            string padraoSituacoes = string.Join("|", SiglasSituacoes);
+            var regexSituacao = new Regex(@"\b(" + padraoSituacoes + @")\b");
+            var situacaoMatch = regexSituacao.Match(bloco);
+
+            if (!situacaoMatch.Success)
+                return null;
+
+            string situacao = situacaoMatch.Value;
+            var linhas = bloco.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            string nome;
+
+            if (linhas.Length == 1)
             {
-                var disciplina = await _disciplinaRepository.ObterDisciplinaPorCodigo(codigo);
-                var disciplinaEquivalente = await _disciplinaRepository.ObterDisciplinaPorCodigoEquivalente(codigo);
-                if (disciplina != null || disciplinaEquivalente != null)
+                var palavras = linhas[0].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                int idxSemestre = Array.FindIndex(palavras, p => p.Contains(ano));
+                int idxPenultima = palavras.Length - 2;
+
+                if (idxSemestre >= 0 && idxPenultima > idxSemestre)
                 {
-                    var entradaExistente = await ObterPorChaveComposta(matricula, codigo, semestre);
-                    if (entradaExistente == null)
-                    {
-                        var entrada = new AlunoDisciplina
-                        {
-                            Matricula = matricula,
-                            CodigoDisciplina = codigo,
-                            Semestre = semestre,
-                            Situacao = situacao
-                        };
-                        entradas.Add(entrada);
-                    }
+                    nome = string.Join(" ", palavras[(idxSemestre + 1)..idxPenultima]);
                 }
                 else
                 {
-                    _logger.LogWarning("Disciplina com código '{Codigo}' não encontrada ", codigo);
-                    codigosNaoEncontrados.Add(codigo);
+                    nome = string.Empty;
+                }
+            }
+            else
+            {
+                nome = linhas[1].Trim();
+            }
+            return new AlunoDisciplina
+            {
+                Semestre = semestre,
+                Situacao = situacao,
+                NomeDisicplina = NormalizarTexto(nome),
+                Matricula = matricula
+            };
+        }
+
+        private List<AlunoDisciplina> ObterEquivalenciasCurriculo(string texto, string matricula)
+        {
+            var idxEquivalencias = texto.IndexOf("Equivalências:", StringComparison.OrdinalIgnoreCase);
+            if (idxEquivalencias < 0)
+                return null;
+
+            var trecho = texto.Substring(idxEquivalencias);
+            var regexCumpriu = new Regex(@"Cumpriu.*\)\s*");
+            var matches = regexCumpriu.Matches(trecho);
+
+            if (matches.Count == 0)
+                return null;
+
+            var equivalencias = new List<AlunoDisciplina>();  
+
+            foreach (Match match in matches)
+            {
+                string matchTexto = match.Value;
+                int posicaoPrimeiroHifen = matchTexto.IndexOf(" -");
+                int posicaoPrimeiroParentese = matchTexto.IndexOf('(');
+
+                if (posicaoPrimeiroParentese > posicaoPrimeiroHifen)
+                {
+                    string nomeDisciplina = matchTexto.Substring(posicaoPrimeiroHifen + 2, posicaoPrimeiroParentese - posicaoPrimeiroHifen - 2).Trim();
+
+                    equivalencias.Add(new AlunoDisciplina
+                    {
+                        Semestre = "2020.1", 
+                        Situacao = "APR",  
+                        NomeDisicplina = NormalizarTexto(nomeDisciplina),
+                        Matricula = matricula
+                    });
                 }
             }
 
-            return entradas;
+            return equivalencias;  
         }
 
-        private string PadronizarTextoHistorico(string textoOriginal)
-        {
-            if (string.IsNullOrWhiteSpace(textoOriginal)) return textoOriginal;
-
-            var textoPadronizado = Regex.Replace(textoOriginal, @"(^|\s)(\d{4}\.\d)", "$1| $2");
-            string[] siglasSituacao = { "APR", "CANC", "DISP", "MATR", "REP", "REPF", "REPMF", "TRANC", "CUMP" };
-            string padraoSituacoes = @"\b(" + string.Join("|", siglasSituacao) + @")\b(?!\s*\|)";
-            textoPadronizado = Regex.Replace(textoPadronizado, padraoSituacoes, "$1 |");
-
-            return textoPadronizado;
-        }
 
         public async Task<AlunoDisciplina> ObterPorChaveComposta(string matricula, string codigoDisciplina, string semestre)
         {
@@ -204,11 +315,11 @@ namespace SPAA.Data.Repository
                 .ToListAsync();
         }
 
-        public Task<List<string>> ObterCodigosDisciplinasPorSituacao(string matricula, string situacao)
+        public Task<List<string>> ObterNomeDisciplinasPorSituacao(string matricula, string situacao)
         {
             return DbSet
                 .Where(ad => ad.Matricula == matricula && ad.Situacao == situacao)
-                .Select(ad => ad.CodigoDisciplina)
+                .Select(ad => ad.NomeDisicplina)
                 .Distinct()
                 .ToListAsync();
         }
