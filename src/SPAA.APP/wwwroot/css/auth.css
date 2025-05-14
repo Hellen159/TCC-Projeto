@@ -13,7 +13,6 @@ body {
     padding: 0 !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
-
 }
 
 .auth-container {
@@ -179,6 +178,26 @@ button[type="submit"] {
         background-color: aquamarine;
     }
 
+.cancel-button {
+    margin-top: 0.5rem;
+    padding: 0.8rem 1.2rem;
+    max-width: 50%;
+    background-color: gray;
+    color: white;
+    border: none;
+    border-radius: 2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+    .cancel-button:hover {
+        background-color: #6e6e6e;
+    }
+
 /* Estilos para a modal */
 .modal-content {
     border-radius: 10px;
@@ -189,6 +208,10 @@ button[type="submit"] {
 .modal-title {
     color: #435FA0;
     font-weight: bold;
+}
+
+.modal-card {
+    display:flex;
 }
 
 .modal-header {
@@ -207,4 +230,39 @@ button[type="submit"] {
 
 .modal-text {
     margin-bottom: 0.5rem;
+}
+
+
+
+.modal-header .btn-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.modal-header h5 {
+    margin-top: 3rem; /* deixa o título mais pra baixo */
+}
+
+.alert {
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 1rem auto;
+    max-width: 40rem;
+    text-align: center;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
+}
+
+.alert-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
 }

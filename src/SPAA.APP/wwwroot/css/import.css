@@ -1,0 +1,139 @@
+﻿html {
+    margin: 0;
+}
+
+body {
+    width: 100% !important;
+    background: linear-gradient(to right, #fff, #f6f6f6);
+    margin: 0;
+}
+
+.container {
+    max-width: 100%;
+    padding: 0 !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
+
+.import-box {
+    display: flex;
+    flex-direction: column;
+    border: thin;
+    gap: 1rem;
+    align-items: center;
+    background-color: #F7FBFF;
+    padding: 2rem;
+    margin: 2rem auto;
+    border-radius: 0.625rem;
+    max-width: 40rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.10);
+}
+
+.toplogo {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.logoSpaa img {
+    height: 4rem;
+    width: auto;
+}
+
+.logo {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #435FA0;
+    margin: 0;
+    letter-spacing: 0.2rem;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #435FA0;
+    letter-spacing: 0.1rem;
+    margin: 0;
+}
+
+.import-title {
+    font-size: 1.5rem;
+    color: #435FA0;
+    font-weight: bold;
+    margin: 0;
+    text-align: center;
+}
+
+.import-description {
+    font-size: 1rem;
+    color: #444;
+    text-align: center;
+    max-width: 36rem;
+}
+
+.form {
+    width: 100%;
+}
+
+.mb-3 {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.btn-import {
+    background-color: #435FA0;
+    border: none;
+    padding: 0.45rem;
+    color: white;
+    border-radius: 0.5rem;
+    width: 35%;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+    .btn-import:hover {
+        background-color: #364d82;
+    }
+
+.file-name {
+    margin-left: 1rem;
+    font-style: italic;
+    color: #555;
+}
+
+.label {
+    font-size: 1.3rem;
+}
+
+.icon {
+    width: 1.75rem;  
+    height: auto;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+}
+
+.alert {
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 1rem auto;
+    max-width: 40rem;
+    text-align: center;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
+}
+
+.alert-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+}
