@@ -19,5 +19,29 @@ namespace SPAA.Data.Repository
         {
             return await DbSet.FirstOrDefaultAsync(e => e.CodigoDisciplina == codigoDisciplina); ;
         }
+
+        public async Task<Disciplina> ObterDisciplinaPorCodigoEquivalente(string codigoDisciplina)
+        {
+            return await DbSet.FirstOrDefaultAsync(e => EF.Functions.Like(e.CodigoEquivalencia!, $"%{codigoDisciplina}%"));
+        }
+
+        public async Task<List<Disciplina>> ObterDisciplinasPorCodigosOuEquivalentes(List<string> codigos)
+        {
+            var disciplinas = new List<Disciplina>();
+
+            foreach (var codigo in codigos)
+            {
+                var disciplina = await ObterDisciplinaPorCodigo(codigo)
+                                  ?? await ObterDisciplinaPorCodigoEquivalente(codigo);
+
+                if (disciplina != null)
+                {
+                    disciplinas.Add(disciplina);
+                }
+            }
+
+            return disciplinas;
+        }
+
     }
 }

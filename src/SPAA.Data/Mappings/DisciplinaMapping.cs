@@ -24,6 +24,7 @@ namespace SPAA.Data.Mappings
 
             builder.Property(d => d.CodigoDisciplina)
                 .ValueGeneratedNever()
+                .HasColumnType("varchar(20)")
                 .HasColumnName("cd_disciplina");
 
             builder.Property(d => d.NomeDisciplina)
@@ -32,16 +33,15 @@ namespace SPAA.Data.Mappings
 
             builder.Property(d => d.CargaHoraria)
                 .HasColumnName("carga_horaria");
-
-
-            builder.Property(d => d.CodigoTipoDisciplina)
-                .HasColumnName("cd_tipo_disciplina");
-
-            builder.Property(d => d.CodigoCurso)
-                .HasColumnName("cd_curso");
             
-            builder.Property(d => d.Curriculo)
-                .HasColumnName("curriculo");
+            builder.Property(d => d.Ativa)
+                .HasColumnName("ativa")
+                .HasColumnType("varchar(10)");
+
+            builder.Property(d => d.CodigoEquivalencia)
+                .HasColumnType("varchar(200)")
+                .HasColumnName("cd_disciplina_equivalente")
+                .IsRequired(false);
         }
     }
 }

@@ -14,8 +14,8 @@ namespace SPAA.Business.Interfaces
         Task<bool> Adicionar(TEntity entity);
         Task<TEntity> ObterPorId(TKey codigo);
         //Task<List<TEntity>> ObterTodos();
-        //Task Atualizar(TEntity entity);
-        Task Remover(TKey codigo);
+        Task Atualizar(TEntity entity);
+        Task<bool> Remover(TKey codigo);
         //Task<IEnumerable<TEntity>> Buscar(Expression<Func<TEntity, bool>> predicate);
         Task<int> SaveChanges();
     }

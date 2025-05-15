@@ -10,19 +10,17 @@ namespace SPAA.Data.Mappings
         {
             builder.ToTable("alunos_disciplinas");
 
-            // Chave primária composta
-            builder.HasKey(ad => new { ad.Matricula, ad.CodigoDisciplina, ad.Semestre });
+            builder.HasKey(ad => new { ad.Matricula, ad.NomeDisicplina, ad.Semestre });
 
-            // Propriedades com nomes de coluna
             builder.Property(ad => ad.Matricula)
                 .IsRequired()
                 .HasMaxLength(20)
                 .HasColumnName("matricula");
 
-            builder.Property(ad => ad.CodigoDisciplina)
+            builder.Property(ad => ad.NomeDisicplina)
                 .IsRequired()
-                .HasMaxLength(20)
-                .HasColumnName("codigo_disciplina");
+                .HasMaxLength(150)
+                .HasColumnName("nome_disciplina");
 
             builder.Property(ad => ad.Semestre)
                 .IsRequired()

@@ -64,5 +64,15 @@ namespace SPAA.Data.Repository
         {
             return await _userManager.ResetPasswordAsync(user, token, novaSenha);
         }
+
+        public async Task<bool> VerificarSenhaAtual(ApplicationUser user, string senhaAtual)
+        {
+            return await _userManager.CheckPasswordAsync(user, senhaAtual);
+        }
+
+        public async Task<IdentityResult> AlterarSenha(ApplicationUser user, string senhaAtual, string novaSenha)
+        {
+            return await _userManager.ChangePasswordAsync(user, senhaAtual, novaSenha);
+        }
     }
 }

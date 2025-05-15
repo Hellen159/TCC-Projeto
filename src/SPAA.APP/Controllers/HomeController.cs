@@ -1,23 +1,41 @@
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SPAA.App.ViewModels;
 using SPAA.APP.Models;
 using SPAA.APP.ViewModels;
 using SPAA.Business.Interfaces;
+using SPAA.Business.Models;
 using SPAA.Data.Context;
+using SPAA.Data.Repository;
 using System.Diagnostics;
 
 namespace SPAA.APP.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IAlunoRepository _alunoRepository;
+        private readonly IAlunoDisciplinaRepository _alunoDisciplinaRepository;
+        private readonly IDisciplinaRepository _disciplinaRepository; 
+        private readonly IMapper _mapper;
+        private readonly ICurriculoRepository _curriculoRepository;
 
 
         public HomeController(ILogger<HomeController> logger,
-                               IAlunoRepository alunoRepository)
+                               IAlunoRepository alunoRepository,
+                               IAlunoDisciplinaRepository alunoDisciplinaRepository,
+                               IDisciplinaRepository disciplinaRepository,
+                               IMapper mapper,
+                               ICurriculoRepository curriculoRepository)
         {
             _logger = logger;
             _alunoRepository = alunoRepository;
+            _alunoDisciplinaRepository = alunoDisciplinaRepository;
+            _disciplinaRepository = disciplinaRepository;
+            _mapper = mapper;
+            _curriculoRepository = curriculoRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -27,15 +45,18 @@ namespace SPAA.APP.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var userId = User.Identity.Name;
-            var verificaHistorico = await _alunoRepository.AlunoJaAnexouHistorico(userId);
-            if (verificaHistorico == false)
+            var alunoJaAnexouHistorico = await _alunoRepository.AlunoJaAnexouHistorico(User.Identity.Name);
+            if (!alunoJaAnexouHistorico)
             {
-                return RedirectToAction("UploadHistorico", "Upload"); 
+                return RedirectToAction("UploadHistorico", "Upload");
             }
 
-            return View();
+            var disciplinasViewModel = await ObterDisciplinasAlunoAsync(User.Identity.Name);
 
+            ViewData["Aprovadas"] = disciplinasViewModel.Aprovadas;
+            ViewData["Pendentes"] = disciplinasViewModel.Pendentes;
+
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -43,5 +64,52 @@ namespace SPAA.APP.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        //metodos privados
+        private async Task<(DisciplinaListaViewModel Aprovadas, DisciplinaListaViewModel Pendentes)> ObterDisciplinasAlunoAsync(string matricula)
+        {
+            var dadosAluno = await _alunoRepository.ObterPorId(matricula);
+
+            var disciplinasCurriculoObrigatorias = await _curriculoRepository.ObterDisciplinasObrigatoriasPorCurrciulo(dadosAluno.CurriculoAluno, 1);
+
+            var nomeDisciplinasAprovadas = await _alunoDisciplinaRepository.ObterNomeDisciplinasPorSituacao(matricula, "APR");
+
+            var obrigatoriasPendentes = disciplinasCurriculoObrigatorias
+                .Where(d => !nomeDisciplinasAprovadas.Contains(d.NomeDisciplina))
+                .ToList();
+
+            var disciplinasAprovadas = disciplinasCurriculoObrigatorias
+                .Where(d => nomeDisciplinasAprovadas.Contains(d.NomeDisciplina))
+                .ToList();
+
+            var disciplinasAprovadasViewModel = disciplinasAprovadas
+                .Select(d => new DisciplinaViewModel
+                {
+                    NomeDisciplina = d.NomeDisciplina
+                })
+                .ToList();
+
+            var disciplinasPendentesViewModel = obrigatoriasPendentes
+                .Select(d => new DisciplinaViewModel
+                {
+                    NomeDisciplina = d.NomeDisciplina
+                })
+                .ToList();
+
+            var aprovadasViewModel = new DisciplinaListaViewModel
+            {
+                Titulo = "Disciplinas Aprovadas",
+                Disciplinas = disciplinasAprovadasViewModel
+            };
+
+            var pendentesViewModel = new DisciplinaListaViewModel
+            {
+                Titulo = "Disciplinas Pendentes",
+                Disciplinas = disciplinasPendentesViewModel
+            };
+
+            return (aprovadasViewModel, pendentesViewModel);
+        }
+
     }
 }

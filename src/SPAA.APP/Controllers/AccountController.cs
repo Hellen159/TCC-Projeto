@@ -39,7 +39,7 @@ public class AccountController : Controller
             var userExistente = await _applicationUserRepository.ObterPorEmail(registerViewModel.Email);
             if (userExistente != null)
             {
-                ModelState.AddModelError("Email", "Esse e-mail já está registrado.");
+                TempData["ErrorMessage"] = "Esse e-mail já está registrado.";
                 return View(registerViewModel);
             }
 
@@ -47,7 +47,7 @@ public class AccountController : Controller
             var alunoExistente = await _alunoRepository.ObterPorId(registerViewModel.Matricula);
             if (alunoExistente != null)
             {
-                ModelState.AddModelError("Matricula", "Essa matrícula já pertence a outro usuário.");
+                TempData["ErrorMessage"] = "Essa matrícula já pertence a outro usuário.";
                 return View(registerViewModel);
             }
 
@@ -93,7 +93,7 @@ public class AccountController : Controller
         }
         catch (Exception ex)
         {
-            ModelState.AddModelError(string.Empty, $"Erro durante o cadastro: {ex.Message}");
+            TempData["ErrorMessage"] = $"Erro durante o cadastro: {ex.Message}";
             return View(registerViewModel);
         }
     }
@@ -120,7 +120,7 @@ public class AccountController : Controller
             return RedirectToAction("Index", "Home");
         }
 
-        TempData["MensagemErro"] = "Usuário ou senha incorretos.";
+        TempData["ErrorMessage"] = "Usuário ou senha incorretos.";
         return View();
     }
 
@@ -183,7 +183,7 @@ public class AccountController : Controller
         var user = await _applicationUserRepository.ObterPorEmail(model.Email);
         if (user == null)
         {
-            TempData["MensagemErro"] = "Usuário não encontrado.";
+            TempData["ErrorMessageF"] = "Usuário não encontrado.";
             return RedirectToAction("Login");
         }
 

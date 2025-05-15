@@ -17,5 +17,7 @@ namespace SPAA.Business.Interfaces
         Task<ApplicationUser> ObterPorEmail(string email);
         Task<string> GerarTokenResetSenha(ApplicationUser user);
         Task<IdentityResult> ResetarSenha(ApplicationUser user, string token, string novaSenha);
+        Task<bool> VerificarSenhaAtual(ApplicationUser user, string senhaAtual);
+        Task<IdentityResult> AlterarSenha(ApplicationUser user, string senhaAtual, string novaSenha);
     }
 }

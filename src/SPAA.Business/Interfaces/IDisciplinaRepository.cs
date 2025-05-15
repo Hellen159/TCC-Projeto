@@ -11,5 +11,7 @@ namespace SPAA.Business.Interfaces
     public interface IDisciplinaRepository : IRepository<Disciplina, string>
     {
         Task<Disciplina> ObterDisciplinaPorCodigo(string codigoDisciplina);
+        Task<Disciplina> ObterDisciplinaPorCodigoEquivalente(string codigoDisciplina);
+        Task<List<Disciplina>> ObterDisciplinasPorCodigosOuEquivalentes(List<string> codigo);
     }
 }

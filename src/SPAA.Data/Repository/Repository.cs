@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SPAA.Business.Interfaces;
+using SPAA.Business.Models;
 using SPAA.Data.Context;
 using System;
 using System.Collections.Generic;
@@ -32,13 +33,23 @@ namespace SPAA.Data.Repository
             return await DbSet.FindAsync(codigo);
         }
 
-        public async Task Remover(TKey codigo)
+        public async Task<bool> Remover(TKey codigo)
         {
             var entity = await ObterPorId(codigo);
             if (entity == null)
-                throw new InvalidOperationException("Entidade não encontrada.");
+                return false;
 
             DbSet.Remove(entity);
+            await SaveChanges();
+            return true;
+        }
+
+        public async Task Atualizar(TEntity entity)
+        {
+            if (entity == null)
+                throw new InvalidOperationException("Entidade não encontrada.");
+
+            DbSet.Update(entity);
             await SaveChanges();
         }
 

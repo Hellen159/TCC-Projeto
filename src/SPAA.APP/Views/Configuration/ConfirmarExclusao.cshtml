@@ -1,0 +1,27 @@
+﻿@model SPAA.App.ViewModels.ConfirmarExclusaoViewModel
+
+<h2>Confirmar Exclusão de Conta</h2>
+
+<form asp-action="ExcluirConta" method="post">
+    <div>
+        <label for="Matricula">Digite sua Matrícula para Confirmar:</label>
+        <input type="text" id="Matricula" name="Matricula" />
+        <span asp-validation-for="Matricula" class="text-danger"></span>
+    </div>
+    <button type="submit">Confirmar Exclusão</button>
+</form>
+
+@if (TempData["MensagemSucesso"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["MensagemSucesso"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
