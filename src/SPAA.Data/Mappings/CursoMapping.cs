@@ -26,7 +26,7 @@ namespace SPAA.Data.Mappings
 
             builder.HasData(
                 new Curso { CodigoCurso = 1, NomeCurso = "comum", CargaHorariaObrigatoria = 0, CargaHorariaOptativa = 0 },
-                new Curso { CodigoCurso = 2, NomeCurso = "software", CargaHorariaObrigatoria = 0, CargaHorariaOptativa = 0 }
+                new Curso { CodigoCurso = 2, NomeCurso = "software", CargaHorariaObrigatoria = 2580, CargaHorariaOptativa = 900 }
                 );
 
 

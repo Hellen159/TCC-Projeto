@@ -44,6 +44,7 @@ namespace SPAA.Data.Repository
                 var blocosDisciplinas = ExtrairBlocos(textoExtraido);
                 var listaEquivalencia = ObterEquivalenciasCurriculo(textoExtraido, matricula);
                 var listaAlunoDisciplina = ConverterBlocos(blocosDisciplinas, matricula);
+                var listaPendentes = ObterObrigatoriasPendentes(textoExtraido, matricula);
 
                 var curriculoAno = ObterInformacoesCurriculo(textoExtraido);
                 if (curriculoAno != null)
@@ -60,6 +61,12 @@ namespace SPAA.Data.Repository
                 if (listaAlunoDisciplina.Any())
                 {
                     DbSet.AddRange(listaAlunoDisciplina);
+                    await SaveChanges();
+                }
+
+                if (listaPendentes.Any())
+                {
+                    DbSet.AddRange(listaPendentes);
                     await SaveChanges();
                 }
 
@@ -276,7 +283,7 @@ namespace SPAA.Data.Repository
 
                     equivalencias.Add(new AlunoDisciplina
                     {
-                        Semestre = "2020.1", 
+                        Semestre = "0000.0", 
                         Situacao = "APR",  
                         NomeDisicplina = NormalizarTexto(nomeDisciplina),
                         Matricula = matricula
@@ -285,6 +292,49 @@ namespace SPAA.Data.Repository
             }
 
             return equivalencias;  
+        }
+
+        private List<AlunoDisciplina> ObterObrigatoriasPendentes(string texto, string matricula)
+        {
+            var resultado = new List<AlunoDisciplina>();
+
+            var titulo = "Componentes Curriculares Obrigatórios Pendentes:";
+            var idxInicio = texto.IndexOf(titulo, StringComparison.OrdinalIgnoreCase);
+
+            if (idxInicio == -1)
+                return resultado;
+
+            var trecho = texto.Substring(idxInicio + titulo.Length);
+
+            var idxFim = trecho.IndexOf("Componentes Curriculares", 10, StringComparison.OrdinalIgnoreCase);
+            if (idxFim > 0)
+                trecho = trecho.Substring(0, idxFim);
+
+            var linhas = trecho.Split('\n')
+                .Select(l => l.Trim())
+                .Where(l => !string.IsNullOrWhiteSpace(l) && Regex.IsMatch(l, @"\d{2,3} h\s+[A-Z]{3}\d{4}"))  
+                .ToList();
+
+            foreach (var linha in linhas)
+            {
+                var linhaLimpa = Regex.Replace(linha, @"\s+Matriculado(\s+em\s+Equivalente)?", "", RegexOptions.IgnoreCase);
+
+                var match = Regex.Match(linhaLimpa, @"^(.*?)\s+\d{1,3} h\s+[A-Z]{3}\d{4}$");
+                if (match.Success)
+                {
+                    var nome = match.Groups[1].Value.Trim();
+
+                    resultado.Add(new AlunoDisciplina
+                    {
+                        NomeDisicplina = NormalizarTexto(nome),
+                        Situacao = "PEND",
+                        Matricula = matricula,
+                        Semestre = "0000.0"
+                    });
+                }
+            }
+
+            return resultado;
         }
 
 

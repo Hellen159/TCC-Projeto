@@ -69,29 +69,20 @@ namespace SPAA.APP.Controllers
         {
             var dadosAluno = await _alunoRepository.ObterPorId(matricula);
 
-            var disciplinasCurriculoObrigatorias = await _curriculoRepository.ObterDisciplinasObrigatoriasPorCurrciulo(dadosAluno.CurriculoAluno, 1);
+            var nomesAprovadas = await _alunoDisciplinaRepository.ObterNomeDisciplinasPorSituacao(matricula, "APR");
+            var nomesPendentes = await _alunoDisciplinaRepository.ObterNomeDisciplinasPorSituacao(matricula, "PEND");
 
-            var nomeDisciplinasAprovadas = await _alunoDisciplinaRepository.ObterNomeDisciplinasPorSituacao(matricula, "APR");
-
-            var obrigatoriasPendentes = disciplinasCurriculoObrigatorias
-                .Where(d => !nomeDisciplinasAprovadas.Contains(d.NomeDisciplina))
-                .ToList();
-
-            var disciplinasAprovadas = disciplinasCurriculoObrigatorias
-                .Where(d => nomeDisciplinasAprovadas.Contains(d.NomeDisciplina))
-                .ToList();
-
-            var disciplinasAprovadasViewModel = disciplinasAprovadas
-                .Select(d => new DisciplinaViewModel
+            var disciplinasAprovadasViewModel = nomesAprovadas
+                .Select(nome => new DisciplinaViewModel
                 {
-                    NomeDisciplina = d.NomeDisciplina
+                    NomeDisciplina = nome
                 })
                 .ToList();
 
-            var disciplinasPendentesViewModel = obrigatoriasPendentes
-                .Select(d => new DisciplinaViewModel
+            var disciplinasPendentesViewModel = nomesPendentes
+                .Select(nome => new DisciplinaViewModel
                 {
-                    NomeDisciplina = d.NomeDisciplina
+                    NomeDisciplina = nome
                 })
                 .ToList();
 
