@@ -11,37 +11,42 @@ namespace SPAA.Data.Repository
 {
     public class DisciplinaRepository : Repository<Disciplina, string>, IDisciplinaRepository
     {
-        public DisciplinaRepository(MeuDbContext context) : base(context)
+        private readonly IAlunoDisciplinaRepository _alunoDisciplinaRepository;
+        private readonly IPreRequisitoRepository _preRequisitoRepository;
+
+        public DisciplinaRepository(MeuDbContext context, 
+                                    IAlunoDisciplinaRepository alunoDisciplinaRepository, 
+                                    IPreRequisitoRepository preRequisitoRepository) : base(context)
         {
+            _alunoDisciplinaRepository = alunoDisciplinaRepository;
+            _preRequisitoRepository = preRequisitoRepository;
         }
 
-        public async Task<Disciplina> ObterDisciplinaPorCodigo(string codigoDisciplina)
+        public async Task<List<string>> ObterDisciplinasLiberadas(string matricula)
         {
-            return await DbSet.FirstOrDefaultAsync(e => e.CodigoDisciplina == codigoDisciplina); ;
-        }
+            var nomesAprovadas = await _alunoDisciplinaRepository.ObterNomeDisciplinasPorSituacao(matricula, "APR");
+            var nomesPendentes = await _alunoDisciplinaRepository.ObterNomeDisciplinasPorSituacao(matricula, "PEND");
+            var preRequisitos = await _preRequisitoRepository.ObterTodos();
+            var disciplinasLiberadas = new List<string>();
 
-        public async Task<Disciplina> ObterDisciplinaPorCodigoEquivalente(string codigoDisciplina)
-        {
-            return await DbSet.FirstOrDefaultAsync(e => EF.Functions.Like(e.CodigoEquivalencia!, $"%{codigoDisciplina}%"));
-        }
-
-        public async Task<List<Disciplina>> ObterDisciplinasPorCodigosOuEquivalentes(List<string> codigos)
-        {
-            var disciplinas = new List<Disciplina>();
-
-            foreach (var codigo in codigos)
+            foreach (var pendente in nomesPendentes)
             {
-                var disciplina = await ObterDisciplinaPorCodigo(codigo)
-                                  ?? await ObterDisciplinaPorCodigoEquivalente(codigo);
+                var prereq = preRequisitos.FirstOrDefault(p =>
+                    p.NomeDisciplina.Equals(pendente, StringComparison.InvariantCultureIgnoreCase));
 
-                if (disciplina != null)
+                if (prereq == null || string.IsNullOrWhiteSpace(prereq.PreRequisitoLogico))
                 {
-                    disciplinas.Add(disciplina);
+                    disciplinasLiberadas.Add(pendente);
+                    continue;
+                }
+
+                if (await _preRequisitoRepository.AtendeRequisitos(prereq.PreRequisitoLogico, nomesAprovadas))
+                {
+                    disciplinasLiberadas.Add(pendente);
                 }
             }
 
-            return disciplinas;
+            return disciplinasLiberadas;
         }
-
     }
 }

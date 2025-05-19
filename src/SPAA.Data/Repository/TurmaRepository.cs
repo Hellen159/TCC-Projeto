@@ -16,16 +16,5 @@ namespace SPAA.Data.Repository
         {
         }
 
-        public async Task<List<Turma>> ObterTurmasPorCodigoDisciplina(string codigoDisciplina)
-        {
-            //teste de navegação entre as classes
-            //var turma = await _context.Turmas
-            //    .Include(t => t.Disciplina)  // Inclui a disciplina associada
-            //    .FirstOrDefaultAsync(t => t.Id == 01);
-
-            return await DbSet
-                    .Where(t => t.CodigoDisciplina == codigoDisciplina)  // Filtra apenas pelo CodigoDisciplina
-                    .ToListAsync();
-        }
     }
 }

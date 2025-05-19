@@ -17,6 +17,7 @@ namespace SPAA.Business.Interfaces
         Task Atualizar(TEntity entity);
         Task<bool> Remover(TKey codigo);
         //Task<IEnumerable<TEntity>> Buscar(Expression<Func<TEntity, bool>> predicate);
+        Task<List<TEntity>> ObterTodos();
         Task<int> SaveChanges();
     }
 }

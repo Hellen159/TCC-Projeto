@@ -15,33 +15,20 @@ namespace SPAA.Data.Mappings
         {
             builder.ToTable("disciplinas");
 
-            builder.HasKey(d => d.Id);
-
-            builder.Property(d => d.Id)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("id")
-                .IsRequired();
+            builder.HasKey(d => d.CodigoDisciplina);
 
             builder.Property(d => d.CodigoDisciplina)
-                .ValueGeneratedNever()
-                .HasColumnType("varchar(20)")
-                .HasColumnName("cd_disciplina");
+                .ValueGeneratedOnAdd()
+                .HasColumnName("cd_disciplina")
+                .IsRequired();
 
             builder.Property(d => d.NomeDisciplina)
-                .HasColumnName("nome")
+                .HasColumnName("nome_disciplina")
                 .HasColumnType("varchar(150)");
 
             builder.Property(d => d.CargaHoraria)
                 .HasColumnName("carga_horaria");
             
-            builder.Property(d => d.Ativa)
-                .HasColumnName("ativa")
-                .HasColumnType("varchar(10)");
-
-            builder.Property(d => d.CodigoEquivalencia)
-                .HasColumnType("varchar(200)")
-                .HasColumnName("cd_disciplina_equivalente")
-                .IsRequired(false);
         }
     }
 }

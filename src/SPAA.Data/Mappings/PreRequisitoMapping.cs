@@ -15,17 +15,17 @@ namespace SPAA.Data.Mappings
         {
             builder.ToTable("pre_requisitos");
 
-            builder.HasKey(d => d.Id);
+            builder.HasKey(d => d.CodigoPreRequisito);
 
-            builder.Property(d => d.Id)
+            builder.Property(d => d.CodigoPreRequisito)
                 .ValueGeneratedOnAdd()
-                .HasColumnName("id")
+                .HasColumnName("cd_pre_requisito")
                 .IsRequired();
 
-            builder.Property(d => d.CodigoDisciplina)
+            builder.Property(d => d.NomeDisciplina)
                 .ValueGeneratedNever()
-                .HasColumnType("varchar(20)")
-                .HasColumnName("cd_disciplina");
+                .HasColumnType("varchar(150)")
+                .HasColumnName("nome_disciplina");
 
             builder.Property(d => d.PreRequisitoLogico)
                 .HasColumnName("pre_requisito_logico")

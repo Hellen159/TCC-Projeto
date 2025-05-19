@@ -16,7 +16,6 @@ namespace SPAA.Data.Repository
     public class AlunoDisciplinaRepository : Repository<AlunoDisciplina, string>, IAlunoDisciplinaRepository
     {
         private readonly ILogger<AlunoDisciplinaRepository> _logger;
-        private readonly IDisciplinaRepository _disciplinaRepository;
         private readonly IAlunoRepository _alunoRepository;
 
         private static readonly string[] SiglasSituacoes = new[] { "APR", "CANC", "DISP", "MATR", "REP", "REPF", "REPMF", "TRANC", "CUMP" };
@@ -24,11 +23,9 @@ namespace SPAA.Data.Repository
 
         public AlunoDisciplinaRepository(MeuDbContext context,
                                             ILogger<AlunoDisciplinaRepository> logger,
-                                            IAlunoRepository alunoRepository,
-                                            IDisciplinaRepository disciplinaRepository) : base(context)
+                                            IAlunoRepository alunoRepository) : base(context)
         {
             _logger = logger;
-            _disciplinaRepository = disciplinaRepository;
             _alunoRepository = alunoRepository;
         }
 

@@ -8,7 +8,7 @@ namespace SPAA.Business.Models
 {
     public class Curriculo
     {
-        public int Id { get; set; }
+        public int CodigoCurriculo { get; set; }
         public string NomeDisciplina { get; set; }
         public string AnoCurriculo { get; set; }
         public int TipoDisciplina { get; set; }

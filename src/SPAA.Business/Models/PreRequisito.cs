@@ -8,8 +8,8 @@ namespace SPAA.Business.Models
 {
     public class PreRequisito
     {
-        public int Id { get; set; }
-        public string CodigoDisciplina { get; set; }
+        public int CodigoPreRequisito { get; set; }
+        public string NomeDisciplina { get; set; }
         public string PreRequisitoLogico { get; set; }
     }
 }

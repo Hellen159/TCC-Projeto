@@ -15,11 +15,11 @@ namespace SPAA.Data.Mappings
         {
             builder.ToTable("turmas");
 
-            builder.HasKey(d => d.Id);
+            builder.HasKey(d => d.CodigoTurmaUnico);
 
-            builder.Property(d => d.Id)
+            builder.Property(d => d.CodigoTurmaUnico)
                 .ValueGeneratedOnAdd()
-                .HasColumnName("id")
+                .HasColumnName("cd_turma_unico")
                 .IsRequired();
 
             builder.Property(d => d.CodigoTurma)
@@ -39,9 +39,9 @@ namespace SPAA.Data.Mappings
             builder.Property(d => d.Capacidade)
                 .HasColumnName("capacidade");
 
-            builder.Property(d => d.CodigoDisciplina)
-                .HasColumnName("cd_disciplina")
-                .HasColumnType("varchar(10)");
+            builder.Property(d => d.NomeDisciplina)
+                .HasColumnName("nome_disciplina")
+                .HasColumnType("varchar(150)");
 
             builder.Property(d => d.Horario)
                 .HasColumnName("horario")

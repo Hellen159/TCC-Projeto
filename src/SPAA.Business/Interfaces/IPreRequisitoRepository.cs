@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace SPAA.Business.Interfaces
 {
-    public interface ITurmaRepository : IRepository<Turma, string>
+    public interface IPreRequisitoRepository : IRepository<PreRequisito, int>
     {
+        Task<bool> AtendeRequisitos(string expressao, List<string> disciplinasAprovadas);
     }
 }

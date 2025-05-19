@@ -62,6 +62,9 @@ namespace SPAA.Data.Repository
         {
             _context?.Dispose();
         }
-
+        public async Task<List<TEntity>> ObterTodos()
+        {
+            return await DbSet.ToListAsync();
+        }
     }
 }

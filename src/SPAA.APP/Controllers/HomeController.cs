@@ -20,6 +20,7 @@ namespace SPAA.APP.Controllers
         private readonly IDisciplinaRepository _disciplinaRepository; 
         private readonly IMapper _mapper;
         private readonly ICurriculoRepository _curriculoRepository;
+        private readonly IPreRequisitoRepository _preRequisitoRepository;
 
 
         public HomeController(ILogger<HomeController> logger,
@@ -27,7 +28,8 @@ namespace SPAA.APP.Controllers
                                IAlunoDisciplinaRepository alunoDisciplinaRepository,
                                IDisciplinaRepository disciplinaRepository,
                                IMapper mapper,
-                               ICurriculoRepository curriculoRepository)
+                               ICurriculoRepository curriculoRepository,
+                               IPreRequisitoRepository preRequisitoRepository)
         {
             _logger = logger;
             _alunoRepository = alunoRepository;
@@ -35,6 +37,7 @@ namespace SPAA.APP.Controllers
             _disciplinaRepository = disciplinaRepository;
             _mapper = mapper;
             _curriculoRepository = curriculoRepository;
+            _preRequisitoRepository = preRequisitoRepository;   
         }
 
         public async Task<IActionResult> Index()

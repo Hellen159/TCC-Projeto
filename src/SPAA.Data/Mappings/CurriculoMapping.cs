@@ -15,11 +15,11 @@ namespace SPAA.Data.Mappings
         {
             builder.ToTable("curriculos");
 
-            builder.HasKey(d => d.Id);
+            builder.HasKey(d => d.CodigoCurriculo);
 
-            builder.Property(d => d.Id)
+            builder.Property(d => d.CodigoCurriculo)
                 .ValueGeneratedOnAdd()
-                .HasColumnName("id")
+                .HasColumnName("cd_curriculo")
                 .IsRequired();
 
             builder.Property(d => d.NomeDisciplina)
