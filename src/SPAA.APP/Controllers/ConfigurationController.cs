@@ -11,16 +11,19 @@ namespace SPAA.App.Controllers
     public class ConfigurationController : Controller
     {
         private readonly IAlunoRepository _alunoRepository;
+        private readonly IAlunoDisciplinaRepository _alunoDisciplinaRepository;
         private readonly IApplicationUserRepository _applicationUserRepository;
         private readonly UserManager<ApplicationUser> _userManager;
 
         public ConfigurationController(IAlunoRepository alunoRepository,
                                         UserManager<ApplicationUser> userManager,
-                                        IApplicationUserRepository applicationUserRepository)
+                                        IApplicationUserRepository applicationUserRepository,
+                                        IAlunoDisciplinaRepository alunoDisciplinaRepository)
         {
             _alunoRepository = alunoRepository;
             _userManager = userManager;
             _applicationUserRepository = applicationUserRepository;
+            _alunoDisciplinaRepository = alunoDisciplinaRepository;
         }
 
         [HttpGet]
@@ -110,9 +113,10 @@ namespace SPAA.App.Controllers
             }
 
             var deleteAluno = await _alunoRepository.Remover(user.UserName);
+            var deleteAlunoDisciplina = await _alunoDisciplinaRepository.Remover(user.UserName);
             var result = await _applicationUserRepository.RemoverApplicationUser(user.Id);
 
-            if (result.Succeeded && deleteAluno)
+            if (result.Succeeded && deleteAluno && deleteAlunoDisciplina)
             {
                 await _applicationUserRepository.LogoutApplicationUser();
                 TempData["MensagemSucesso"] = "Conta excluída com sucesso.";
