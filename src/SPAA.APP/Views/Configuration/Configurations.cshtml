@@ -1,52 +1,71 @@
-﻿@model SPAA.App.ViewModels.ConfigurationViewModel
+﻿@{
+    ViewData["LayoutType"] = "formulario";
+}
 
-<div class="configuracoes-modal">
-    <h2>Configurações</h2>
+@model SPAA.App.ViewModels.ConfigurationViewModel
 
-    <div class="formularios">
-        <!-- Formulário de Importar Histórico -->
-        <form id="formHistorico" asp-controller="Upload" asp-action="UploadHistorico" method="post" enctype="multipart/form-data">
-            <div>
-                <label asp-for="Historico">Histórico</label>
-                <input asp-for="Historico" type="file" class="form-control" accept=".pdf" />
-                <span asp-validation-for="Historico" class="text-danger"></span>
+@section Styles {
+    <link rel="stylesheet" href="~/css/config.css" />
+}
+
+<!-- Botão para abrir a modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#configuracoesModal">
+    Abrir Configurações
+</button>
+
+<!-- Modal de Configurações -->
+<div class="modal fade" id="configuracoesModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="font-weight: bold; color: #435FA0;">Configurações</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <input type="hidden" name="returnAction" value="Configurations" />
-            <input type="hidden" name="returnController" value="Configuration" />
-            <button type="submit" name="submitButton" value="Salvar Histórico">Salvar Histórico</button>
-        </form>
+            <div class="modal-body">
+                <div class="formularios">
+                    <!-- Formulário de Importar Histórico -->
+                    <form class="forms" id="formHistorico" asp-controller="Upload" asp-action="UploadHistorico" method="post" enctype="multipart/form-data">
+                        <div>
+                            <label asp-for="Historico">Histórico</label>
+                            <input asp-for="Historico" type="file" class="form-control" accept=".pdf" />
+                            <span asp-validation-for="Historico" class="text-danger"></span>
+                        </div>
+                        <input type="hidden" name="returnAction" value="Configurations" />
+                        <input type="hidden" name="returnController" value="Configuration" />
+                        <button type="submit" name="submitButton" value="Salvar Histórico">Salvar Histórico</button>
+                    </form>
+                </div>
+                <div class="alteracoes">
+                    <!-- Formulário de Alterar Nome -->
+                    <form class ="forms" id="formAlterarNome" asp-action="AlterarNome" method="post">
+                        <div style="margin-bottom: 1rem;">
+                            <label for="NovoNome">Alterar Nome:</label>
+                            <input asp-for="NovoNome" id="NovoNome" placeholder="Novo Nome*" />
+                            <span asp-validation-for="NovoNome" class="text-danger"></span>
+                        </div>
+                        <button type="submit" name="submitButton" value="Salvar Nome">Salvar Nome</button>
+                    </form>
+                    <!-- Formulário de Alterar Senha -->
+                    <form class="forms" id="formAlterarSenha" asp-action="AlterarSenha" method="post">
+                        <div style="margin-bottom: 1rem; width: 92%;">
+                            <input asp-for="SenhaAtual" placeholder="Senha Atual*" id="SenhaAtual" />
+                        </div>
+                        <div style="margin-bottom: 1rem; width: 92%;">
+                            <input asp-for="NovaSenha" placeholder="Nova Senha*" id="NovaSenha" />
+                        </div>
+                        <div style="margin-bottom: 1rem; width: 92%;">
+                            <input asp-for="ConfirmacaoSenha" placeholder="Confirme a nova senha*" id="ConfirmacaoSenha" />
+                        </div>
+                        <button type="submit" name="submitButton" value="Salvar Senha">Salvar Senha</button>
+                    </form>
+                </div>
+                <!-- Botão de Excluir Conta -->
+                <form class="forms" asp-action="ConfirmarExclusao" method="get">
+                    <button type="submit" style="background-color: red;">Excluir Conta</button>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <div class="alteracoes">
-        <!-- Formulário de Alterar Nome -->
-        <form id="formAlterarNome" asp-action="AlterarNome" method="post">
-            <div>
-                <label for="NovoNome">Alterar Nome:</label>
-                <input asp-for="NovoNome" id="NovoNome" placeholder="Novo Nome*" />
-                <span asp-validation-for="NovoNome" class="text-danger"></span>
-            </div>
-            <button type="submit" name="submitButton" value="Salvar Nome">Salvar Nome</button>
-        </form>
-
-        <!-- Formulário de Alterar Senha -->
-        <form id="formAlterarSenha" asp-action="AlterarSenha" method="post">
-            <div>
-                <input asp-for="SenhaAtual" placeholder="Senha Atual*" id="SenhaAtual" />
-            </div>
-            <div>
-                <input asp-for="NovaSenha" placeholder="Nova Senha*" id="NovaSenha" />
-            </div>
-            <div>
-                <input asp-for="ConfirmacaoSenha" placeholder="Confirme a nova senha*" id="ConfirmacaoSenha" />
-            </div>
-            <button type="submit" name="submitButton" value="Salvar Senha">Salvar Senha</button>
-        </form>
-    </div>
-
-    <!-- Botão de Excluir Conta -->
-    <form asp-action="ConfirmarExclusao" method="get">
-        <button type="submit" style="background-color: red;">Excluir Conta</button>
-    </form>
 </div>
 
 @if (TempData["MensagemSucesso"] != null)
@@ -56,7 +75,6 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
-
 @if (TempData["ErrorMessage"] != null)
 {
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -72,9 +90,7 @@
     document.getElementById("formAlterarNome").onsubmit = function (e) {
         var nome = document.getElementById("NovoNome").value.trim();
         var validationDiv = document.getElementById("validationMessages");
-
         validationDiv.innerHTML = ""; // limpa mensagens anteriores
-
         if (nome === "") {
             e.preventDefault();
             validationDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
@@ -83,7 +99,6 @@
                 '</div>';
             return false;
         }
-
         if (nome.length < 10 || nome.length > 150) {
             e.preventDefault();
             validationDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
@@ -100,9 +115,7 @@
         var novaSenha = document.getElementById("NovaSenha").value.trim();
         var confirmacaoSenha = document.getElementById("ConfirmacaoSenha").value.trim();
         var validationDiv = document.getElementById("validationMessages");
-
         validationDiv.innerHTML = ""; // Limpa mensagens anteriores
-
         if (senhaAtual === "") {
             e.preventDefault();
             validationDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
@@ -111,7 +124,6 @@
                 '</div>';
             return false;
         }
-
         if (novaSenha === "" || confirmacaoSenha === "") {
             e.preventDefault();
             validationDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
@@ -120,7 +132,6 @@
                 '</div>';
             return false;
         }
-
         if (novaSenha.length < 8 || novaSenha.length > 20) {
             e.preventDefault();
             validationDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
@@ -129,7 +140,6 @@
                 '</div>';
             return false;
         }
-
         if (novaSenha !== confirmacaoSenha) {
             e.preventDefault();
             validationDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
@@ -145,9 +155,7 @@
         var historicoInput = document.getElementById("Historico");
         var historico = historicoInput.value;
         var validationDiv = document.getElementById("validationMessages");
-
         validationDiv.innerHTML = ""; // limpa mensagens anteriores
-
         if (!historico) {
             e.preventDefault();
             validationDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
@@ -156,7 +164,6 @@
                 '</div>';
             return false;
         }
-
         var fileExtension = historico.split('.').pop().toLowerCase();
         if (fileExtension !== 'pdf') {
             e.preventDefault();
@@ -168,4 +175,3 @@
         }
     };
 </script>
-

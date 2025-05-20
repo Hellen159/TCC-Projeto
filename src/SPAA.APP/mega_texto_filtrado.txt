@@ -1,0 +1,2086 @@
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\ViewModels\AboutViewModel.cs ---
+namespace SPAA.APP.ViewModels
+{
+    public class AboutViewModel
+    {
+        public string Title { get; set; }
+        public string Text { get; set; }
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\ViewModels\ConfigurationViewModel.cs ---
+using System.ComponentModel.DataAnnotations;
+
+namespace SPAA.App.ViewModels
+{
+    public class ConfigurationViewModel
+    {
+
+        public IFormFile Historico { get; set; }
+
+        [DataType(DataType.Password)]
+        public string SenhaAtual { get; set; }
+
+
+        [DataType(DataType.Password)]
+        public string NovaSenha { get; set; }
+
+        [DataType(DataType.Password)]
+        public string ConfirmacaoSenha { get; set; }
+
+        // Novo Nome 
+        public string NovoNome { get; set; }
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\ViewModels\ConfirmarExclusaoViewModel.cs ---
+using System.ComponentModel.DataAnnotations;
+
+namespace SPAA.App.ViewModels
+{
+    public class ConfirmarExclusaoViewModel
+    {
+        // Matrícula
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        [StringLength(9, MinimumLength = 1, ErrorMessage = "O campo {0} deve ter {1} caracteres.")]
+        [RegularExpression(@"^\d{9}$", ErrorMessage = "O campo {0} deve conter exatamente 9 dígitos.")]
+        [Display(Name = "Matrícula")]
+        public string Matricula { get; set; }
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\ViewModels\CurriculoViewModel.cs ---
+namespace SPAA.App.ViewModels
+{
+    public class CurriculoViewModel
+    {
+        public string NomeDisciplina { get; set; }
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\ViewModels\DisciplinaListaViewModel.cs ---
+namespace SPAA.App.ViewModels
+{
+    public class DisciplinaListaViewModel
+    {
+        public string Titulo { get; set; }
+        public List<DisciplinaViewModel> Disciplinas { get; set; }
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\ViewModels\DisciplinaViewModel.cs ---
+using System.ComponentModel.DataAnnotations;
+
+namespace SPAA.App.ViewModels
+{
+    public class DisciplinaViewModel
+    {
+        public string NomeDisciplina { get; set; }
+
+        [Display(Name = "Carga Horaria")]
+        public int CargaHoraria { get; set; }
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\ViewModels\ErrorViewModel.cs ---
+namespace SPAA.APP.Models
+{
+    public class ErrorViewModel
+    {
+        public string? RequestId { get; set; }
+
+        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\ViewModels\ForgotPasswordViewModel.cs ---
+using System.ComponentModel.DataAnnotations;
+
+namespace SPAA.App.ViewModels
+{
+    public class ForgotPasswordViewModel
+    {
+        [Required(ErrorMessage = "O e-mail é obrigatório.")]
+        [EmailAddress(ErrorMessage = "E-mail inválido.")]
+        public string Email { get; set; }
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\ViewModels\LoginViewModel.cs ---
+using System.ComponentModel.DataAnnotations;
+namespace Projeto.App.ViewModels
+{
+    public class LoginViewModel
+    {
+        [Required(ErrorMessage = "A matrícula é obrigatória.")]
+        public string Matricula { get; set; }
+
+
+        [Required(ErrorMessage = "A senha é obrigatória.")]
+        [DataType(DataType.Password)]
+        public string Senha { get; set; }
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\ViewModels\RegisterViewModel.cs ---
+using System.ComponentModel.DataAnnotations;
+
+namespace Projeto.App.ViewModels
+{
+    public class RegisterViewModel
+    {
+        // Email
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        [EmailAddress(ErrorMessage = "O campo {0} deve conter um endereço de email válido.")]
+        [StringLength(150, MinimumLength = 6, ErrorMessage = "O campo {0} deve ter entre {2} e {1} caracteres.")]
+        public string Email { get; set; }
+
+        // Senha
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        [StringLength(20, MinimumLength = 8, ErrorMessage = "O campo {0} deve ter entre {2} e {1} caracteres.")]
+        [DataType(DataType.Password)]
+        public string Senha { get; set; }
+
+        // Confirmação da Senha
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        [DataType(DataType.Password)]
+        [Compare("Senha", ErrorMessage = "As senhas não coincidem.")]
+        [Display(Name = "Confirme a Senha")]
+        public string ConfirmacaoSenha { get; set; }
+
+        // Nome Completo
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        [StringLength(150, MinimumLength = 10, ErrorMessage = "O campo {0} deve ter entre {2} e {1} caracteres.")]
+        [Display(Name = "Nome Completo")]
+        public string Nome { get; set; }
+
+        // Matrícula
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        [StringLength(9, MinimumLength = 1, ErrorMessage = "O campo {0} deve ter {1} caracteres.")]
+        [RegularExpression(@"^\d{9}$", ErrorMessage = "O campo {0} deve conter exatamente 9 dígitos.")]
+        [Display(Name = "Matrícula")]
+        public string Matricula { get; set; }
+
+        // Semestre de Entrada
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        [Range(1, 2, ErrorMessage = "O campo {0} deve ser 1 (primeiro semestre) ou 2 (segundo semestre).")]
+        [Display(Name = "Semestre de Entrada")]
+        public int SemestreEntrada { get; set; }
+
+        // Ano de Entrada
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        [Range(2015, 2025, ErrorMessage = "O campo {0} deve estar entre {1} e {2}.")]
+        [Display(Name = "Ano de Entrada")]
+        public int AnoEntrada { get; set; }
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\ViewModels\ResetPasswordViewModel.cs ---
+using System.ComponentModel.DataAnnotations;
+
+namespace SPAA.App.ViewModels
+{
+    public class ResetPasswordViewModel
+    {
+        [Required(ErrorMessage = "O e-mail é obrigatório.")]
+        [EmailAddress(ErrorMessage = "E-mail inválido.")]
+        public string Email { get; set; }
+        // Senha
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        [StringLength(20, MinimumLength = 8, ErrorMessage = "O campo {0} deve ter entre {2} e {1} caracteres.")]
+        [DataType(DataType.Password)]
+        public string Senha { get; set; }
+
+        // Confirmação da Senha
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        [DataType(DataType.Password)]
+        [Compare("Senha", ErrorMessage = "As senhas não coincidem.")]
+        [Display(Name = "Confirme a Senha")]
+        public string ConfirmacaoSenha { get; set; }
+
+        public string Token { get; set; }
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\ViewModels\UploadFormViewModel.cs ---
+namespace SPAA.App.ViewModels
+{
+    public class UploadHistoricoViewModel
+    {
+        public IFormFile Historico { get; set; }
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\ViewModels\UploadHistoricoViewModel.cs ---
+using System.ComponentModel.DataAnnotations;
+
+namespace SPAA.App.ViewModels
+{
+    public class UploadFormViewModel
+    {
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        public IFormFile Historico { get; set; }
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Controllers\AccountController.cs ---
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Projeto.App.ViewModels;
+using SPAA.App.ViewModels;
+using SPAA.Business.Interfaces;
+using SPAA.Business.Models;
+
+public class AccountController : Controller
+{
+    private readonly IAlunoRepository _alunoRepository;
+    private readonly IApplicationUserRepository _applicationUserRepository;
+    private readonly IEmailService _emailService;
+
+    public AccountController(IAlunoRepository alunoRepository,
+                             IApplicationUserRepository applicationUserRepository,
+                             IEmailService emailService)
+    {
+        _alunoRepository = alunoRepository;
+        _applicationUserRepository = applicationUserRepository;
+        _emailService = emailService;
+
+    }
+
+    [HttpGet]
+    public IActionResult Register()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
+    {
+        if (!ModelState.IsValid)
+            return View(registerViewModel);
+
+        try
+        {
+            // Verificação de duplicidade de e-mail
+            var userExistente = await _applicationUserRepository.ObterPorEmail(registerViewModel.Email);
+            if (userExistente != null)
+            {
+                TempData["ErrorMessage"] = "Esse e-mail já está registrado.";
+                return View(registerViewModel);
+            }
+
+            // Verificação de duplicidade de matrícula
+            var alunoExistente = await _alunoRepository.ObterPorId(registerViewModel.Matricula);
+            if (alunoExistente != null)
+            {
+                TempData["ErrorMessage"] = "Essa matrícula já pertence a outro usuário.";
+                return View(registerViewModel);
+            }
+
+            // Criação do usuário
+            var user = new ApplicationUser
+            {
+                UserName = registerViewModel.Matricula.ToString(),
+                Email = registerViewModel.Email
+            };
+
+            var result = await _applicationUserRepository.RegistrarApplicationUser(user, registerViewModel.Senha);
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError(string.Empty, error.Description);
+                return View(registerViewModel);
+            }
+
+            // Criação do aluno vinculado ao usuário
+            var aluno = new Aluno
+            {
+                Matricula = registerViewModel.Matricula,
+                NomeAluno = registerViewModel.Nome,
+                SemestreEntrada = $"{registerViewModel.AnoEntrada}.{registerViewModel.SemestreEntrada}",
+                CodigoUser = user.Id
+            };
+
+            try
+            {
+                await _alunoRepository.Adicionar(aluno);
+
+                // TempData para passar a mensagem de sucesso
+                TempData["MensagemSucesso"] = "Cadastro realizado com sucesso!";
+                return RedirectToAction("Login", "Account");
+            }
+            catch (Exception ex)
+            {
+                await _applicationUserRepository.RemoverApplicationUser(user.Id);
+                ModelState.AddModelError(string.Empty, $"Erro ao salvar o aluno no banco de dados: {ex.Message}");
+                return View(registerViewModel);
+            }
+        }
+        catch (Exception ex)
+        {
+            TempData["ErrorMessage"] = $"Erro durante o cadastro: {ex.Message}";
+            return View(registerViewModel);
+        }
+    }
+
+
+    [HttpGet]
+    public IActionResult Login()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Login(LoginViewModel loginViewModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(loginViewModel);
+        }
+
+        var result = await _applicationUserRepository.LogarApplicationUser(loginViewModel.Matricula, loginViewModel.Senha);
+
+        if (result.Succeeded)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
+        TempData["ErrorMessage"] = "Usuário ou senha incorretos.";
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Logout()
+    {
+        await _applicationUserRepository.LogoutApplicationUser();
+        return RedirectToAction("Login", "Account");
+    }
+
+    [HttpGet]
+    public IActionResult ForgotPassword()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+    {
+        if (!ModelState.IsValid)
+            return View(model);
+
+        var user = await _applicationUserRepository.ObterPorEmail(model.Email);
+        if (user == null)
+        {
+            // Não revelar se o usuário não existe
+            TempData["MensagemSucesso"] = "Se o e-mail estiver cadastrado, você receberá um link de redefinição de senha.";
+            return RedirectToAction("Login");
+        }
+
+        var token = await _applicationUserRepository.GerarTokenResetSenha(user);
+
+        var callbackUrl = Url.Action(
+            nameof(ResetPassword),
+            "Account",
+            new { token, email = user.Email },
+            protocol: HttpContext.Request.Scheme);
+
+        // Enviar e-mail com o link de redefinição (você pode usar um serviço de e-mail)
+        await _emailService.EnviarEmailAsync(user.Email, "Redefinição de Senha",
+            $"Clique no link para redefinir sua senha: <a href='{callbackUrl}'>Redefinir Senha</a>");
+
+        TempData["MensagemSucesso"] = "Se o e-mail estiver cadastrado, você receberá um link de redefinição de senha.";
+        return RedirectToAction("Login");
+    }
+
+    [HttpGet]
+    public IActionResult ResetPassword(string token, string email)
+    {
+        var model = new ResetPasswordViewModel { Token = token, Email = email };
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+    {
+        if (!ModelState.IsValid)
+            return View(model);
+
+        var user = await _applicationUserRepository.ObterPorEmail(model.Email);
+        if (user == null)
+        {
+            TempData["ErrorMessageF"] = "Usuário não encontrado.";
+            return RedirectToAction("Login");
+        }
+
+        var result = await _applicationUserRepository.ResetarSenha(user, model.Token, model.Senha);
+        if (result.Succeeded)
+        {
+            TempData["MensagemSucesso"] = "Senha redefinida com sucesso!";
+            return RedirectToAction("Login");
+        }
+
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError(string.Empty, error.Description);
+        }
+
+        return View(model);
+    }
+}
+
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Controllers\ConfigurationController.cs ---
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using SPAA.App.ViewModels;
+using SPAA.Business.Interfaces;
+using SPAA.Business.Models;
+
+namespace SPAA.App.Controllers
+{
+    [Authorize]
+    public class ConfigurationController : Controller
+    {
+        private readonly IAlunoRepository _alunoRepository;
+        private readonly IApplicationUserRepository _applicationUserRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public ConfigurationController(IAlunoRepository alunoRepository,
+                                        UserManager<ApplicationUser> userManager,
+                                        IApplicationUserRepository applicationUserRepository)
+        {
+            _alunoRepository = alunoRepository;
+            _userManager = userManager;
+            _applicationUserRepository = applicationUserRepository;
+        }
+
+        [HttpGet]
+        public IActionResult Configurations()
+        {
+            return View();
+        }
+
+        // POST: Alterar Nome
+        [HttpPost]
+        public async Task<IActionResult> AlterarNome(ConfigurationViewModel model)
+        {
+            var result = await _alunoRepository.AlterarNome(User.Identity.Name, model.NovoNome);
+
+            if (result)
+            {
+                TempData["MensagemSucesso"] = "Nome alterado com sucesso!";
+                return RedirectToAction("Configurations", "Configuration");
+            }
+
+            TempData["ErrorMessage"] = "Erro ao alterar nome!";
+            return RedirectToAction( "Configurations", "Configuration");
+        }
+
+        //// POST: Refazer Formulário
+        //[HttpPost]
+        //public IActionResult RefazerFormulario()
+        //{
+        //    // Lógica para refazer o formulário
+        //    TempData["Mensagem"] = "Formulário refeito com sucesso!";
+        //    return RedirectToAction("Index");
+        //}
+
+        // POST: Alterar Senha
+        [HttpPost]
+        public async Task<IActionResult> AlterarSenha(ConfigurationViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "Usuário não encontrado.";
+                return RedirectToAction("Index");
+            }
+
+            if (!await _applicationUserRepository.VerificarSenhaAtual(user, model.SenhaAtual))
+            {
+                TempData["ErrorMessage"] = "Senha atual incorreta.";
+                return RedirectToAction("Configurations", "Configuration");
+            }
+
+            var resultado = await _applicationUserRepository.AlterarSenha(user, model.SenhaAtual, model.NovaSenha);
+            if (resultado.Succeeded)
+            {
+                TempData["MensagemSucesso"] = "Senha alterada com sucesso!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = string.Join(" ", resultado.Errors.Select(e => e.Description));
+            }
+
+            return RedirectToAction("Configurations", "Configuration");
+        }
+
+        [HttpGet]
+        public IActionResult ConfirmarExclusao()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ExcluirConta(ConfirmarExclusaoViewModel model)
+        {
+            if (model.Matricula == null)
+            {
+                TempData["ErrorMessage"] = "A matrícula é obrigatória para confirmar a exclusão.";
+                return RedirectToAction("ConfirmarExclusao");
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null || user.UserName != model.Matricula)
+            {
+                TempData["ErrorMessage"] = "A matrícula informada não corresponde ao usuário.";
+                return RedirectToAction("ConfirmarExclusao");
+            }
+
+            var deleteAluno = await _alunoRepository.Remover(user.UserName);
+            var result = await _applicationUserRepository.RemoverApplicationUser(user.Id);
+
+            if (result.Succeeded && deleteAluno)
+            {
+                await _applicationUserRepository.LogoutApplicationUser();
+                TempData["MensagemSucesso"] = "Conta excluída com sucesso.";
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Erro ao excluir conta.";
+                return RedirectToAction("ConfirmarExclusao", "Configuration");
+            }
+        }
+    }
+}
+
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Controllers\FormController.cs ---
+using Microsoft.AspNetCore.Mvc;
+using SPAA.APP.Models;
+using SPAA.Business.Interfaces;
+using SPAA.Data.Context;
+using System.Diagnostics;
+
+namespace SPAA.App.Controllers
+{
+    public class FormController : Controller
+    {
+        public IActionResult Form()
+        {
+            return View();
+        }
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Controllers\HomeController.cs ---
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SPAA.App.ViewModels;
+using SPAA.APP.Models;
+using SPAA.APP.ViewModels;
+using SPAA.Business.Interfaces;
+using SPAA.Business.Models;
+using SPAA.Data.Context;
+using SPAA.Data.Repository;
+using System.Diagnostics;
+
+namespace SPAA.APP.Controllers
+{
+    [Authorize]
+    public class HomeController : Controller
+    {
+        private readonly ILogger<HomeController> _logger;
+        private readonly IAlunoRepository _alunoRepository;
+        private readonly IAlunoDisciplinaRepository _alunoDisciplinaRepository;
+        private readonly IDisciplinaRepository _disciplinaRepository; 
+        private readonly IMapper _mapper;
+        private readonly ICurriculoRepository _curriculoRepository;
+
+
+        public HomeController(ILogger<HomeController> logger,
+                               IAlunoRepository alunoRepository,
+                               IAlunoDisciplinaRepository alunoDisciplinaRepository,
+                               IDisciplinaRepository disciplinaRepository,
+                               IMapper mapper,
+                               ICurriculoRepository curriculoRepository)
+        {
+            _logger = logger;
+            _alunoRepository = alunoRepository;
+            _alunoDisciplinaRepository = alunoDisciplinaRepository;
+            _disciplinaRepository = disciplinaRepository;
+            _mapper = mapper;
+            _curriculoRepository = curriculoRepository;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var alunoJaAnexouHistorico = await _alunoRepository.AlunoJaAnexouHistorico(User.Identity.Name);
+            if (!alunoJaAnexouHistorico)
+            {
+                return RedirectToAction("UploadHistorico", "Upload");
+            }
+
+            var disciplinasViewModel = await ObterDisciplinasAlunoAsync(User.Identity.Name);
+
+            ViewData["Aprovadas"] = disciplinasViewModel.Aprovadas;
+            ViewData["Pendentes"] = disciplinasViewModel.Pendentes;
+
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        //metodos privados
+        private async Task<(DisciplinaListaViewModel Aprovadas, DisciplinaListaViewModel Pendentes)> ObterDisciplinasAlunoAsync(string matricula)
+        {
+            var dadosAluno = await _alunoRepository.ObterPorId(matricula);
+
+            var disciplinasCurriculoObrigatorias = await _curriculoRepository.ObterDisciplinasObrigatoriasPorCurrciulo(dadosAluno.CurriculoAluno, 1);
+
+            var nomeDisciplinasAprovadas = await _alunoDisciplinaRepository.ObterNomeDisciplinasPorSituacao(matricula, "APR");
+
+            var obrigatoriasPendentes = disciplinasCurriculoObrigatorias
+                .Where(d => !nomeDisciplinasAprovadas.Contains(d.NomeDisciplina))
+                .ToList();
+
+            var disciplinasAprovadas = disciplinasCurriculoObrigatorias
+                .Where(d => nomeDisciplinasAprovadas.Contains(d.NomeDisciplina))
+                .ToList();
+
+            var disciplinasAprovadasViewModel = disciplinasAprovadas
+                .Select(d => new DisciplinaViewModel
+                {
+                    NomeDisciplina = d.NomeDisciplina
+                })
+                .ToList();
+
+            var disciplinasPendentesViewModel = obrigatoriasPendentes
+                .Select(d => new DisciplinaViewModel
+                {
+                    NomeDisciplina = d.NomeDisciplina
+                })
+                .ToList();
+
+            var aprovadasViewModel = new DisciplinaListaViewModel
+            {
+                Titulo = "Disciplinas Aprovadas",
+                Disciplinas = disciplinasAprovadasViewModel
+            };
+
+            var pendentesViewModel = new DisciplinaListaViewModel
+            {
+                Titulo = "Disciplinas Pendentes",
+                Disciplinas = disciplinasPendentesViewModel
+            };
+
+            return (aprovadasViewModel, pendentesViewModel);
+        }
+
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Controllers\UploadController.cs ---
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SPAA.Business.Interfaces;
+using SPAA.Data.Repository;
+
+namespace SPAA.App.Controllers
+{
+    [Authorize]
+    public class UploadController : Controller
+    {
+        private readonly IAlunoDisciplinaRepository _alunoDisciplinaRepository;
+        private readonly IAlunoRepository _alunoRepository;
+
+        public UploadController(IAlunoDisciplinaRepository alunoDisciplinaRepository, 
+                                IAlunoRepository alunoRepository)
+        {
+            _alunoDisciplinaRepository = alunoDisciplinaRepository;
+            _alunoRepository = alunoRepository;
+        }
+
+        public IActionResult UploadHistorico()
+        {
+            return View();
+        }
+
+        public IActionResult UploadForm()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadHistorico(IFormFile historico, string returnAction = null, string returnController = null)
+        {
+            var alunoJaAnexouHistorico = await _alunoRepository.AlunoJaAnexouHistorico(User.Identity.Name);
+            if (alunoJaAnexouHistorico)
+            {
+                await _alunoDisciplinaRepository.ExcluirDisciplinasDoAluno(User.Identity.Name);
+            }
+
+            var result = await _alunoDisciplinaRepository.ConsumirHistoricoPdf(historico, User.Identity.Name);
+
+            if (!result.isValid)
+            {
+                TempData["ErrorMessage"] = result.mensagem;
+                return RedirectToAction(returnAction ?? "UploadHistorico", returnController ?? "Upload");
+            }
+
+            TempData["MensagemSucesso"] = result.mensagem;
+            return RedirectToAction(returnAction ?? "Index", returnController ?? "Home");
+        }
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\_ViewImports.cshtml ---
+@using SPAA.APP
+@using SPAA.APP.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\_ViewStart.cshtml ---
+@{
+    Layout = "_Layout";
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Account\ForgotPassword.cshtml ---
+@model SPAA.App.ViewModels.ForgotPasswordViewModel
+
+<h2>Esqueci a Senha</h2>
+
+<form asp-action="ForgotPassword" method="post">
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <button type="submit">Enviar Link de Redefinição</button>
+</form>
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Account\Login.cshtml ---
+@model Projeto.App.ViewModels.LoginViewModel
+@section Styles {
+    <link rel="stylesheet" href="~/css/auth.css" />
+}
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="auth-container">
+    <div class="logoSpaa">
+        <img src="~/assets/unbflag.svg" alt="Imagem da Logo da UnB" />
+        <h2 class="subtitle">Sistema de Planejamento<br />Acadêmico Assistido</h2>
+    </div>
+    <div class="auth-box">
+        <h1 class="logo">SPAA</h1>
+        <h2 class="subtitle">Universidade de Brasília</h2>
+        <h3 class="form-title">Login</h3>
+        <p class="login-link">Não tem uma conta? <a asp-controller="Account" asp-action="Register">Fazer Registro</a></p>
+
+        <form asp-action="Login" method="post">
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+            <div class="form-group">
+                <input asp-for="Matricula" placeholder="Matricula" />
+                <span asp-validation-for="Matricula"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Senha" placeholder="Senha" type="password" />
+                <span asp-validation-for="Senha"></span>
+            </div>
+            <button type="submit"> <img src="~/assets/buttomLoginRegister.svg" alt="Ícone de usuário" class="icon" /> Entrar</button>
+            <p class="forget-link">Esqueceu a senha da conta? <a href="#" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">Clique aqui</a></p>
+        
+        </form>
+        @await Html.PartialAsync("_ForgotPasswordModal", new SPAA.App.ViewModels.ForgotPasswordViewModel())
+    </div>
+</div>
+
+
+@if (TempData["MensagemSucesso"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["MensagemSucesso"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Account\Register.cshtml ---
+@model Projeto.App.ViewModels.RegisterViewModel
+@section Styles {
+    <link rel="stylesheet" href="~/css/auth.css" />
+}
+
+@{
+    ViewData["Title"] = "Registro";
+}
+
+<div class="auth-container">
+    <div class="logoSpaa">
+        <img src="~/assets/unbflag.svg" alt="Imagem da Logo da UnB" />
+        <h2 class="subtitle">Sistema de Planejamento<br />Acadêmico Assistido</h2>
+    </div>"
+    <div class="auth-box">
+        <h1 class="logo">SPAA</h1>
+        <h2 class="subtitle">Universidade de Brasília</h2>
+        <h3 class="form-title">Formulário de Registro</h3>
+        <p class="login-link">Já tem uma conta? <a asp-controller="Account" asp-action="Login">Fazer login</a></p>
+
+        <form method="post" asp-action="Register">
+            <div class="form-group">
+                <input asp-for="Nome" placeholder="Nome completo" />
+                <span asp-validation-for="Nome"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Email" placeholder="Email institucional" />
+                <span asp-validation-for="Email"></span>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <select asp-for="SemestreEntrada" class="form-control">
+                        <option value="">Semestre de entrada</option>
+                        <option value="01">01</option>
+                        <option value="02">02</option>
+                    </select>
+                    <span asp-validation-for="SemestreEntrada" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <select asp-for="AnoEntrada" class="form-control">
+                        <option value="">Ano de entrada</option>
+                        @for (int ano = 2025; ano >= 2015; ano--)
+                        {
+                            <option value="@ano">@ano</option>
+                        }
+                    </select>
+                    <span asp-validation-for="AnoEntrada" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input asp-for="Senha" type="password" placeholder="Senha" />
+                <span asp-validation-for="Senha"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="ConfirmacaoSenha" type="password" placeholder="Confirmar senha" />
+                <span asp-validation-for="ConfirmacaoSenha"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Matricula" placeholder="Matrícula" />
+                <span asp-validation-for="Matricula"></span>
+            </div>
+
+            <button type="submit"> <img src="~/assets/buttomLoginRegister.svg" alt="Ícone de usuário" class="icon" /> Registrar</button>
+        </form>
+    </div>
+</div>
+
+@if (TempData["MensagemSucesso"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["MensagemSucesso"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Account\ResetPassword.cshtml ---
+@model SPAA.App.ViewModels.ResetPasswordViewModel
+
+@{
+    ViewData["LayoutType"] = "formulario";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/auth.css" />
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card {
+            width: 100%;
+        }
+        .modal-card {
+            width: 30%;
+        }
+
+        .toplogo {
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .logoSpaa img {
+            height: 4rem;
+            width: auto;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #435FA0;
+            margin: 0;
+            letter-spacing: 0.2rem;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #435FA0;
+            letter-spacing: 0.1rem;
+            margin: 0;
+        }
+
+        button[type="submit"] {
+            max-width: 100%;
+        }
+
+        .modal-footer {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+    </style>
+}
+
+<a href="/Account/Login" style="text-decoration: none;">
+<div class="toplogo">
+    <div class="logoSpaa">
+        <img src="~/assets/unbflag.svg" alt="Imagem da Logo da UnB" />
+    </div>
+    <div>
+        <h1 class="logo">SPAA</h1>
+        <h2 class="subtitle">Universidade de Brasília</h2>
+    </div>
+</div>
+</a>
+
+<div class="modal-card mt-5">
+    <div class="modal-content" style="box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);">
+        <div class="modal-header modal-header d-flex justify-content-between align-items-start flex-column text-center">
+            <div class="card" style="background: #F7FBFF;">
+                <div class="modal-header ">
+                    <h5 class="modal-title mt-4 w-100 " style="margin-bottom: 1rem;">Redefinir Senha</h5>
+                </div>
+                <div class="modal-body">
+                    <form asp-action="ResetPassword" method="post">
+                        <input type="hidden" asp-for="Token" />
+                        <input type="hidden" asp-for="Email" />
+
+                        <div class="mb-3">
+                            <label asp-for="Senha" class="form-label">Nova Senha</label>
+                            <input asp-for="Senha" type="password" class="form-control" />
+                            <span asp-validation-for="Senha" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ConfirmacaoSenha" class="form-label">Confirmar Nova Senha</label>
+                            <input asp-for="ConfirmacaoSenha" type="password" class="form-control" />
+                            <span asp-validation-for="ConfirmacaoSenha" class="text-danger"></span>
+                        </div>
+
+                        <div class="modal-footer">
+                            <a href="/Account/Login" class="cancel-button" style="background-color: gray;">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Redefinir Senha</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+@if (TempData["MensagemSucesso"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["MensagemSucesso"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Account\_ResetPasswordmodal.cshtml ---
+@model SPAA.App.ViewModels.ResetPasswordViewModel
+
+<div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header d-flex justify-content-between align-items-start flex-column text-center">
+                <button type="button" class="btn-close align-self-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title mt-4 w-100">Redefinir Senha</h5>
+            </div>
+
+            <form asp-action="ResetPassword" method="post">
+                <div class="modal-body">
+                    <input type="hidden" asp-for="Token" />
+                    <input type="hidden" asp-for="Email" />
+
+                    <div class="mb-3">
+                        <label asp-for="Senha" class="form-label">Nova Senha</label>
+                        <input asp-for="Senha" type="password" class="form-control" />
+                        <span asp-validation-for="Senha" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConfirmacaoSenha" class="form-label">Confirmar Nova Senha</label>
+                        <input asp-for="ConfirmacaoSenha" type="password" class="form-control" />
+                        <span asp-validation-for="ConfirmacaoSenha" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" style="background-color: gray" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Redefinir</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Configuration\Configurations.cshtml ---
+@model SPAA.App.ViewModels.ConfigurationViewModel
+
+<div class="configuracoes-modal">
+    <h2>Configurações</h2>
+
+    <div class="formularios">
+        <!-- Formulário de Importar Histórico -->
+        <form id="formHistorico" asp-controller="Upload" asp-action="UploadHistorico" method="post" enctype="multipart/form-data">
+            <div>
+                <label asp-for="Historico">Histórico</label>
+                <input asp-for="Historico" type="file" class="form-control" accept=".pdf" />
+                <span asp-validation-for="Historico" class="text-danger"></span>
+            </div>
+            <input type="hidden" name="returnAction" value="Configurations" />
+            <input type="hidden" name="returnController" value="Configuration" />
+            <button type="submit" name="submitButton" value="Salvar Histórico">Salvar Histórico</button>
+        </form>
+    </div>
+
+    <div class="alteracoes">
+        <!-- Formulário de Alterar Nome -->
+        <form id="formAlterarNome" asp-action="AlterarNome" method="post">
+            <div>
+                <label for="NovoNome">Alterar Nome:</label>
+                <input asp-for="NovoNome" id="NovoNome" placeholder="Novo Nome*" />
+                <span asp-validation-for="NovoNome" class="text-danger"></span>
+            </div>
+            <button type="submit" name="submitButton" value="Salvar Nome">Salvar Nome</button>
+        </form>
+
+        <!-- Formulário de Alterar Senha -->
+        <form id="formAlterarSenha" asp-action="AlterarSenha" method="post">
+            <div>
+                <input asp-for="SenhaAtual" placeholder="Senha Atual*" id="SenhaAtual" />
+            </div>
+            <div>
+                <input asp-for="NovaSenha" placeholder="Nova Senha*" id="NovaSenha" />
+            </div>
+            <div>
+                <input asp-for="ConfirmacaoSenha" placeholder="Confirme a nova senha*" id="ConfirmacaoSenha" />
+            </div>
+            <button type="submit" name="submitButton" value="Salvar Senha">Salvar Senha</button>
+        </form>
+    </div>
+
+    <!-- Botão de Excluir Conta -->
+    <form asp-action="ConfirmarExclusao" method="get">
+        <button type="submit" style="background-color: red;">Excluir Conta</button>
+    </form>
+</div>
+
+@if (TempData["MensagemSucesso"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["MensagemSucesso"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div id="validationMessages" class="validation-messages"></div>
+
+<script>
+    // Validação do Formulário de Alterar Nome
+    document.getElementById("formAlterarNome").onsubmit = function (e) {
+        var nome = document.getElementById("NovoNome").value.trim();
+        var validationDiv = document.getElementById("validationMessages");
+
+        validationDiv.innerHTML = ""; // limpa mensagens anteriores
+
+        if (nome === "") {
+            e.preventDefault();
+            validationDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                'O nome é obrigatório.' +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                '</div>';
+            return false;
+        }
+
+        if (nome.length < 10 || nome.length > 150) {
+            e.preventDefault();
+            validationDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                'O nome deve ter entre 10 e 150 caracteres.' +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                '</div>';
+            return false;
+        }
+    };
+
+    // Validação do Formulário de Alterar Senha
+    document.getElementById("formAlterarSenha").onsubmit = function (e) {
+        var senhaAtual = document.getElementById("SenhaAtual").value.trim();
+        var novaSenha = document.getElementById("NovaSenha").value.trim();
+        var confirmacaoSenha = document.getElementById("ConfirmacaoSenha").value.trim();
+        var validationDiv = document.getElementById("validationMessages");
+
+        validationDiv.innerHTML = ""; // Limpa mensagens anteriores
+
+        if (senhaAtual === "") {
+            e.preventDefault();
+            validationDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                'A senha atual é obrigatória.' +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                '</div>';
+            return false;
+        }
+
+        if (novaSenha === "" || confirmacaoSenha === "") {
+            e.preventDefault();
+            validationDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                'A nova senha e a confirmação são obrigatórias.' +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                '</div>';
+            return false;
+        }
+
+        if (novaSenha.length < 8 || novaSenha.length > 20) {
+            e.preventDefault();
+            validationDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                'A nova senha deve ter entre 8 e 20 caracteres.' +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                '</div>';
+            return false;
+        }
+
+        if (novaSenha !== confirmacaoSenha) {
+            e.preventDefault();
+            validationDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                'As senhas não coincidem.' +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                '</div>';
+            return false;
+        }
+    };
+
+    // Validação do Formulário de Importar Histórico
+    document.getElementById("formHistorico").onsubmit = function (e) {
+        var historicoInput = document.getElementById("Historico");
+        var historico = historicoInput.value;
+        var validationDiv = document.getElementById("validationMessages");
+
+        validationDiv.innerHTML = ""; // limpa mensagens anteriores
+
+        if (!historico) {
+            e.preventDefault();
+            validationDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                'O arquivo de histórico é obrigatório.' +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                '</div>';
+            return false;
+        }
+
+        var fileExtension = historico.split('.').pop().toLowerCase();
+        if (fileExtension !== 'pdf') {
+            e.preventDefault();
+            validationDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                'Apenas arquivos PDF são permitidos.' +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                '</div>';
+            return false;
+        }
+    };
+</script>
+
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Configuration\Configurations.cshtml.cs ---
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace SPAA.App.Views.Configuration
+{
+    public class ConfigurationModel : PageModel
+    {
+        public void OnGet()
+        {
+        }
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Configuration\ConfirmarExclusao.cshtml ---
+@model SPAA.App.ViewModels.ConfirmarExclusaoViewModel
+
+<h2>Confirmar Exclusão de Conta</h2>
+
+<form asp-action="ExcluirConta" method="post">
+    <div>
+        <label for="Matricula">Digite sua Matrícula para Confirmar:</label>
+        <input type="text" id="Matricula" name="Matricula" />
+        <span asp-validation-for="Matricula" class="text-danger"></span>
+    </div>
+    <button type="submit">Confirmar Exclusão</button>
+</form>
+
+@if (TempData["MensagemSucesso"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["MensagemSucesso"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Home\Index.cshtml ---
+@using SPAA.App.ViewModels
+@model List<SPAA.App.ViewModels.DisciplinaListaViewModel>
+
+@{
+    ViewData["Title"] = "SPAA";
+    var disciplinasAprovadas = ViewData["Aprovadas"] as DisciplinaListaViewModel;
+}
+
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<!-- Exibe disciplinas aprovadas -->
+@if (ViewData["Aprovadas"] is DisciplinaListaViewModel aprovadas)
+{
+    @await Html.PartialAsync("_ListaDisciplinas", aprovadas)
+}
+
+@if (ViewData["Pendentes"] is DisciplinaListaViewModel pendentes)
+{
+    @await Html.PartialAsync("_ListaDisciplinas", pendentes)
+}
+
+@if (TempData["MensagemSucesso"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["MensagemSucesso"]
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Home\Privacy.cshtml ---
+@{
+    ViewData["Title"] = "Privacy Policy";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Use this page to detail your site's privacy policy.</p>
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Shared\Error.cshtml ---
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<h1 class="text-danger">Error.</h1>
+<h2 class="text-danger">An error occurred while processing your request.</h2>
+
+@if (Model.ShowRequestId)
+{
+    <p>
+        <strong>Request ID:</strong> <code>@Model.RequestId</code>
+    </p>
+}
+
+<h3>Development Mode</h3>
+<p>
+    Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
+</p>
+<p>
+    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
+    It can result in displaying sensitive information from exceptions to end users.
+    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
+    and restarting the app.
+</p>
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Shared\_Aboutmodal.cshtml ---
+@model SPAA.APP.ViewModels.AboutViewModel
+
+<style>
+    .modal-header {
+        justify-content: center;
+    }
+    .modal-header h5 {
+    margin-top: 0; 
+    }
+    </style>
+
+<div class="modal fade" id="aboutModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content p-4">
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title">Sobre Nós</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    O Sistema de Planejamento Acadêmico Assistido (SPAA) foi desenvolvido como parte de um projeto acadêmico com o objetivo de auxiliar estudantes no gerenciamento de sua trajetória universitária.
+                    O sistema oferece ferramentas para organização da grade horária, visualização de disciplinas pendentes e concluídas, além de fluxogramas que orientam o planejamento dos semestres futuros.
+                    <br /><br />
+                    Nosso compromisso é oferecer uma ferramenta funcional e clara para o planejamento acadêmico, com base em dados reais e regras institucionais, respeitando a autonomia do estudante.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Shared\_ForgotPasswordmodal.cshtml ---
+@model SPAA.App.ViewModels.ForgotPasswordViewModel
+
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between align-items-start flex-column text-center">
+                <button type="button" class="btn-close align-self-end" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title mt-4 w-100">Encontre Sua Conta</h5>
+            </div>
+
+            <form asp-action="ForgotPassword" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <p class="modal-text">Insira seu Email para encontrar sua conta.</p>
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" placeholder="Digite seu Email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" style="background-color: gray" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Shared\_Layout.cshtml ---
+@{
+    var isAuthenticated = User.Identity.IsAuthenticated;
+    var currentPath = Context.Request.Path.ToString().ToLower();
+    var linkDestino = currentPath.Contains("login") ? "/Account/Register" :
+                      currentPath.Contains("register") ? "/Account/Login" :
+                      "/Account/Login";
+
+    var textoLink = currentPath.Contains("login") ? "Registre-se" :
+                    currentPath.Contains("register") ? "Login" :
+                    "Login / Registre-se";
+
+    var layoutTipo = ViewData["LayoutType"]?.ToString()?.ToLower()
+                     ?? (currentPath.Contains("login") || currentPath.Contains("register") ? "publico" : "padrao");
+}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SPAA.APP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SPAA.APP.styles.css" asp-append-version="true" />
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+
+    @* Cabeçalhos diferentes por tipo de layout *@
+    @if (layoutTipo == "publico")
+    {
+        <header class="custom-header">
+            <nav class="header-content">
+                <button type="button" class="header-link btn btn-link p-0 m-0" data-bs-toggle="modal" data-bs-target="#aboutModal">
+                    Sobre-nós
+                </button>
+
+                <a href="#docs" class="header-link">Documentação</a>
+                <a href="@linkDestino" class="header-button">
+                    <img src="~/assets/buttomLoginRegister.svg" alt="Ícone de usuário" class="icon" />
+                    @textoLink
+                </a>
+            </nav>
+        </header>
+    }
+    else if (layoutTipo == "formulario")
+    {
+    }
+    else
+    {
+        <header class="custom-header">
+            <nav class="header-content">
+                <a href="/dashboard" class="header-link">Dashboard</a>
+                <a href="/perfil" class="header-link">Perfil</a>
+
+                @if (!isAuthenticated)
+                {
+                    <a href="@linkDestino" class="header-button">
+                        <img src="~/assets/buttomLoginRegister.svg" alt="Ícone de usuário" class="icon" />
+                        @textoLink
+                    </a>
+                }
+                else
+                {
+                    <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
+                        <button type="submit" class="header-button" style="background:none; border:none; padding:0;">
+                            <img src="~/assets/buttomLoginRegister.svg" alt="Ícone de usuário" class="icon" />
+                            Sair
+                        </button>
+                    </form>
+                }
+            </nav>
+        </header>
+    }
+
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    @await Html.PartialAsync("~/Views/Shared/_AboutModal.cshtml")
+
+
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-pzjw8f+ua7Kw1TIq0VJjwpz5I3Hg0LmlGok3eWwzOlg8mZpH2JbL0yA7aa8Qz2pk" crossorigin="anonymous">
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Shared\_Layout.cshtml.css ---
+/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+container {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+a {
+  color: #0077cc;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+}
+
+/*-------*/
+
+.custom-header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 42%;
+    height: 9%;
+    background-color: rgba(74, 144, 226, 0.4); /* Azul com 40% de opacidade */
+    border-radius: 0rem 0rem 0rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 1rem 2rem;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+}
+
+.header-link {
+    font-size: 0.85rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    color: black;
+    text-decoration: none;
+    padding: 0.4rem 0.6rem;
+}
+
+.header-button {
+    background-color: #435FA0;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.header-button:hover {
+    background-color: #f0f0f0;
+}
+
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Shared\_ListaDisciplinas.cshtml ---
+@model SPAA.App.ViewModels.DisciplinaListaViewModel
+
+<div class="container my-3">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+
+                <div class="card-body p-0">
+                    @if (Model.Disciplinas != null && Model.Disciplinas.Any())
+                    {
+                        <table class="table table-sm table-striped mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="card-header bg-primary text-white">@Model.Titulo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var disciplina in Model.Disciplinas)
+                                {
+                                    <tr>
+                                        <td>@disciplina.NomeDisciplina</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p class="m-3 text-muted">Nenhuma disciplina encontrada.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Shared\_ValidationScriptsPartial.cshtml ---
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Upload\UploadForm.cs ---
+namespace SPAA.App.Views.Upload
+{
+    public class UploadForm
+    {
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Upload\UploadForm.cshtml ---
+@{
+    ViewData["LayoutType"] = "formulario";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/import.css" />
+    <style>
+        .import-box .form-step {
+            display: none !important;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+            .import-box .form-step.active {
+                display: block !important;
+                opacity: 1;
+            }
+
+        .btn-import {
+            margin-top: 1rem;
+            padding: 0.8rem 1.2rem;
+            background-color: #435FA0;
+            color: white;
+            border: none;
+            border-radius: 2rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn-import:hover {
+                background-color: aquamarine;
+            }
+
+
+        .question {
+            margin-bottom: 1rem;
+        }
+
+            .question h4 {
+                margin-bottom: 0.5rem;
+                font-size: 1rem;
+            }
+
+        .rating label {
+            display: inline-block;
+            align-content: center;
+            width: 2rem;
+            height: 2rem;
+            text-align: center;
+            line-height: 1rem;
+            border: 1px solid #ccc;
+            margin-right: 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .rating input[type="radio"] {
+            display: none;
+        }
+
+            .rating input[type="radio"]:checked + label {
+                background-color: #435FA0;
+                color: white;
+                border-color: #fff;
+            }
+    </style>
+}
+
+<div>
+    <div class="toplogo">
+        <div class="logoSpaa">
+            <img src="~/assets/unbflag.svg" alt="Imagem da Logo da UnB" />
+        </div>
+        <div>
+            <h1 class="logo">SPAA</h1>
+            <h2 class="subtitle">Universidade de Brasília</h2>
+        </div>
+    </div>
+
+    <div class="box import-box">
+
+        <form class="form" style="text-align: center;" id="multiStepForm">
+
+            <!-- Etapa 1 -->
+            <div class="form-step active" style="display: flex ;flex-direction: column; align-items: center;" id="step1">
+                <h3 class="import-title" style="margin-bottom:1rem;">Formulário de Conhecimento</h3>
+                <p class="import-description">
+                    Este formulário tem como objetivo entender melhor o seu perfil acadêmico e os conhecimentos que você já possui.
+                    <br /><br />
+                    As informações fornecidas nos ajudarão a identificar suas afinidades, experiências e áreas de interesse.
+                </p>
+                <button type="button" class="btn-import" onclick="nextStep()">Próximo</button>
+            </div>
+
+            <!-- Etapa 2 -->
+            <div class="form-step" id="step2">
+                <h3 class="import-title" style="margin-bottom:">Etapa 2: Suas áreas de interesse</h3>
+                <p class="import-description">
+                    Nos diga mais sobre suas preferências acadêmicas.
+                </p>
+                <form id="formulario">
+                    <div id="perguntas"></div>
+                    <button type="submit" class="btn-import">Enviar</button>
+                </form>
+            </div>
+
+            <!-- Etapa 3 -->
+            <div class="form-step" id="step3">
+                <h3 class="import-title">Seu Perfil Acadêmico</h3>
+                <div class="import-description" id="resultado-final" style="text-align: left;"></div>
+                <button type="button" class="btn-import" onclick="refazer()">Refazer Questionário</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function nextStep() {
+            const step1 = document.getElementById("step1");
+            const step2 = document.getElementById("step2");
+
+            step1.classList.remove("active");
+            step2.classList.add("active");
+        }
+
+                const perguntas = [
+          // Perguntas de Desenvolvimento Web
+          { id: "1", texto: "Qual o seu nível de interesse em compreender arquiteturas de software escaláveis ou distribuídas?", perfil: "Desenvolvimento Web" },
+          { id: "2", texto: "Em que grau o desenvolvimento de aplicações web, tanto frontend quanto backend, se alinha ao seu perfil?", perfil: "Desenvolvimento Web" },
+
+          // Perguntas de Inteligência Artificial
+          { id: "3", texto: "Em que grau o estudo de inteligência artificial e aprendizado de máquina lhe parece atraente?", perfil: "Inteligência Artificial" },
+          { id: "4", texto: "Em que medida você se sente atraído(a) pela automação de tarefas por meio da programação?", perfil: "Inteligência Artificial" },
+
+          // Perguntas de Sistemas e Baixo Nível
+          { id: "5", texto: "Você considera importante compreender o funcionamento interno de sistemas operacionais?", perfil: "Sistemas e Baixo Nível" },
+          { id: "6", texto: "Qual é o seu interesse em compreender como funcionam compiladores e interpretadores de linguagens?", perfil: "Sistemas e Baixo Nível" },
+          { id: "7", texto: "Em que medida o desenvolvimento de software de base, como bibliotecas, sistemas embarcados e ferramentas de infraestrutura, é relevante para você?", perfil: "Sistemas e Baixo Nível" },
+
+          // Perguntas de Computação Teórica
+          { id: "8", texto: "O quanto você considera estimulante o estudo de cálculo, álgebra linear e equações diferenciais?", perfil: "Computação Teórica" },
+          { id: "9", texto: "Em que medida os fundamentos matemáticos de algoritmos e estruturas de dados lhe interessam?", perfil: "Computação Teórica" },
+          { id: "10", texto: "Qual é o seu grau de interesse pelos aspectos teóricos da computação, como autômatos, linguagens formais e complexidade computacional?", perfil: "Computação Teórica" },
+
+          // Perguntas de Engenheiro de Software
+          { id: "11", texto: "Qual é a sua percepção sobre a relevância da engenharia de requisitos, análise e documentação técnica?", perfil: "Engenheiro de Software" },
+          { id: "12", texto: "Qual é o seu interesse em trabalhar com metodologias ágeis, como Scrum ou Kanban, para o desenvolvimento de software?", perfil: "Engenheiro de Software" },
+          { id: "13", texto: "Em que grau você se interessa pela automação de testes e pela garantia de qualidade do software durante o processo de desenvolvimento?", perfil: "Engenheiro de Software" },
+
+          // Perguntas de Desempenho e Algoritmos
+          { id: "14", texto: "Em que medida resolver problemas de lógica e algoritmos lhe desperta interesse?", perfil: "Desempenho e Algoritmos" },
+          { id: "15", texto: "Qual o seu nível de motivação para desenvolver sistemas de software com múltiplas funcionalidades e componentes?", perfil: "Desempenho e Algoritmos" },
+          { id: "16", texto: "Você se sente motivado(a) a desenvolver algoritmos otimizados com foco em desempenho?", perfil: "Desempenho e Algoritmos" },
+
+          // Perguntas de Competição e Programação
+          { id: "17", texto: "Qual é o seu nível de interesse em participar de competições de programação, como maratonas e hackathons?", perfil: "Competição e Programação" },
+          { id: "18", texto: "Você se sente motivado(a) por desafios em ambientes competitivos que exigem soluções criativas sob pressão?", perfil: "Competição e Programação" },
+
+          // Perguntas de Segurança e Hacking Ético
+          { id: "19", texto: "Em que grau a área de segurança da informação, incluindo análise de vulnerabilidades e criptografia, chama sua atenção?", perfil: "Segurança e Hacking Ético" },
+          { id: "20", texto: "Você tem curiosidade em explorar ambientes de simulação voltados à prática de hacking ético?", perfil: "Segurança e Hacking Ético" },
+
+          // --- Separação para perguntas de Engenharia (perfil terciário) ---
+
+          // Perguntas de Engenharia (perfil terciário)
+          { id: "21", texto: "Você tem interesse por sistemas embarcados veiculares, veículos autônomos ou controle e monitoramento de veículos?", perfil: "Engenharia Automotiva" },
+          { id: "22", texto: "Você se interessa por drones, satélites, aviônica ou navegação autônoma?", perfil: "Engenharia Aeroespacial" },
+          { id: "23", texto: "Você gostaria de atuar com monitoramento, controle e otimização energética com apoio de software?", perfil: "Engenharia de Energia" },
+          { id: "24", texto: "Você tem interesse por circuitos, sensores, microcontroladores e dispositivos eletrônicos?", perfil: "Engenharia Eletrônica" },
+        ];
+
+            const perguntasDiv = document.getElementById("perguntas");
+
+            perguntas.forEach((p, index) => {
+              const div = document.createElement("div");
+              div.className = "question";
+              div.innerHTML = `
+                <h4>${index + 1}. ${p.texto}</h4>
+                <div class="rating">
+                  ${[...Array(10)].map((_, i) => `
+                    <input type="radio" name="q${p.id}" id="q${p.id}_${i+1}" value="${i+1}" required>
+                    <label for="q${p.id}_${i+1}">${i+1}</label>
+                  `).join('')}
+                </div>
+              `;
+              perguntasDiv.appendChild(div);
+            });
+
+            document.getElementById("formulario").addEventListener("submit", function(e) {
+          e.preventDefault();
+
+          const dados = new FormData(this);
+          const perfilNotas = {};
+          const terciarios = {};
+
+          perguntas.forEach(p => {
+            const nota = parseInt(dados.get("q" + p.id));
+            if (!nota) return;
+
+            // Separar perfis de engenharia como terciários
+            if (p.perfil.startsWith("Engenharia")) {
+              if (!terciarios[p.perfil]) terciarios[p.perfil] = [];
+              terciarios[p.perfil].push(nota);
+            } else {
+              // Perfis não-engenharia (secundários ou principais)
+              if (!perfilNotas[p.perfil]) perfilNotas[p.perfil] = [];
+              perfilNotas[p.perfil].push(nota);
+            }
+          });
+
+          // Calcular a média para os perfis principais e secundários
+          const perfilMedias = Object.entries(perfilNotas).map(([perfil, notas]) => {
+            const media = notas.reduce((a, b) => a + b, 0) / notas.length;
+            return { perfil, media };
+          }).sort((a, b) => b.media - a.media);
+
+          // Filtrar perfis secundários
+          const principais = perfilMedias[0]; // Principal é o primeiro da lista ordenada
+          const secundarios = perfilMedias.slice(1).filter(p => p.media >= 7); // Secundários, média >= 7
+
+          // Calcular a média para os perfis de engenharia (terciários)
+          const terciarioMedias = Object.entries(terciarios).map(([perfil, notas]) => {
+            const media = notas.reduce((a, b) => a + b, 0) / notas.length;
+            return { perfil, media };
+          }).filter(p => p.media >= 7); // Apenas perfis com média >= 7
+
+          // Mudar de etapa
+          document.getElementById("step2").classList.remove("active");
+          document.getElementById("step3").classList.add("active");
+
+          // Mostrar resultado
+          const resultadoFinal = document.getElementById("resultado-final");
+          resultadoFinal.innerHTML = `
+            <p><strong>Perfil Principal:</strong> ${principais.perfil} (média ${principais.media.toFixed(2)})</p>
+            ${secundarios.length > 0 ? `<p><strong>Perfis Secundários:</strong> ${secundarios.map(p => `${p.perfil} (${p.media.toFixed(2)})`).join(", ")}</p>` : "<p>Sem perfis secundários detectados.</p>"}
+            ${terciarioMedias.length > 0 ? `<p><strong>Perfis Terciários (Engenharia):</strong> ${terciarioMedias.map(p => `${p.perfil} (${p.media.toFixed(2)})`).join(", ")}</p>` : "<p>Sem perfil de engenharia detectado.</p>"}
+        `;
+
+                function refazer() {
+            // Voltar à etapa 1
+            document.getElementById("step3").classList.remove("active");
+            document.getElementById("step1").classList.add("active");
+
+            // Resetar formulário
+            document.getElementById("formulario").reset();
+            document.getElementById("resultado-final").innerHTML = "";
+        }
+        });
+    </script>
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Upload\UploadForm.cshtml.cs ---
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace SPAA.App.Views.Upload
+{
+    public class UploadFormModel : PageModel
+    {
+        public void OnGet()
+        {
+        }
+    }
+}
+
+
+--- Arquivo: C:\Users\Akae\Desktop\TCC\TCC-Projeto\src\SPAA.APP\Views\Upload\UploadHistorico.cshtml ---
+@model SPAA.App.ViewModels.UploadHistoricoViewModel
+
+@{
+    ViewData["LayoutType"] = "formulario";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/import.css" />
+    <style>
+        .import-box {
+            width: 60rem;
+        }
+
+    </style>
+}
+
+<div>
+    <div class="toplogo">
+        <div class="logoSpaa">
+            <img src="~/assets/unbflag.svg" alt="Imagem da Logo da UnB" />
+        </div>
+        <div>
+            <h1 class="logo">SPAA</h1>
+            <h2 class="subtitle">Universidade de Brasília</h2>
+        </div>
+    </div>
+
+<div class="box import-box">
+    
+
+    <h3 class="import-title">Importação de Histórico Curricular</h3>
+
+    <p class="import-description">
+        Faça o upload do seu Histórico Acadêmico oficial em PDF, gerado pelo SIGAA.
+        Utilizaremos essas informações apenas para processar e estruturar seu plano de acompanhamento acadêmico.
+        Todos os dados enviados são tratados com segurança e não serão compartilhados.
+        Nenhuma modificação será feita em seu histórico — o sistema apenas lê os dados.
+    </p>
+
+        <form asp-action="UploadHistorico" class="form" method="post" enctype="multipart/form-data" id="uploadForm">
+            <div class="mb-3 custom-file-upload">
+                <label class="label" for="historico">Importar Histórico:</label>
+
+                <input type="file" id="historico" name="historico" accept=".pdf" required hidden />
+
+                <button type="button" class="btn-import" onclick="document.getElementById('historico').click()"> <img src="~/assets/buttomAnexo.svg" alt="Ícone de usuário" class="icon" />
+                    Anexar
+                </button>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const input = document.getElementById('historico');
+    const form = document.getElementById('uploadForm');
+
+    input.addEventListener('change', function () {
+        if (this.files.length > 0) {
+            form.submit();
+        }
+    });
+</script>
+
+@if (TempData["MensagemSucesso"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["MensagemSucesso"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+
+
+
