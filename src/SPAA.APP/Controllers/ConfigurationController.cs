@@ -113,10 +113,10 @@ namespace SPAA.App.Controllers
             }
 
             var deleteAluno = await _alunoRepository.Remover(user.UserName);
-            var deleteAlunoDisciplina = await _alunoDisciplinaRepository.Remover(user.UserName);
+            var deleteAlunoDisciplina = await _alunoDisciplinaRepository.ExcluirDisciplinasDoAluno(user.UserName);
             var result = await _applicationUserRepository.RemoverApplicationUser(user.Id);
 
-            if (result.Succeeded && deleteAluno && deleteAlunoDisciplina)
+            if (result.Succeeded && deleteAluno && deleteAlunoDisciplina && deleteAlunoDisciplina)
             {
                 await _applicationUserRepository.LogoutApplicationUser();
                 TempData["MensagemSucesso"] = "Conta excluída com sucesso.";

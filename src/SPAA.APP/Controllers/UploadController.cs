@@ -31,11 +31,12 @@ namespace SPAA.App.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadHistorico(IFormFile historico, string returnAction = null, string returnController = null)
         {
-            var alunoJaAnexouHistorico = await _alunoRepository.AlunoJaAnexouHistorico(User.Identity.Name);
-            if (alunoJaAnexouHistorico)
-            {
-                await _alunoDisciplinaRepository.ExcluirDisciplinasDoAluno(User.Identity.Name);
-            }
+            //var alunoJaAnexouHistorico = await _alunoRepository.AlunoJaAnexouHistorico(User.Identity.Name);
+            var existeDadosAlunoEmAlunosDisciplinas = await _alunoDisciplinaRepository.ExcluirDisciplinasDoAluno(User.Identity.Name);
+            //if (alunoJaAnexouHistorico)
+            //{
+            //    await _alunoDisciplinaRepository.ExcluirDisciplinasDoAluno(User.Identity.Name);
+            //}
 
             var result = await _alunoDisciplinaRepository.ConsumirHistoricoPdf(historico, User.Identity.Name);
 

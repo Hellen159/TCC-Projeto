@@ -14,6 +14,5 @@ namespace SPAA.Business.Interfaces
         Task<bool> ExcluirDisciplinasDoAluno(string matricula);
         Task<List<AlunoDisciplina>> ObterAlunoDisciplinaPorSituacao(string matricula, string situacao);
         Task<List<string>> ObterNomeDisciplinasPorSituacao(string matricula, string situacao);
-
     }
 }

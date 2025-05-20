@@ -54,7 +54,7 @@ namespace SPAA.APP.Controllers
                 return RedirectToAction("UploadHistorico", "Upload");
             }
 
-            var disciplinasViewModel = await ObterDisciplinasAlunoAsync(User.Identity.Name);
+            var disciplinasViewModel = await ObterDisciplinasAluno(User.Identity.Name);
 
             ViewData["Aprovadas"] = disciplinasViewModel.Aprovadas;
             ViewData["Pendentes"] = disciplinasViewModel.Pendentes;
@@ -69,7 +69,7 @@ namespace SPAA.APP.Controllers
         }
 
         //metodos privados
-        private async Task<(DisciplinaListaViewModel Aprovadas, DisciplinaListaViewModel Pendentes)> ObterDisciplinasAlunoAsync(string matricula)
+        private async Task<(DisciplinaListaViewModel Aprovadas, DisciplinaListaViewModel Pendentes)> ObterDisciplinasAluno(string matricula)
         {
             var dadosAluno = await _alunoRepository.ObterPorId(matricula);
 
