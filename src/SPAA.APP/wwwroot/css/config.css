@@ -1,0 +1,122 @@
+﻿#configuracoesModal .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none;
+    padding-bottom: 1rem;
+    width: 100%;
+    flex-direction: column-reverse;
+}
+}
+
+    #configuracoesModal .modal-header h5.modal-title {
+        font-size: 1.5rem;
+        font-weight: bold; 
+        color: #435FA0;
+    }
+
+/* Estilo geral para labels */
+label {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem; /* Espaçamento entre o label e o input */
+    color: #495057; /* Cor padrão para labels */
+    display: inline-block; /* Labels não ocupam a linha inteira */
+    width: 100%; /* Garante que os labels estejam alinhados à esquerda */
+}
+
+/* Estilo para inputs digitáveis */
+input[type="text"],
+input[type="password"],
+input[type="file"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="file"]:focus {
+        border-color: #435FA0; /* Cor de destaque ao focar */
+        box-shadow: 0 0 5px rgba(67, 95, 160, 0.5);
+    }
+
+/* Botões genéricos */
+button {
+    padding: 0.5rem 1rem;
+    margin-bottom: 2rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    /* Botão primário (Salvar) */
+    button[name="submitButton"] {
+        background-color: #435FA0;
+        color: white;
+    }
+
+        button[name="submitButton"]:hover {
+            background-color: #3a518c;
+        }
+
+    /* Botão de excluir conta */
+    button[style*="background-color: red;"] {
+        background-color: #dc3545 !important;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        button[style*="background-color: red;"]:hover {
+            background-color: #b02a37 !important;
+        }
+
+/* Ajustes específicos para a modal de configurações */
+#configuracoesModal .modal-body {
+    text-align: left; /* Alinha o texto à esquerda */
+}
+
+#configuracoesModal .modal-content {
+    background-color: #F7FBFF;
+    align-items: center;
+}
+
+/* Espaçamento após o botão Salvar Histórico */
+#formHistorico button[name="submitButton"] {
+    margin-top: 1rem;
+}
+
+/* Centralizar botões no rodapé da modal */
+.modal-footer {
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    gap: 1rem; /* Espaçamento entre os botões */
+    padding-top: 1rem;
+}
+
+/* Garantir que os alertas de erro apareçam acima da modal */
+.alert {
+    position: fixed; /* Fixa o alerta na tela */
+    top: 20px; /* Distância do topo */
+    left: 50%; /* Centraliza horizontalmente */
+    transform: translateX(-50%); /* Ajuste para centralização */
+    z-index: 1060; /* Acima da modal (que geralmente tem z-index 1050) */
+    width: auto; /* Largura automática */
+    max-width: 90%; /* Limita a largura máxima */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para destacar */
+}
+
+.forms {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

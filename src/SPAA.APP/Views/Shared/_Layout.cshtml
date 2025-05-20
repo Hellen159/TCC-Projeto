@@ -32,7 +32,10 @@
     {
         <header class="custom-header">
             <nav class="header-content">
-                <a href="#sobre" class="header-link">Sobre-nós</a>
+                <button type="button" class="header-link btn btn-link p-0 m-0" data-bs-toggle="modal" data-bs-target="#aboutModal">
+                    Sobre-nós
+                </button>
+
                 <a href="#docs" class="header-link">Documentação</a>
                 <a href="@linkDestino" class="header-button">
                     <img src="~/assets/buttomLoginRegister.svg" alt="Ícone de usuário" class="icon" />
@@ -74,6 +77,10 @@
     <div class="container">
         @RenderBody()
     </div>
+
+    @await Html.PartialAsync("~/Views/Shared/_AboutModal.cshtml")
+
+
 
     <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
