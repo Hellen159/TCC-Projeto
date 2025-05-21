@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SPAA.App.ViewModels;
-using SPAA.Business.Interfaces;
+using SPAA.Business.Interfaces.Repository;
 using SPAA.Business.Models;
 
 namespace SPAA.App.Controllers

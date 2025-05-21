@@ -1,13 +1,12 @@
-﻿using SPAA.Business.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SPAA.Business.Interfaces
+namespace SPAA.Business.Interfaces.Services
 {
-    public interface IPreRequisitoRepository : IRepository<PreRequisito, int>
+    public interface IPreRequisitoService
     {
         Task<bool> AtendeRequisitos(string expressao, List<string> disciplinasAprovadas);
     }

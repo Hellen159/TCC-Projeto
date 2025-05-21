@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Projeto.App.ViewModels;
 using SPAA.App.ViewModels;
-using SPAA.Business.Interfaces;
+using SPAA.Business.Interfaces.Repository;
+using SPAA.Business.Interfaces.Services;
 using SPAA.Business.Models;
 
 public class AccountController : Controller

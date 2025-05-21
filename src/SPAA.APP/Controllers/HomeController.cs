@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SPAA.App.ViewModels;
 using SPAA.APP.Models;
 using SPAA.APP.ViewModels;
-using SPAA.Business.Interfaces;
+using SPAA.Business.Interfaces.Repository;
 using SPAA.Business.Models;
 using SPAA.Data.Context;
 using SPAA.Data.Repository;
@@ -18,10 +18,12 @@ namespace SPAA.APP.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IAlunoRepository _alunoRepository;
         private readonly IAlunoDisciplinaRepository _alunoDisciplinaRepository;
-        private readonly IDisciplinaRepository _disciplinaRepository; 
+        private readonly IDisciplinaRepository _disciplinaRepository;
         private readonly IMapper _mapper;
         private readonly ICurriculoRepository _curriculoRepository;
         private readonly IPreRequisitoRepository _preRequisitoRepository;
+        private readonly IAreaInteresseAlunoRepository _areaInteresseAlunoRepository;
+        private readonly ITurmaRepository _turmaRepository;
 
 
         public HomeController(ILogger<HomeController> logger,
@@ -30,7 +32,9 @@ namespace SPAA.APP.Controllers
                                IDisciplinaRepository disciplinaRepository,
                                IMapper mapper,
                                ICurriculoRepository curriculoRepository,
-                               IPreRequisitoRepository preRequisitoRepository)
+                               IPreRequisitoRepository preRequisitoRepository,
+                               IAreaInteresseAlunoRepository areaInteresseAlunoRepository,
+                               ITurmaRepository turmaRepository)
         {
             _logger = logger;
             _alunoRepository = alunoRepository;
@@ -38,7 +42,9 @@ namespace SPAA.APP.Controllers
             _disciplinaRepository = disciplinaRepository;
             _mapper = mapper;
             _curriculoRepository = curriculoRepository;
-            _preRequisitoRepository = preRequisitoRepository;   
+            _preRequisitoRepository = preRequisitoRepository;
+            _areaInteresseAlunoRepository = areaInteresseAlunoRepository;
+            _turmaRepository = turmaRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -54,6 +60,11 @@ namespace SPAA.APP.Controllers
                 return RedirectToAction("UploadHistorico", "Upload");
             }
 
+            //var alunoJaTemAreaInteresse = await _areaInteresseAlunoRepository.AlunoJaTemAreaInteresse(User.Identity.Name);
+            //if (!alunoJaTemAreaInteresse)
+            //{
+            //    return RedirectToAction("FormAluno", "Form");
+            //}
             var disciplinasViewModel = await ObterDisciplinasAluno(User.Identity.Name);
 
             ViewData["Aprovadas"] = disciplinasViewModel.Aprovadas;
@@ -75,6 +86,19 @@ namespace SPAA.APP.Controllers
 
             var nomesAprovadas = await _alunoDisciplinaRepository.ObterNomeDisciplinasPorSituacao(matricula, "APR");
             var nomesPendentes = await _alunoDisciplinaRepository.ObterNomeDisciplinasPorSituacao(matricula, "PEND");
+
+            var preferencias = new List<AulaHorario>
+                {
+                    new AulaHorario { DiaSemana = 3, Turno = 'T', Horario = 2 },
+                    new AulaHorario { DiaSemana = 3, Turno = 'T', Horario = 3 },
+                    new AulaHorario { DiaSemana = 5, Turno = 'T', Horario = 2 },
+                    new AulaHorario { DiaSemana = 5, Turno = 'T', Horario = 3 }
+                };
+
+            foreach (var nome in nomesPendentes)
+            {
+                var teste = await _turmaRepository.BuscarTurmasCompativeis(nome, preferencias);
+            }
 
             var disciplinasAprovadasViewModel = nomesAprovadas
                 .Select(nome => new DisciplinaViewModel

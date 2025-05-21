@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SPAA.Business.Interfaces;
+using SPAA.Business.Interfaces.Repository;
+using SPAA.Business.Interfaces.Services;
 using SPAA.Business.Models;
 using SPAA.Business.Services;
 using SPAA.Data.Context;
@@ -58,6 +59,12 @@ namespace SPAA.App.Configurations
             services.AddScoped<ITurmaRepository, TurmaRepository>();
             services.AddScoped<ICurriculoRepository, CurriculoRepository>();
             services.AddScoped<IPreRequisitoRepository, PreRequisitoRepository>();
+            services.AddScoped<IAreaInteresseAlunoRepository, AreaInteresseAlunoRepository>();
+
+            services.AddScoped<IAulaHorarioService, AulaHorarioService>();
+            services.AddScoped<IAlunoDisciplinaService, AlunoDisciplinaService>();
+            services.AddScoped<IDisciplinaService, DisciplinaService>();
+            services.AddScoped<IPreRequisitoService, PreRequisitoService>();
 
             // Configurações de e-mail
             var emailSettings = configuration.GetSection("EmailSettings").Get<EmailSettings>();

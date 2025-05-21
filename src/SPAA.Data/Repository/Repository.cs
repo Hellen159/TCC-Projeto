@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SPAA.Business.Interfaces;
+using SPAA.Business.Interfaces.Repository;
 using SPAA.Business.Models;
 using SPAA.Data.Context;
 using System;

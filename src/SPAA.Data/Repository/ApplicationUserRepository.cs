@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using SPAA.Business.Interfaces;
+using SPAA.Business.Interfaces.Repository;
 using SPAA.Business.Models;
 using System;
 using System.Collections.Generic;

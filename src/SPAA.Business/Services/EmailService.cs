@@ -1,4 +1,4 @@
-﻿using SPAA.Business.Interfaces;
+﻿using SPAA.Business.Interfaces.Services;
 using SPAA.Business.Models;
 using System.Net;
 using System.Net.Mail;

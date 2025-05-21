@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SPAA.Business.Interfaces;
+using SPAA.Business.Interfaces.Repository;
 using SPAA.Data.Repository;
 
 namespace SPAA.App.Controllers

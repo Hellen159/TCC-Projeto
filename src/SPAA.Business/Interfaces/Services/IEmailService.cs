@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SPAA.Business.Interfaces
+namespace SPAA.Business.Interfaces.Services
 {
     public interface IEmailService
     {

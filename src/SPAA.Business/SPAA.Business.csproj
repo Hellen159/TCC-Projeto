@@ -7,11 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Validations\" />
-    <Folder Include="Notificacoes\" />
+    <Compile Remove="Notificacoes\**" />
+    <Compile Remove="Validations\**" />
+    <EmbeddedResource Remove="Notificacoes\**" />
+    <EmbeddedResource Remove="Validations\**" />
+    <None Remove="Notificacoes\**" />
+    <None Remove="Validations\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="itext7" Version="9.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.13" />
   </ItemGroup>

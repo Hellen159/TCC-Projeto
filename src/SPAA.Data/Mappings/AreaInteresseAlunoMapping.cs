@@ -15,7 +15,10 @@ namespace SPAA.Data.Mappings
         {
             builder.ToTable("area_interesse_aluno");
 
-            builder.HasKey(aia => new { aia.Matricula, aia.CodigoAreaInteresse, aia.NivelInteresse });
+            builder.HasKey(aia => aia.CodigoAreaInteresseAluno);
+            
+            builder.Property(ai => ai.CodigoAreaInteresseAluno)
+                .HasColumnName("cd_area_interesse_aluno");
 
             builder.Property(ai => ai.CodigoAreaInteresse)
                 .HasColumnName("cd_area_interesse");

@@ -1,6 +1,6 @@
 ﻿using SPAA.Business.Models;
 
-namespace SPAA.Business.Interfaces
+namespace SPAA.Business.Interfaces.Repository
 {
     public interface ICurriculoRepository : IRepository<Curriculo, int>
     {

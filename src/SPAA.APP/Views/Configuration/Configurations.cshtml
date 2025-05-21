@@ -34,10 +34,15 @@
                         <input type="hidden" name="returnController" value="Configuration" />
                         <button type="submit" name="submitButton" value="Salvar Histórico">Salvar Histórico</button>
                     </form>
+                    <!-- Formulário perfil usuario -->
+                    <form class="forms" asp-controller="Form" asp-action="FormAluno" method="get">
+                        <label>Formulário</label>
+                        <button type="submit" name="submitButton" value="Refazer Formulario">Refazer Formulário</button>
+                    </form>
                 </div>
                 <div class="alteracoes">
                     <!-- Formulário de Alterar Nome -->
-                    <form class ="forms" id="formAlterarNome" asp-action="AlterarNome" method="post">
+                    <form class="forms" id="formAlterarNome" asp-action="AlterarNome" method="post">
                         <div style="margin-bottom: 1rem;">
                             <label for="NovoNome">Alterar Nome:</label>
                             <input asp-for="NovoNome" id="NovoNome" placeholder="Novo Nome*" />

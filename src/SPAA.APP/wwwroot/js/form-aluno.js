@@ -55,72 +55,6 @@ function validarPerguntas() {
     return true; // Permite o avanço
 }
 
-function calcularPerfis() {
-
-    if (!validarPerguntas()) {
-        return; // Impede o cálculo se houver perguntas não respondidas
-    }
-    const perfilNotas = {};
-    const terciarios = {};
-
-    // Verificar se todas as perguntas foram respondidas
-    let todasRespondidas = true;
-    perguntas.forEach((p) => {
-        const input = document.querySelector(`input[name="q${p.id}"]:checked`);
-        if (!input) {
-            todasRespondidas = false;
-        }
-    });
-
-    // Continuar com o cálculo dos perfis
-    perguntas.forEach((p) => {
-        const input = document.querySelector(`input[name="q${p.id}"]:checked`);
-        if (!input) return;
-
-        const nota = parseInt(input.value);
-        if (p.perfil.startsWith("Engenharia")) {
-            if (!terciarios[p.perfil]) terciarios[p.perfil] = [];
-            terciarios[p.perfil].push(nota);
-        } else {
-            if (!perfilNotas[p.perfil]) perfilNotas[p.perfil] = [];
-            perfilNotas[p.perfil].push(nota);
-        }
-    });
-
-    // Calcular médias para perfis principais e secundários
-    const perfilMedias = Object.entries(perfilNotas).map(([perfil, notas]) => {
-        const media = notas.reduce((a, b) => a + b, 0) / notas.length;
-        return { perfil, media };
-    }).sort((a, b) => b.media - a.media);
-
-    const principais = perfilMedias[0]; // Principal é o primeiro da lista ordenada
-    const secundarios = perfilMedias.slice(1).filter(p => p.media >= 7); // Secundários, média >= 7
-
-    // Calcular médias para perfis terciários
-    const terciarioMedias = Object.entries(terciarios).map(([perfil, notas]) => {
-        const media = notas.reduce((a, b) => a + b, 0) / notas.length;
-        return { perfil, media };
-    }).filter(p => p.media >= 7); // Apenas perfis com média >= 7
-
-    // Mudar para a Etapa 3
-    document.getElementById("step2").classList.remove("active");
-    document.getElementById("step3").classList.add("active");
-
-    const resultado = {
-        principal: principais,
-        secundarios: secundarios,
-        terciarios: terciarioMedias
-    };
-
-    // Exibir resultados
-    const resultadoFinal = document.getElementById("resultado-final");
-    resultadoFinal.innerHTML = `
-    <p><strong>Perfil Principal:</strong> ${principais ? `${principais.perfil} (média ${principais.media.toFixed(2)})` : "Nenhum perfil detectado."}</p>
-    <p><strong>Perfis Secundários:</strong> ${secundarios.length > 0 ? secundarios.map(p => `${p.perfil} (${p.media.toFixed(2)})`).join(", ") : "Nenhum perfil secundário detectado."}</p>
-    <p><strong>Perfis Terciários (Engenharia):</strong> ${terciarioMedias.length > 0 ? terciarioMedias.map(p => `${p.perfil} (${p.media.toFixed(2)})`).join(", ") : "Nenhum perfil de engenharia detectado."}</p>
-    `;
-}
-
 function refazer() {
     document.getElementById("step3").classList.remove("active");
     document.getElementById("step1").classList.add("active");
@@ -143,3 +77,38 @@ perguntas.forEach((p, index) => {
     perguntasDiv.appendChild(div);
 });
 
+function enviarRespostas() {
+    if (!validarPerguntas()) return;
+
+    const respostas = perguntas.map(p => {
+        const input = document.querySelector(`input[name="q${p.id}"]:checked`);
+        return {
+            id: p.id,
+            nota: parseInt(input.value),
+            perfil: p.perfil
+        };
+    });
+
+    fetch('/Form/CalcularPerfil', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(respostas)
+    })
+        .then(res => res.json())
+        .then(resultado => {
+            document.getElementById("step2").classList.remove("active");
+            document.getElementById("step3").classList.add("active");
+
+            const resultadoFinal = document.getElementById("resultado-final");
+            resultadoFinal.innerHTML = `
+            <p><strong>Perfil Principal:</strong> ${resultado.principal}</p>
+            <p><strong>Perfis Secundários:</strong> ${resultado.secundarios}</p>
+            <p><strong>Perfis Terciários:</strong> ${resultado.terciarios}</p>
+        `;
+        })
+        .catch(err => {
+            console.error("Erro ao enviar respostas:", err);
+        });
+}
