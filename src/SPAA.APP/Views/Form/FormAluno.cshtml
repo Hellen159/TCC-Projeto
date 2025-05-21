@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["LayoutType"] = "formulario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/import.css" />
+    <link rel="stylesheet" href="~/css/form-aluno.css" />
+}
+<div>
+    <div class="toplogo">
+        <a href="/Account/Login" style="text-decoration: none; display: flex; align-items: center;">
+            <div class="logoSpaa">
+                <img src="~/assets/unbflag.svg" alt="Imagem da Logo da UnB" />
+            </div>
+            <div>
+                <h1 class="logo">SPAA</h1>
+                <h2 class="subtitle">Universidade de Brasília</h2>
+            </div>
+        </a>
+    </div>
+    <div class="box import-box">
+        <form class="form" style="text-align: center;" id="multiStepForm">
+            <!-- Etapa 1 -->
+            <div class="form-step active" id="step1">
+                <h3 class="import-title">Formulário de Conhecimento</h3>
+                <p class="import-description">
+                    Este formulário tem como objetivo entender melhor o seu perfil acadêmico e os conhecimentos que você já possui.
+                    As informações fornecidas nos ajudarão a identificar suas afinidades, experiências e áreas de interesse.
+                </p>
+                <button type="button" class="btn-import" onclick="nextStep()">Próximo</button>
+            </div>
+            <!-- Etapa 2 -->
+            <div class="form-step" id="step2">
+                <h3 class="import-title">Etapa 2: Suas áreas de interesse</h3>
+                <p class="import-description">
+                    Nos diga mais sobre suas preferências acadêmicas.
+                </p>
+                <div id="perguntas"></div>
+                <button type="button" class="btn-import" onclick="calcularPerfis()">Enviar</button>
+            </div>
+            <!-- Etapa 3 -->
+            <div class="form-step" id="step3">
+                <h3 class="import-title">Seu Perfil Acadêmico</h3>
+                <div class="import-description" id="resultado-final" style="text-align: left;"></div>
+                <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <button type="button" class="btn-import" onclick="refazer()" style="background-color: grey;">
+                        Refazer Questionário
+                    </button>
+                    <a href="/Upload/UploadHistorico" style="text-decoration: none;" class="btn-import">Terminar Formulário</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="validationMessages" class="validation-messages"></div>
+
+@section Scripts {
+    <script src="~/js/form-aluno.js"></script>
+}
+@if (TempData["MensagemSucesso"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["MensagemSucesso"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}

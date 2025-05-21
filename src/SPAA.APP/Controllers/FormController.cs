@@ -8,9 +8,11 @@ namespace SPAA.App.Controllers
 {
     public class FormController : Controller
     {
-        public IActionResult Form()
+        public IActionResult FormAluno()
         {
+            ViewData["LayoutType"] = "formulario";
             return View();
         }
     }
+
 }

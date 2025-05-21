@@ -23,11 +23,6 @@ namespace SPAA.App.Controllers
             return View();
         }
 
-        public IActionResult UploadForm()
-        {
-            return View();
-        }
-
         [HttpPost]
         public async Task<IActionResult> UploadHistorico(IFormFile historico, string returnAction = null, string returnController = null)
         {

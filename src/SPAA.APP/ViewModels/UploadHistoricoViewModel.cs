@@ -2,7 +2,7 @@
 
 namespace SPAA.App.ViewModels
 {
-    public class UploadFormViewModel
+    public class UploadHistoricoViewModel
     {
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         public IFormFile Historico { get; set; }

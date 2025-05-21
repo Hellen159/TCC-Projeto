@@ -1,0 +1,61 @@
+﻿.logoSpaa {
+    margin-right: 1rem;
+}
+
+.import-box .form-step {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+    .import-box .form-step.active {
+        display: block;
+        opacity: 1;
+    }
+
+.btn-import {
+    margin-top: 1rem;
+    padding: 0.8rem 1.2rem;
+    background-color: #435FA0;
+    color: white;
+    border: none;
+    border-radius: 2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .btn-import:hover {
+        background-color: aquamarine;
+    }
+
+.question {
+    margin-bottom: 1rem;
+}
+
+    .question h4 {
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+    }
+
+.rating label {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
+    line-height: 2rem;
+    border: 1px solid #ccc;
+    margin-right: 0.5rem;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.rating input[type="radio"] {
+    display: none;
+}
+
+    .rating input[type="radio"]:checked + label {
+        background-color: #435FA0;
+        color: white;
+        border-color: #fff;
+    }
