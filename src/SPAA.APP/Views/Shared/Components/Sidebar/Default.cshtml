@@ -1,0 +1,31 @@
+﻿@model SPAA.Business.Models.Aluno
+
+<aside class="sidebar">
+    <div class="user-dropdown">
+        <button class="user-button">
+            @Model.NomeAluno
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="caret-down-icon" viewBox="0 0 16 16">
+                <path d="M3.5 14.5L8 9.5l4.5 5z" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Progresso simulado -->
+    <section class="progress-section">
+        <div class="momento">
+            <h3>PROGRESSO</h3>
+            <h3>ACADÊMICO</h3>
+        </div>
+    </section>
+
+    <section class="hours-remaining-section">
+        <h3>Horas faltantes:</h3>
+    </section>
+
+    <form asp-controller="Account" asp-action="Logout" method="post">
+        <button type="submit" class="header-button">
+            <img src="~/assets/buttomLoginRegister.svg" alt="Ícone de usuário" class="icon" />
+            Sair
+        </button>
+    </form>
+</aside>

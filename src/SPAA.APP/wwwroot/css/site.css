@@ -34,6 +34,7 @@ body {
     margin: 0;
     padding: 0;
     border-radius: 0;
+    margin-right: 300px; /* mesma largura da sidebar */
 }
 
 .container {
@@ -65,10 +66,16 @@ body {
 
 /* Sidebar */
 .sidebar {
-    flex: 23; /* 23% of the container */
-    background-color: rgba(74,144,226, 0.4);
-    background-color: rgba(74,144,226, 0.4);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 300px; /* Define largura fixa */
+    height: 100vh; /* Ocupa toda a altura da tela */
+    background-color: rgba(74, 144, 226, 0.4);
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    overflow-y: auto;
+    z-index: 1000;
 }
 
 /* User Dropdown */
