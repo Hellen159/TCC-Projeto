@@ -9,7 +9,6 @@ namespace SPAA.Business.Interfaces.Repository
 {
     public interface ITurmaRepository : IRepository<Turma, int>
     {
-        Task<List<Turma>> BuscarTurmasCompativeis(string nomeDisciplina, List<AulaHorario> preferencias);
         Task<List<Turma>> TurmasDisponiveisPorDisciplina(string nomeMateria);
     }
 }

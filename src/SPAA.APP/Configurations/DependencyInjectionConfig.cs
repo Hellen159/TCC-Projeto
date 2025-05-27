@@ -65,6 +65,7 @@ namespace SPAA.App.Configurations
             services.AddScoped<IAlunoDisciplinaService, AlunoDisciplinaService>();
             services.AddScoped<IDisciplinaService, DisciplinaService>();
             services.AddScoped<IPreRequisitoService, PreRequisitoService>();
+            services.AddScoped<IAlunoService, AlunoService>();
 
             // Configurações de e-mail
             var emailSettings = configuration.GetSection("EmailSettings").Get<EmailSettings>();
