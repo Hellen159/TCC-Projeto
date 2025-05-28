@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SPAA.App.ViewModels;
 using SPAA.Business.Interfaces.Repository;
+using SPAA.Business.Interfaces.Services;
 using SPAA.Business.Models;
 
 namespace SPAA.App.Controllers
@@ -11,6 +12,7 @@ namespace SPAA.App.Controllers
     public class ConfigurationController : Controller
     {
         private readonly IAlunoRepository _alunoRepository;
+        private readonly IAlunoService _alunoService;
         private readonly IAlunoDisciplinaRepository _alunoDisciplinaRepository;
         private readonly IApplicationUserRepository _applicationUserRepository;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -18,12 +20,14 @@ namespace SPAA.App.Controllers
         public ConfigurationController(IAlunoRepository alunoRepository,
                                         UserManager<ApplicationUser> userManager,
                                         IApplicationUserRepository applicationUserRepository,
-                                        IAlunoDisciplinaRepository alunoDisciplinaRepository)
+                                        IAlunoDisciplinaRepository alunoDisciplinaRepository,
+                                        IAlunoService alunoService)
         {
             _alunoRepository = alunoRepository;
             _userManager = userManager;
             _applicationUserRepository = applicationUserRepository;
             _alunoDisciplinaRepository = alunoDisciplinaRepository;
+            _alunoService = alunoService;
         }
 
         [HttpGet]
@@ -36,7 +40,7 @@ namespace SPAA.App.Controllers
         [HttpPost]
         public async Task<IActionResult> AlterarNome(ConfigurationViewModel model)
         {
-            var result = await _alunoRepository.AlterarNome(User.Identity.Name, model.NovoNome);
+            var result = await _alunoService.AlterarNome(User.Identity.Name, model.NovoNome);
 
             if (result)
             {

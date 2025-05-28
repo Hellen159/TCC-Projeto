@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SPAA.Business.Interfaces.Repository;
+using SPAA.Business.Interfaces.Services;
 using SPAA.Data.Repository;
 
 namespace SPAA.App.Controllers
@@ -10,12 +11,15 @@ namespace SPAA.App.Controllers
     {
         private readonly IAlunoDisciplinaRepository _alunoDisciplinaRepository;
         private readonly IAlunoRepository _alunoRepository;
+        private readonly IAlunoDisciplinaService _alunoDisciplinaService;
 
         public UploadController(IAlunoDisciplinaRepository alunoDisciplinaRepository, 
-                                IAlunoRepository alunoRepository)
+                                IAlunoRepository alunoRepository,
+                                IAlunoDisciplinaService alunoDisciplinaService)
         {
             _alunoDisciplinaRepository = alunoDisciplinaRepository;
             _alunoRepository = alunoRepository;
+            _alunoDisciplinaService = alunoDisciplinaService;
         }
 
         public IActionResult UploadHistorico()
@@ -33,7 +37,7 @@ namespace SPAA.App.Controllers
             //    await _alunoDisciplinaRepository.ExcluirDisciplinasDoAluno(User.Identity.Name);
             //}
 
-            var result = await _alunoDisciplinaRepository.ConsumirHistoricoPdf(historico, User.Identity.Name);
+            var result = await _alunoDisciplinaService.ConsumirHistoricoPdf(historico, User.Identity.Name);
 
             if (!result.isValid)
             {

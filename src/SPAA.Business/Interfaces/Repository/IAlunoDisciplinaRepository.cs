@@ -10,7 +10,8 @@ namespace SPAA.Business.Interfaces.Repository
 {
     public interface IAlunoDisciplinaRepository : IRepository<AlunoDisciplina, string>
     {
-        Task<(bool isValid, string mensagem)> ConsumirHistoricoPdf(IFormFile pdf, string matricula);
+        Task InserirEquivalencias(List<AlunoDisciplina> equivalencias, string matricula);
+        Task InserirDisciplinas(List<AlunoDisciplina> disciplinas);
         Task<bool> ExcluirDisciplinasDoAluno(string matricula);
         Task<List<AlunoDisciplina>> ObterAlunoDisciplinaPorSituacao(string matricula, string situacao);
         Task<List<string>> ObterNomeDisciplinasPorSituacao(string matricula, string situacao);
