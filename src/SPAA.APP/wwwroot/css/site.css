@@ -126,6 +126,7 @@ body {
     justify-content: flex-end;
     margin-top: -1rem;
     border: 0;
+    flex-direction: column;
 }
 
 .modal-open {
@@ -133,32 +134,27 @@ body {
     padding-right: 0 !important; /* remove o padding adicional */
 }
 
-    .dropdown-menu ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        margin-right: 3.1rem;
-        font-size: 1.5rem;
-        color: #fff !important; /* força a cor branca */
-        text-decoration: none;
+.dropdown-menu ul li,
+.dropdown-menu ul li a,
+.dropdown-menu ul li button {
+    display: block;
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #fff !important;
+    text-decoration: none;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+}
+
+    .dropdown-menu ul li button:hover,
+    .dropdown-menu ul li a:hover {
+        background-color: midnightblue;
+        border-radius: 1rem;
     }
 
-        .dropdown-menu ul li {
-            padding: 12px 16px;
-            cursor: pointer;
-        }
-
-        .dropdown-menu a {
-            color: #fff !important;
-            text-decoration: none;
-        }
-
-            .dropdown-menu ul li:hover {
-                background-color: midnightblue;
-                border-radius: 1rem;
-            }
 
 /* Progress Section */
 .progress-section {

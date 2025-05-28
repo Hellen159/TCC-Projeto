@@ -1,17 +1,15 @@
-﻿@{
-    ViewData["LayoutType"] = "formulario";
-}
+﻿
+
 
 @model SPAA.App.ViewModels.ConfigurationViewModel
 
 @section Styles {
     <link rel="stylesheet" href="~/css/config.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
 }
 
-<!-- Botão para abrir a modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#configuracoesModal">
-    Abrir Configurações
-</button>
+
 
 <!-- Modal de Configurações -->
 <div class="modal fade" id="configuracoesModal" tabindex="-1" aria-hidden="true">
