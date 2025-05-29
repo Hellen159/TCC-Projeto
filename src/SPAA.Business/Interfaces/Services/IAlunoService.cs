@@ -12,6 +12,7 @@ namespace SPAA.Business.Interfaces.Services
         Task<bool> AlterarNome(string matricula, string novoNome);
         Task<(bool sucesso, string mensagem)> MarcarHistoricoComoAnexado(string matricula);
         Task<bool> AlunoJaAnexouHistorico(string matricula);
+        Task<bool> SalvarHorasAluno(string matricula, int optativas, int obrigatoria);
 
     }
 }

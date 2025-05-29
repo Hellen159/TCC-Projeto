@@ -26,7 +26,7 @@ namespace SPAA.Business.Services
         private readonly ILogger<AlunoDisciplinaService> _logger;
         private readonly IAlunoService _alunoService;
         private readonly IAlunoDisciplinaRepository _alunoDisciplinaRepository;
-        public AlunoDisciplinaService(ILogger<AlunoDisciplinaService> logger, 
+        public AlunoDisciplinaService(ILogger<AlunoDisciplinaService> logger,
                                       IAlunoService alunoService,
                                       IAlunoDisciplinaRepository alunoDisciplinaRepository)
         {
@@ -276,6 +276,7 @@ namespace SPAA.Business.Services
             {
                 List<string> codigosNaoEncontrados = new();
                 string textoExtraido = await ExtrairTextoDePdf(arquivoPdf);
+                var horasPendentes = await ObterHorasPendentes(textoExtraido, matricula);
                 var blocosDisciplinas = await ExtrairBlocos(textoExtraido);
                 var listaEquivalencia = await ObterEquivalenciasCurriculo(textoExtraido, matricula);
                 var listaAlunoDisciplina = await ConverterBlocos(blocosDisciplinas, matricula);
@@ -315,5 +316,34 @@ namespace SPAA.Business.Services
                 return (false, $"Erro ao processar o arquivo: {ex.Message}. Detalhes internos: {inner}");
             }
         }
+
+        public async Task<List<int>> ObterHorasPendentes(string texto, string matricula)
+        {
+            var marcadorInicio = "Exigido\nIntegralizado\nPendente";
+            var idxInicio = texto.IndexOf(marcadorInicio, StringComparison.OrdinalIgnoreCase);
+            if (idxInicio < 0)
+                return new List<int>(); 
+
+            var trecho = texto.Substring(idxInicio);
+
+            var regexHoras = new Regex(@"\d+\s?h", RegexOptions.IgnoreCase);
+            var matches = regexHoras.Matches(trecho);
+
+            if (matches.Count < 6)
+                return new List<int>(); 
+
+            int horasOptativasPendentes = int.Parse(matches[2].Value.Replace("h", "").Trim());
+            int horasObrigatoriasPendentes = int.Parse(matches[5].Value.Replace("h", "").Trim());
+
+            await _alunoService.SalvarHorasAluno(matricula, horasOptativasPendentes, horasObrigatoriasPendentes);
+
+            return new List<int>
+            {
+                horasOptativasPendentes,
+                horasObrigatoriasPendentes
+            };
+        }
+
+
     }
 }

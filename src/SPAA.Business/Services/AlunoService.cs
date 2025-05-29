@@ -69,5 +69,19 @@ namespace SPAA.Business.Services
 
             return (true, "Histórico processado com sucesso!");
         }
+
+        public async Task<bool> SalvarHorasAluno (string matricula, int optativas, int obrigatoria)
+        {
+            var aluno = await _alunoRepository.ObterPorId(matricula);
+
+            if (aluno == null)
+                return (false);
+
+            aluno.HorasOptativasPendentes = optativas;
+            aluno.HorasObrigatoriasPendentes = obrigatoria;
+            await _alunoRepository.Atualizar(aluno);
+
+            return (true);
+        }
     }
 }
