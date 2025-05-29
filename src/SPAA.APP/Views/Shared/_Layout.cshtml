@@ -4,11 +4,9 @@
     var linkDestino = currentPath.Contains("login") ? "/Account/Register" :
                       currentPath.Contains("register") ? "/Account/Login" :
                       "/Account/Login";
-
     var textoLink = currentPath.Contains("login") ? "Registre-se" :
                     currentPath.Contains("register") ? "Login" :
                     "Login / Registre-se";
-
     var layoutTipo = ViewData["LayoutType"]?.ToString()?.ToLower()
                      ?? (currentPath.Contains("login") || currentPath.Contains("register") ? "publico" : "padrao");
 }
@@ -26,7 +24,6 @@
     @RenderSection("Styles", required: false)
 </head>
 <body>
-
     @* Cabeçalhos diferentes por tipo de layout *@
     @if (layoutTipo == "publico")
     {
@@ -35,7 +32,6 @@
                 <button type="button" class="header-link btn btn-link p-0 m-0" data-bs-toggle="modal" data-bs-target="#aboutModal">
                     Sobre-nós
                 </button>
-
                 <a href="#docs" class="header-link">Documentação</a>
                 <a href="@linkDestino" class="header-button">
                     <img src="~/assets/buttomLoginRegister.svg" alt="Ícone de usuário" class="icon" />
@@ -46,41 +42,36 @@
     }
     else if (layoutTipo == "formulario")
     {
+        <!-- Nenhum cabeçalho ou sidebar -->
     }
     else
     {
-        <header class="custom-header">
-            <nav class="header-content">
-                <a href="/dashboard" class="header-link">Dashboard</a>
-                <a href="/perfil" class="header-link">Perfil</a>
-
-                @if (!isAuthenticated)
-                {
-                    <a href="@linkDestino" class="header-button">
-                        <img src="~/assets/buttomLoginRegister.svg" alt="Ícone de usuário" class="icon" />
-                        @textoLink
-                    </a>
-                }
-                else
-                {
-                    <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
-                        <button type="submit" class="header-button" style="background:none; border:none; padding:0;">
-                            <img src="~/assets/buttomLoginRegister.svg" alt="Ícone de usuário" class="icon" />
-                            Sair
-                        </button>
-                    </form>
-                }
-            </nav>
-        </header>
     }
 
-    <div class="container">
-        @RenderBody()
-    </div>
+    @* Conteúdo principal *@
+    @if (layoutTipo == "formulario")
+    {
+        <div class="container-formulario">
+            @RenderBody()
+        </div>
+    }
+    else if (isAuthenticated && layoutTipo == "padrao")
+    {
+        <div class="container">
+            <div class="main-content">
+                @RenderBody()
+            </div>
+            @await Component.InvokeAsync("Sidebar")
+        </div>
+    }
+    else
+    {
+        <div class="container-publico">
+            @RenderBody()
+        </div>
+    }
 
     @await Html.PartialAsync("~/Views/Shared/_AboutModal.cshtml")
-
-
 
     <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
