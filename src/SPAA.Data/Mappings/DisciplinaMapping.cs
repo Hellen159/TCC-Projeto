@@ -28,7 +28,15 @@ namespace SPAA.Data.Mappings
 
             builder.Property(d => d.CargaHoraria)
                 .HasColumnName("carga_horaria");
-            
+
+            builder.Property(d => d.Ementa)
+                .HasColumnName("ementa")
+                .HasColumnType("varchar(5000)");
+
+            builder.Property(d => d.Codigo)
+                .HasColumnName("codigo")
+                .HasColumnType("varchar(10)");
+
         }
     }
 }

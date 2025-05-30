@@ -1,0 +1,38 @@
+﻿@model SPAA.App.ViewModels.TurmaListaViewModel
+
+<div class="container my-3">
+    <div class="row justify-content-center" style="width: 100%;">
+        <div class="col-md-6" style="width: 100%;">
+            <div class="card shadow-sm">
+
+                <div class="card-body p-0">
+                    @if (Model.Turmas != null && Model.Turmas.Any())
+                    {
+                        <table class="table table-sm table-striped mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="card-header bg-primary text-white">@Model.Titulo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    @foreach (var turma in Model.Turmas)
+                                    {
+                                    <tr>
+                                        <td>@turma.CodigoDisciplina</td>
+                                        <td>@turma.NomeDisciplina</td>
+                                        <td>@turma.NomeProfessor</td>
+                                        <td>@turma.Horario</td>
+                                    </tr>
+                                    }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p class="m-3 text-muted">Nenhuma turma encontrada.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

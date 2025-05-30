@@ -1,0 +1,10 @@
+﻿@using SPAA.App.ViewModels
+@model SPAA.App.ViewModels.TurmaViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2>Dashboard</h2>
+
+<p>Bem-vinda ao painel de controle, Hellen!</p>
+@await Html.PartialAsync("_ListaTurmas")
