@@ -1,5 +1,17 @@
 ﻿@model SPAA.Business.Models.Aluno
 
+@{
+    var configuracaoViewModel = new SPAA.App.ViewModels.ConfigurationViewModel();
+} 
+
+@section Styles {
+    <link rel="stylesh eet" href="~/css/config.css" />
+    <link rel="stylesheet" href="~/css/auth.css" />
+}
+
+
+@await Html.PartialAsync("_ConfiguracoesModal", configuracaoViewModel)
+
 <!-- Sidebar -->
 <aside class="sidebar">
     <div class="user-dropdown">
@@ -12,7 +24,7 @@
 
         <div class="dropdown-menu">
             <ul>
-                <li><a href="configuration/configurations">Configurações</a></li>
+                <li><a href="#" id="abrir-config" style="padding-right: 0px;">Configurações</a></li>
                 <li><a href="#" data-bs-toggle="modal" data-bs-target="#aboutModal" data-bs-padding-right="0">Sobre Nós</a></li>
                 <li>
                     <form asp-controller="Account" asp-action="Logout" method="post">
@@ -64,7 +76,7 @@
             <h3>ACADÊMICO</h3>
             <p>28%</p>
         </div>
-        <button class="view-flowchart-button"> <img src="~/assets/clock.svg" alt="Ícone de Relógio" style="margin-right: 1rem;" />Visualizar Fluxograma</button>
+        <button class="view-flowchart-button"> <img src="~/assets/clock.svg" alt="Ícone de Relógio" style="margin-right: 0.5rem;" />Visualizar Fluxograma</button>
     </section>
     <section class="notifications-section">
         <h3>Notificações</h3>
@@ -80,7 +92,7 @@
     <section class="hours-remaining-section">
         <h3>Horas faltantes:</h3>
         <p>Obrigatória: 1860 horas</p>
-        <p>Optativa: 560 horas</p>
+        <p style="margin-bottom: 0;">Optativa: 560 horas</p>
     </section>
 </aside>
 
@@ -112,4 +124,15 @@
         var aboutModal = new bootstrap.Modal(document.getElementById('aboutModal'));
         aboutModal.show();
     }
+
+        document.addEventListener("DOMContentLoaded", function () {
+        const configLink = document.getElementById("abrir-config");
+        if (configLink) {
+            configLink.addEventListener("click", function (e) {
+                e.preventDefault();
+                var modal = new bootstrap.Modal(document.getElementById('configuracoesModal'));
+                modal.show();
+            });
+        }
+    });
 </script>

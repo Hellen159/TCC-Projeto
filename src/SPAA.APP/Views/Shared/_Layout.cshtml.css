@@ -59,7 +59,7 @@ button.accept-policy {
     position: absolute;
     top: 0;
     right: 0;
-    width: 42%;
+    min-width: 42%;
     height: 9%;
     background-color: rgba(74, 144, 226, 0.4); /* Azul com 40% de opacidade */
     border-radius: 0rem 0rem 0rem 1rem;
@@ -101,3 +101,7 @@ button.accept-policy {
     background-color: #f0f0f0;
 }
 
+@media (max-width: 800px) {
+
+
+}

@@ -1,17 +1,128 @@
-﻿@{
-    ViewData["LayoutType"] = "formulario";
-}
+﻿@model SPAA.App.ViewModels.ConfigurationViewModel
 
-@model SPAA.App.ViewModels.ConfigurationViewModel
+<style>
+    #configuracoesModal .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: none;
+        padding-bottom: 1rem;
+        width: 100%;
+        flex-direction: column-reverse;
+    }
+    
+    #configuracoesModal .modal-header h5.modal-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #435FA0;
+    }
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/config.css" />
-}
+    /* Estilo geral para labels */
+    #configuracoesModal label {
+        font-size: 1rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem; /* Espaçamento entre o label e o input */
+        color: #495057; /* Cor padrão para labels */
+        display: inline-block; /* Labels não ocupam a linha inteira */
+        width: 100%; /* Garante que os labels estejam alinhados à esquerda */
+    }
 
-<!-- Botão para abrir a modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#configuracoesModal">
-    Abrir Configurações
-</button>
+    /* Estilo para inputs digitáveis */
+    #configuracoesModal input[type="text"],
+    #configuracoesModal input[type="password"],
+    #configuracoesModal input[type="file"] {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+    }
+
+        #configuracoesModal input[type="text"]:focus,
+        #configuracoesModal input[type="password"]:focus,
+        #configuracoesModal input[type="file"]:focus {
+            border-color: #435FA0; /* Cor de destaque ao focar */
+            box-shadow: 0 0 5px rgba(67, 95, 160, 0.5);
+        }
+
+    /* Botões genéricos */
+    #configuracoesModal button {
+        padding: 0.5rem 1rem;
+        margin-bottom: 2rem;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        /* Botão primário (Salvar) */
+        #configuracoesModal button[name="submitButton"] {
+            background-color: #435FA0;
+            color: white;
+        }
+
+            #configuracoesModal button[name="submitButton"]:hover {
+                background-color: #3a518c;
+            }
+
+        /* Botão de excluir conta */
+        #configuracoesModal button[style*="background-color: red;"] {
+            background-color: #dc3545 !important;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            #configuracoesModal button[style*="background-color: red;"]:hover {
+                background-color: #b02a37 !important;
+            }
+
+    /* Ajustes específicos para a modal de configurações */
+    #configuracoesModal .modal-body {
+        text-align: left; /* Alinha o texto à esquerda */
+    }
+
+    #configuracoesModal .modal-content {
+        background-color: #F7FBFF;
+        align-items: center;
+    }
+
+    /* Espaçamento após o botão Salvar Histórico */
+    #formHistorico button[name="submitButton"] {
+        margin-top: 1rem;
+    }
+
+    /* Centralizar botões no rodapé da modal */
+    #configuracoesModal .modal-footer {
+        display: flex;
+        justify-content: center; /* Centraliza horizontalmente */
+        gap: 1rem; /* Espaçamento entre os botões */
+        padding-top: 1rem;
+    }
+
+    /* Garantir que os alertas de erro apareçam acima da modal */
+    .alert {
+        position: fixed; /* Fixa o alerta na tela */
+        top: 20px; /* Distância do topo */
+        left: 50%; /* Centraliza horizontalmente */
+        transform: translateX(-50%); /* Ajuste para centralização */
+        z-index: 1060; /* Acima da modal (que geralmente tem z-index 1050) */
+        width: auto; /* Largura automática */
+        max-width: 90%; /* Limita a largura máxima */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para destacar */
+    }
+
+    #configuracoesModal .forms {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+</style>
 
 <!-- Modal de Configurações -->
 <div class="modal fade" id="configuracoesModal" tabindex="-1" aria-hidden="true">
@@ -26,7 +137,7 @@
                     <!-- Formulário de Importar Histórico -->
                     <form class="forms" id="formHistorico" asp-controller="Upload" asp-action="UploadHistorico" method="post" enctype="multipart/form-data">
                         <div>
-                            <label asp-for="Historico">Histórico</label>
+                            <label asp-for="Historico">Histórico e Formulário</label>
                             <input asp-for="Historico" type="file" class="form-control" accept=".pdf" />
                             <span asp-validation-for="Historico" class="text-danger"></span>
                         </div>
@@ -36,15 +147,14 @@
                     </form>
                     <!-- Formulário perfil usuario -->
                     <form class="forms" asp-controller="Form" asp-action="FormAluno" method="get">
-                        <label>Formulário</label>
                         <button type="submit" name="submitButton" value="Refazer Formulario">Refazer Formulário</button>
                     </form>
                 </div>
                 <div class="alteracoes">
                     <!-- Formulário de Alterar Nome -->
                     <form class="forms" id="formAlterarNome" asp-action="AlterarNome" method="post">
+                        <label for="NovoNome">Alterar Nome</label>
                         <div style="margin-bottom: 1rem;">
-                            <label for="NovoNome">Alterar Nome:</label>
                             <input asp-for="NovoNome" id="NovoNome" placeholder="Novo Nome*" />
                             <span asp-validation-for="NovoNome" class="text-danger"></span>
                         </div>
@@ -52,6 +162,7 @@
                     </form>
                     <!-- Formulário de Alterar Senha -->
                     <form class="forms" id="formAlterarSenha" asp-action="AlterarSenha" method="post">
+                        <label for="NovoNome">Alterar Senha</label>
                         <div style="margin-bottom: 1rem; width: 92%;">
                             <input asp-for="SenhaAtual" placeholder="Senha Atual*" id="SenhaAtual" />
                         </div>

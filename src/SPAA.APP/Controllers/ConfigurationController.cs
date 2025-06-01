@@ -41,11 +41,11 @@ namespace SPAA.App.Controllers
             if (result)
             {
                 TempData["MensagemSucesso"] = "Nome alterado com sucesso!";
-                return RedirectToAction("Configurations", "Configuration");
+                return PartialView("~/Views/Shared/_ConfiguracoesModal.cshtml", model);
             }
 
             TempData["ErrorMessage"] = "Erro ao alterar nome!";
-            return RedirectToAction( "Configurations", "Configuration");
+            return PartialView("~/Views/Shared/_ConfiguracoesModal.cshtml", model);
         }
 
         //// POST: Refazer Formulário
@@ -71,7 +71,7 @@ namespace SPAA.App.Controllers
             if (!await _applicationUserRepository.VerificarSenhaAtual(user, model.SenhaAtual))
             {
                 TempData["ErrorMessage"] = "Senha atual incorreta.";
-                return RedirectToAction("Configurations", "Configuration");
+                return PartialView("~/Views/Shared/_ConfiguracoesModal.cshtml", model);
             }
 
             var resultado = await _applicationUserRepository.AlterarSenha(user, model.SenhaAtual, model.NovaSenha);
@@ -84,7 +84,7 @@ namespace SPAA.App.Controllers
                 TempData["ErrorMessage"] = string.Join(" ", resultado.Errors.Select(e => e.Description));
             }
 
-            return RedirectToAction("Configurations", "Configuration");
+            return PartialView("~/Views/Shared/_ConfiguracoesModal.cshtml", model);
         }
 
         [HttpGet]
@@ -125,7 +125,7 @@ namespace SPAA.App.Controllers
             else
             {
                 TempData["ErrorMessage"] = "Erro ao excluir conta.";
-                return RedirectToAction("ConfirmarExclusao", "Configuration");
+                return PartialView("~/Views/Shared/_ConfiguracoesModal.cshtml", model);
             }
         }
     }

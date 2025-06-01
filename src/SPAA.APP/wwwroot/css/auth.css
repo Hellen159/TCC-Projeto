@@ -198,6 +198,51 @@ button[type="submit"] {
         background-color: #6e6e6e;
     }
 
+@media (max-width: 800px) {
+    .auth-container {
+        display: flex;
+        flex-direction: column;
+        padding: 2rem 1rem;
+        justify-content: center;
+    }
+
+    .logoSpaa img {
+        margin-top:8%;
+        max-width: 20%;
+    }
+
+    .logoSpaa .subtitle {
+        font-size: 1.5rem;
+    }
+
+    .logo {
+        font-size: 3rem;
+    }
+
+    .form-title {
+        font-size: 1.3rem;
+    }
+
+    button[type="submit"],
+    .cancel-button {
+        max-width: 100%;
+    }
+
+    .login-link,
+    .forget-link {
+        font-size: 0.85rem;
+    }
+
+    .form-group input {
+        font-size: 0.9rem;
+    }
+
+    .auth-box {
+        margin-right:0;
+        padding-top: 0;
+    }
+}
+
 /* Estilos para a modal */
 .modal-content {
     border-radius: 10px;
