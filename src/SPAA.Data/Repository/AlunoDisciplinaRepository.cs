@@ -18,90 +18,18 @@ namespace SPAA.Data.Repository
     {
         private readonly ILogger<AlunoDisciplinaRepository> _logger;
         private readonly IAlunoRepository _alunoRepository;
-        private readonly IAlunoDisciplinaService _alunoDisciplinaService;
+        private readonly IAlunoService _alunoService;
 
 
 
         public AlunoDisciplinaRepository(MeuDbContext context,
                                             ILogger<AlunoDisciplinaRepository> logger,
                                             IAlunoRepository alunoRepository,
-                                            IAlunoDisciplinaService alunoDisciplinaService) : base(context)
+                                            IAlunoService alunoService) : base(context)
         {
             _logger = logger;
             _alunoRepository = alunoRepository;
-            _alunoDisciplinaService = alunoDisciplinaService;
-        }
-
-        public async Task<(bool isValid, string mensagem)> ConsumirHistoricoPdf(IFormFile arquivoPdf, string matricula)
-        {
-            if (arquivoPdf == null || arquivoPdf.Length == 0)
-                return (false, "Nenhum arquivo enviado.");
-
-            try
-            {
-                List<string> codigosNaoEncontrados = new();
-                string textoExtraido = await _alunoDisciplinaService.ExtrairTextoDePdf(arquivoPdf);
-                var blocosDisciplinas = await _alunoDisciplinaService.ExtrairBlocos(textoExtraido);
-                var listaEquivalencia = await _alunoDisciplinaService.ObterEquivalenciasCurriculo(textoExtraido, matricula);
-                var listaAlunoDisciplina = await _alunoDisciplinaService.ConverterBlocos(blocosDisciplinas, matricula);
-                var listaPendentes = await _alunoDisciplinaService.ObterObrigatoriasPendentes(textoExtraido, matricula);
-
-                var curriculoAno = await _alunoDisciplinaService.ObterInformacoesCurriculo(textoExtraido);
-                if (curriculoAno != null)
-                {
-                    _logger.LogInformation($"Currículo: {curriculoAno}");
-                    await _alunoRepository.AdicionarCurriculoAluno(matricula, curriculoAno);
-                }
-
-
-                if (!listaAlunoDisciplina.Any())
-                    return (false, "Formato de histórico inválido ou nenhum dado encontrado.");
-
-
-                if (listaAlunoDisciplina.Any())
-                {
-                    DbSet.AddRange(listaAlunoDisciplina);
-                    await SaveChanges();
-                }
-
-                if (listaPendentes.Any())
-                {
-                    DbSet.AddRange(listaPendentes);
-                    await SaveChanges();
-                }
-
-                if (listaEquivalencia.Any())
-                {
-                    foreach (var disciplina in listaEquivalencia)
-                    {
-                        bool jaExiste = await DbSet.AnyAsync(d =>
-                            d.Matricula == disciplina.Matricula &&
-                            d.NomeDisicplina == disciplina.NomeDisicplina &&
-                            d.Situacao == "APR");
-
-                        if (!jaExiste)
-                        {
-                            DbSet.Add(disciplina);
-                        }
-                    }
-
-                    await SaveChanges();
-                }
-
-                var (anexadoComSucesso, mensagemAnexar) = await _alunoRepository.MarcarHistoricoComoAnexado(matricula);
-                if (!anexadoComSucesso)
-                {
-                    return (false, mensagemAnexar);
-                }
-
-                return (true, mensagemAnexar);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Erro ao processar o histórico do aluno.");
-                var inner = ex.InnerException?.ToString() ?? "sem inner exception";
-                return (false, $"Erro ao processar o arquivo: {ex.Message}. Detalhes internos: {inner}");
-            }
+            _alunoService = alunoService;
         }
 
         public async Task<bool> ExcluirDisciplinasDoAluno(string matricula)
@@ -134,5 +62,33 @@ namespace SPAA.Data.Repository
                 .Distinct()
                 .ToListAsync();
         }
+
+        public async Task InserirDisciplinas(List<AlunoDisciplina> disciplinas)
+        {
+            if (disciplinas.Any())
+            {
+                DbSet.AddRange(disciplinas);
+                await SaveChanges();
+            }
+        }
+
+        public async Task InserirEquivalencias(List<AlunoDisciplina> equivalencias, string matricula)
+        {
+            foreach (var disciplina in equivalencias)
+            {
+                bool jaExiste = await DbSet.AnyAsync(d =>
+                    d.Matricula == disciplina.Matricula &&
+                    d.NomeDisicplina == disciplina.NomeDisicplina &&
+                    d.Situacao == "APR");
+
+                if (!jaExiste)
+                {
+                    DbSet.Add(disciplina);
+                }
+            }
+
+            await SaveChanges();
+        }
+
     }
 }

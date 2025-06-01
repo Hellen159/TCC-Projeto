@@ -2,6 +2,9 @@
 using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf.Canvas.Parser.Listener;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using SPAA.Business.Interfaces.Repository;
 using SPAA.Business.Interfaces.Services;
 using SPAA.Business.Models;
 using System;
@@ -20,6 +23,17 @@ namespace SPAA.Business.Services
 
         private static readonly string[] SiglasSituacoes = new[] { "APR", "CANC", "DISP", "MATR", "REP", "REPF", "REPMF", "TRANC", "CUMP" };
         private static readonly Regex semestreAnoRegex = new Regex(@"\b(\d{4})\.(\d{0,2})\b");
+        private readonly ILogger<AlunoDisciplinaService> _logger;
+        private readonly IAlunoService _alunoService;
+        private readonly IAlunoDisciplinaRepository _alunoDisciplinaRepository;
+        public AlunoDisciplinaService(ILogger<AlunoDisciplinaService> logger, 
+                                      IAlunoService alunoService,
+                                      IAlunoDisciplinaRepository alunoDisciplinaRepository)
+        {
+            _logger = logger;
+            _alunoService = alunoService;
+            _alunoDisciplinaRepository = alunoDisciplinaRepository;
+        }
 
         public async Task<List<AlunoDisciplina>> ConverterBlocos(List<string> blocos, string matricula)
         {
@@ -251,6 +265,55 @@ namespace SPAA.Business.Services
             }
 
             return sb.ToString().Normalize(NormalizationForm.FormC);
+        }
+
+        public async Task<(bool isValid, string mensagem)> ConsumirHistoricoPdf(IFormFile arquivoPdf, string matricula)
+        {
+            if (arquivoPdf == null || arquivoPdf.Length == 0)
+                return (false, "Nenhum arquivo enviado.");
+
+            try
+            {
+                List<string> codigosNaoEncontrados = new();
+                string textoExtraido = await ExtrairTextoDePdf(arquivoPdf);
+                var blocosDisciplinas = await ExtrairBlocos(textoExtraido);
+                var listaEquivalencia = await ObterEquivalenciasCurriculo(textoExtraido, matricula);
+                var listaAlunoDisciplina = await ConverterBlocos(blocosDisciplinas, matricula);
+                var listaPendentes = await ObterObrigatoriasPendentes(textoExtraido, matricula);
+
+                var curriculoAno = await ObterInformacoesCurriculo(textoExtraido);
+
+                if (curriculoAno != null)
+                {
+                    _logger.LogInformation($"Currículo: {curriculoAno}");
+                    await _alunoService.AdicionarCurriculoAluno(matricula, curriculoAno);
+                }
+
+
+                if (!listaAlunoDisciplina.Any())
+                    return (false, "Formato de histórico inválido ou nenhum dado encontrado.");
+
+
+                await _alunoDisciplinaRepository.InserirDisciplinas(listaAlunoDisciplina);
+                await _alunoDisciplinaRepository.InserirDisciplinas(listaPendentes);
+                await _alunoDisciplinaRepository.InserirEquivalencias(listaEquivalencia, matricula);
+
+
+
+                var (anexadoComSucesso, mensagemAnexar) = await _alunoService.MarcarHistoricoComoAnexado(matricula);
+                if (!anexadoComSucesso)
+                {
+                    return (false, mensagemAnexar);
+                }
+
+                return (true, mensagemAnexar);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao processar o histórico do aluno.");
+                var inner = ex.InnerException?.ToString() ?? "sem inner exception";
+                return (false, $"Erro ao processar o arquivo: {ex.Message}. Detalhes internos: {inner}");
+            }
         }
     }
 }

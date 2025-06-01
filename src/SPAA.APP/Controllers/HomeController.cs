@@ -5,6 +5,7 @@ using SPAA.App.ViewModels;
 using SPAA.APP.Models;
 using SPAA.APP.ViewModels;
 using SPAA.Business.Interfaces.Repository;
+using SPAA.Business.Interfaces.Services;
 using SPAA.Business.Models;
 using SPAA.Data.Context;
 using SPAA.Data.Repository;
@@ -24,6 +25,7 @@ namespace SPAA.APP.Controllers
         private readonly IPreRequisitoRepository _preRequisitoRepository;
         private readonly IAreaInteresseAlunoRepository _areaInteresseAlunoRepository;
         private readonly ITurmaRepository _turmaRepository;
+        private readonly IAlunoService _alunoService;
 
 
         public HomeController(ILogger<HomeController> logger,
@@ -34,7 +36,8 @@ namespace SPAA.APP.Controllers
                                ICurriculoRepository curriculoRepository,
                                IPreRequisitoRepository preRequisitoRepository,
                                IAreaInteresseAlunoRepository areaInteresseAlunoRepository,
-                               ITurmaRepository turmaRepository)
+                               ITurmaRepository turmaRepository,
+                               IAlunoService alunoService)
         {
             _logger = logger;
             _alunoRepository = alunoRepository;
@@ -45,6 +48,7 @@ namespace SPAA.APP.Controllers
             _preRequisitoRepository = preRequisitoRepository;
             _areaInteresseAlunoRepository = areaInteresseAlunoRepository;
             _turmaRepository = turmaRepository;
+            _alunoService = alunoService;
         }
 
         public async Task<IActionResult> Index()
@@ -54,7 +58,7 @@ namespace SPAA.APP.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var alunoJaAnexouHistorico = await _alunoRepository.AlunoJaAnexouHistorico(User.Identity.Name);
+            var alunoJaAnexouHistorico = await _alunoService.AlunoJaAnexouHistorico(User.Identity.Name);
             if (!alunoJaAnexouHistorico)
             {
                 return RedirectToAction("UploadHistorico", "Upload");
@@ -87,18 +91,18 @@ namespace SPAA.APP.Controllers
             var nomesAprovadas = await _alunoDisciplinaRepository.ObterNomeDisciplinasPorSituacao(matricula, "APR");
             var nomesPendentes = await _alunoDisciplinaRepository.ObterNomeDisciplinasPorSituacao(matricula, "PEND");
 
-            var preferencias = new List<AulaHorario>
-                {
-                    new AulaHorario { DiaSemana = 3, Turno = 'T', Horario = 2 },
-                    new AulaHorario { DiaSemana = 3, Turno = 'T', Horario = 3 },
-                    new AulaHorario { DiaSemana = 5, Turno = 'T', Horario = 2 },
-                    new AulaHorario { DiaSemana = 5, Turno = 'T', Horario = 3 }
-                };
+            //var preferencias = new List<AulaHorario>
+            //    {
+            //        new AulaHorario { DiaSemana = 3, Turno = 'T', Horario = 2 },
+            //        new AulaHorario { DiaSemana = 3, Turno = 'T', Horario = 3 },
+            //        new AulaHorario { DiaSemana = 5, Turno = 'T', Horario = 2 },
+            //        new AulaHorario { DiaSemana = 5, Turno = 'T', Horario = 3 }
+            //    };
 
-            foreach (var nome in nomesPendentes)
-            {
-                var teste = await _turmaRepository.BuscarTurmasCompativeis(nome, preferencias);
-            }
+            //foreach (var nome in nomesPendentes)
+            //{
+            //    var teste = await _turmaRepository.BuscarTurmasCompativeis(nome, preferencias);
+            //}
 
             var disciplinasAprovadasViewModel = nomesAprovadas
                 .Select(nome => new DisciplinaViewModel

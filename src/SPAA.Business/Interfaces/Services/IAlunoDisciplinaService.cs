@@ -10,6 +10,7 @@ namespace SPAA.Business.Interfaces.Services
 {
     public interface IAlunoDisciplinaService
     {
+        Task<(bool isValid, string mensagem)> ConsumirHistoricoPdf(IFormFile pdf, string matricula);
         Task<string> ExtrairTextoDePdf(IFormFile arquivoPdf);
         Task<List<string>> ExtrairBlocos(string texto);
         Task<List<AlunoDisciplina>> ObterEquivalenciasCurriculo(string texto, string matricula);
