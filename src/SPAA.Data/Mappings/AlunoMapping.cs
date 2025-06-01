@@ -46,7 +46,12 @@ namespace SPAA.Data.Mappings
             .HasColumnName("user_id")
             .HasColumnType("varchar(255)");
 
-
+            builder.Property(a => a.HorasObrigatoriasPendentes)
+                .HasColumnName("hora_obrigatoria_pendente");
+            
+            builder.Property(a => a.HorasOptativasPendentes)
+                .HasColumnName("hora_optativa_pendente");
+        
             builder.HasOne(a => a.User)
                 .WithOne(u => u.Aluno)
                 .HasForeignKey<Aluno>(a => a.CodigoUser);

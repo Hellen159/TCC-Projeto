@@ -13,6 +13,8 @@ namespace SPAA.Business.Models
         public string SemestreEntrada { get; set; }
         public bool HistoricoAnexado { get; set; }
         public string? CurriculoAluno { get; set; }
+        public int? HorasObrigatoriasPendentes { get; set; }
+        public int? HorasOptativasPendentes { get; set; }
 
         // Relacionamento com IdentityUser
         public string CodigoUser { get; set; }

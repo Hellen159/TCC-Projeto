@@ -16,6 +16,7 @@ namespace SPAA.Business.Interfaces.Services
         Task<List<AlunoDisciplina>> ObterEquivalenciasCurriculo(string texto, string matricula);
         Task<List<AlunoDisciplina>> ConverterBlocos(List<string> blocos, string matricula);
         Task<List<AlunoDisciplina>> ObterObrigatoriasPendentes(string texto, string matricula);
+        Task<List<int>> ObterHorasPendentes(string texto, string matricula);
         Task <string> ObterInformacoesCurriculo(string texto);
     }
 }

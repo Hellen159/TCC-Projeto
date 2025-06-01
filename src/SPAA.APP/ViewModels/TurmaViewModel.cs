@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SPAA.Business.Models
+﻿namespace SPAA.App.ViewModels
 {
-    public class Turma
+    public class TurmaViewModel
     {
         public int CodigoTurmaUnico { get; set; }
         public string CodigoTurma { get; set; }
@@ -17,10 +10,6 @@ namespace SPAA.Business.Models
         public string NomeDisciplina { get; set; }
         public string Horario { get; set; }
         public string CodigoDisciplina { get; set; }
-
-
-        [NotMapped]
-        public Disciplina Disciplina { get; set; }   // Navegação
 
     }
 }

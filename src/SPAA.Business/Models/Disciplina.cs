@@ -12,6 +12,8 @@ namespace SPAA.Business.Models
         public int CodigoDisciplina { get; set; }
         public string NomeDisciplina { get; set; }
         public int CargaHoraria { get; set; }
+        public string ? Ementa {  get; set; }
+        public string Codigo { get; set; }
 
         [NotMapped]
         public ICollection<Turma> Turmas { get; set; }
