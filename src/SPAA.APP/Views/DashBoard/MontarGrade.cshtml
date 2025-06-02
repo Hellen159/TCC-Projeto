@@ -1,0 +1,123 @@
+﻿@using SPAA.App.ViewModels
+@model SPAA.App.ViewModels.MontarGradeViewModel
+
+@{
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Components/logo.css" />
+    <link rel="stylesheet" href="~/css/Components/grade.css" />
+    <link rel="stylesheet" href="~/css/Components/montar-grade.css" />
+}
+
+@{
+    ViewData["Title"] = "SPAA";
+}
+
+<a href="/" style="text-decoration:none">
+<div class="toplogo">
+    <div class="logoSpaa">
+        <img src="~/assets/unbflag.svg" alt="Imagem da Logo da UnB" />
+    </div>
+    <div>
+        <h1 class="logo">SPAA</h1>
+        <h2 class="subtitle">Universidade de Brasília</h2>
+    </div>
+</div>
+</a>
+
+<div class="grade-container">
+
+    <form method="post">
+        <!-- Cabeçalho -->
+        <div class="header-grade">
+            <h2>Selecione os horários nos dias que você tem preferência.</h2>
+            <button type="button" class="btn-acoes"></button>
+        </div>
+
+    <!-- Tabela -->
+    <div class="tabela-grade">
+        <table>
+            <thead>
+                <tr>
+                    <th>Horários</th>
+                    <th>Seg</th>
+                    <th>Ter</th>
+                    <th>Qua</th>
+                    <th>Qui</th>
+                    <th>Sex</th>
+                    <th>Sáb</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="horario">08:00</td>
+                    <td class="celula" data-horario=" M1" data-dia="2"></td>
+                    <td class="celula" data-horario=" M1" data-dia="3"></td>
+                    <td class="celula" data-horario=" M1" data-dia="4"></td>
+                    <td class="celula" data-horario=" M1" data-dia="5"></td>
+                    <td class="celula" data-horario=" M1" data-dia="6"></td>
+                    <td class="celula" data-horario=" M1" data-dia="7"></td>
+                </tr>
+                <tr>
+                    <td class="horario">10:00</td>
+                    <td class="celula" data-horario="M3" data-dia="2"></td>
+                    <td class="celula" data-horario="M3" data-dia="3"></td>
+                    <td class="celula" data-horario="M3" data-dia="4"></td>
+                    <td class="celula" data-horario="M3" data-dia="5"></td>
+                    <td class="celula" data-horario="M3" data-dia="6"></td>
+                    <td class="celula" data-horario="M3" data-dia="7"></td>
+                </tr>
+                <tr>
+                    <td class="horario">12:00</td>
+                    <td class="celula" data-horario="M5" data-dia="2"></td>
+                    <td class="celula" data-horario="M5" data-dia="3"></td>
+                    <td class="celula" data-horario="M5" data-dia="4"></td>
+                    <td class="celula" data-horario="M5" data-dia="5"></td>
+                    <td class="celula" data-horario="M5" data-dia="6"></td>
+                    <td class="celula" data-horario="M5" data-dia="7"></td>
+                </tr>
+                <tr>
+                    <td class="horario">14:00</td>
+                    <td class="celula" data-horario="T2" data-dia="2"></td>
+                    <td class="celula" data-horario="T2" data-dia="3"></td>
+                    <td class="celula" data-horario="T2" data-dia="4"></td>
+                    <td class="celula" data-horario="T2" data-dia="5"></td>
+                    <td class="celula" data-horario="T2" data-dia="6"></td>
+                    <td class="celula" data-horario="T2" data-dia="7"></td>
+                </tr>
+                <tr>
+                    <td class="horario">16:00</td>
+                    <td class="celula" data-horario="T4" data-dia="2"></td>
+                    <td class="celula" data-horario="T4" data-dia="3"></td>
+                    <td class="celula" data-horario="T4" data-dia="4"></td>
+                    <td class="celula" data-horario="T4" data-dia="5"></td>
+                    <td class="celula" data-horario="T4" data-dia="6"></td>
+                    <td class="celula" data-horario="T4" data-dia="7"></td>
+                </tr>
+                <tr>
+                    <td class="horario">18:00</td>
+                    <td class="celula" data-horario="T6" data-dia="2"></td>
+                    <td class="celula" data-horario="T6" data-dia="3"></td>
+                    <td class="celula" data-horario="T6" data-dia="4"></td>
+                    <td class="celula" data-horario="T6" data-dia="5"></td>
+                    <td class="celula" data-horario="T6" data-dia="6"></td>
+                    <td class="celula" data-horario="T6" data-dia="7"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Input oculto para armazenar os valores marcados -->
+    <input type="hidden" id="HorariosMarcados" name="HorariosMarcados" />
+
+    <!-- Botões Inferiores -->
+    <div class="botoes-inferiores">
+        <button type="submit"> Enviar Disponibilidade</button>
+        <button type="button" id="limparBtn">Limpar Seleção</button>
+    </div>
+</form>
+
+</div>
+
+<script src="~/js/MontarGrade.js"></script>

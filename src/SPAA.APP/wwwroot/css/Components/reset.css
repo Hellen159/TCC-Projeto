@@ -1,0 +1,54 @@
+﻿.container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card {
+    width: 100%;
+}
+
+.modal-card {
+    width: 30%;
+}
+
+.toplogo {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.logoSpaa img {
+    height: 4rem;
+    width: auto;
+}
+
+.logo {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #435FA0;
+    margin: 0;
+    letter-spacing: 0.2rem;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #435FA0;
+    letter-spacing: 0.1rem;
+    margin: 0;
+}
+
+button[type="submit"] {
+    max-width: 100%;
+}
+
+.modal-footer {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    gap: 1rem;
+}

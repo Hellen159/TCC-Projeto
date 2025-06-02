@@ -58,9 +58,10 @@ button.accept-policy {
 .custom-header {
     position: absolute;
     top: 0;
+    white-space: nowrap;
     right: 0;
     min-width: 42%;
-    height: 9%;
+    height: 4.5rem;
     background-color: rgba(74, 144, 226, 0.4); /* Azul com 40% de opacidade */
     border-radius: 0rem 0rem 0rem 1rem;
     display: flex;

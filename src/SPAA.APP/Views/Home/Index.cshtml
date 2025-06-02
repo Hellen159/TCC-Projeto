@@ -1,11 +1,120 @@
 ﻿@using SPAA.App.ViewModels
 @model List<SPAA.App.ViewModels.DisciplinaListaViewModel>
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/Components/logo.css" />
+    <link rel="stylesheet" href="~/css/Components/grade.css" />
+}
+
 @{
     ViewData["Title"] = "SPAA";
     var disciplinasAprovadas = ViewData["Aprovadas"] as DisciplinaListaViewModel;
 }
 
+<div class="toplogo">
+        <div class="logoSpaa">
+            <img src="~/assets/unbflag.svg" alt="Imagem da Logo da UnB" />
+        </div>
+        <div>
+            <h1 class="logo">SPAA</h1>
+            <h2 class="subtitle">Universidade de Brasília</h2>
+        </div>
+</div>
+
+<div class="grade-container">
+
+    <!-- Cabeçalho com título e botão de ações -->
+    <div class="header-grade">
+        <h2>Grade 2025.1</h2>
+        <button class="btn-acoes"></button>
+    </div>
+
+    <!-- Tabela -->
+    <div class="tabela-grade">
+        <table>
+            <thead>
+                <tr>
+                    <th>Horários</th>
+                    <th>Seg</th>
+                    <th>Ter</th>
+                    <th>Qua</th>
+                    <th>Qui</th>
+                    <th>Sex</th>
+                    <th>Sáb</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="horario">08:00</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                </tr>
+                <tr>
+                    <td class="horario">10:00</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                </tr>
+                <tr>
+                    <td class="horario">12:00</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                </tr>
+                <tr>
+                    <td class="horario">14:00</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                </tr>
+                <tr>
+                    <td class="horario">16:00</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                </tr>
+                <tr>
+                    <td class="horario">18:00</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                    <td>---</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Botões Inferiores -->
+    <div class="botoes-inferiores">
+        <a asp-controller="Grid" asp-action="MontarGrade" class="btn-montar">
+            <img src="~/assets/plus.svg" alt="Ícone de Mais" style="margin-right: 0.5rem;" />
+            Montar sua grade
+        </a>
+        <a class="btn-editar"><img src="~/assets/editDashboard.svg" alt="Ícone de editar" style="margin-right: 0.5rem;" /> Editar grade</a>
+    </div>
+
+</div>
+
+
+<div>
 <!-- Exibe disciplinas aprovadas -->
 @if (ViewData["Aprovadas"] is DisciplinaListaViewModel aprovadas)
 {
@@ -29,3 +138,4 @@
         @TempData["ErrorMessage"]
     </div>
 }
+</div>
