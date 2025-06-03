@@ -64,6 +64,8 @@ namespace SPAA.APP.Controllers
                 return RedirectToAction("UploadHistorico", "Upload");
             }
 
+            var testeTodasTurmas =await _turmaRepository.TurmasDisponiveisPorSemestre("2025.1");
+
             //var alunoJaTemAreaInteresse = await _areaInteresseAlunoRepository.AlunoJaTemAreaInteresse(User.Identity.Name);
             //if (!alunoJaTemAreaInteresse)
             //{

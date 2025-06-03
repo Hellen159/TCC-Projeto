@@ -20,5 +20,10 @@ namespace SPAA.Data.Repository
         {
             return await DbSet.Where(t => t.NomeDisciplina == nomeMateria).ToListAsync();
         }
+
+        public async Task<List<Turma>> TurmasDisponiveisPorSemestre(string semestre)
+        {
+            return await DbSet.Where(t => t.Semestre == semestre).ToListAsync();
+        }
     }
 }
