@@ -1,0 +1,44 @@
+﻿@model IEnumerable<SPAA.App.ViewModels.TurmaViewModel>
+
+<div class="tabela-turmas">
+    <!-- Cabeçalho -->
+    <div class="tabela-cabecalho">
+        <div class="linha cabecalho">
+            <div class="celulas" style="width: 40%">Turmas Disponíveis</div>
+            <div class="celulas" style="width: 10%"></div>
+            <div class="celulas" style="width: 5%"></div>
+            <div class="celulas" style="width: 40%"></div>
+            <div class="celulas" style="width: 5%"></div>
+        </div>
+    </div>
+
+    <!-- Corpo com scroll -->
+    <div class="tabela-corpo">
+        <div class="corpo-container">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var turma in Model)
+                {
+                    <div class="linha">
+                        <div class="celulas" title="@turma.NomeDisciplina">@turma.NomeDisciplina</div>
+                        <div class="celulas" title="@turma.CodigoDisciplina">@turma.CodigoDisciplina</div>
+                        <div class="celulas" title="@turma.Horario">@turma.Horario</div>
+                        <div class="celulas" title="@turma.NomeProfessor">@turma.NomeProfessor</div>
+                        <div class="celulas acoes">
+                            <button class="btn-acoes" title="Detalhes">ℹ️</button>
+                            <input type="checkbox" name="turmasSelecionadas" value="@turma.CodigoTurmaUnico" />
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="linha">
+                    <div class="celulas text-muted text-center" colspan="5">
+                        Nenhuma turma disponível no momento.
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

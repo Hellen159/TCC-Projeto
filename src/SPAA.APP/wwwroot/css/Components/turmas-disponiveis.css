@@ -1,0 +1,91 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+.tabela-turmas {
+    margin: 1.5rem;
+    width: 70%;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
+    border: 1px solid #ddd;
+    font-family: sans-serif;
+}
+
+/* Cabeçalho */
+.tabela-cabecalho {
+    background-color: #b8d4f4;
+    color: #001d6c;
+    font-weight: bold;
+    font-size: 1.1rem;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.linha.cabecalho {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+/* Corpo da tabela com scroll */
+.tabela-corpo {
+    max-height: 12.5rem;
+    overflow-y: auto;
+    background-color: white;
+}
+
+.corpo-container .linha:hover {
+    background-color: #f9f9f9;
+}
+
+/* Linhas e células */
+.linha {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.celulas {
+    white-space: nowrap; /* Impede quebra de linha */
+    overflow: hidden; /* Esconde conteúdo extra */
+    text-overflow: ellipsis; /* Coloca ... no final */
+    padding: 0 12px;
+    font-size: 0.95rem;
+    text-align: center; /* Texto centralizado por padrão */
+    flex-shrink: 0;
+}
+
+    /* Nome da disciplina */
+    .celulas:nth-child(1) {
+        width: 30%;
+        text-align: left;
+    }
+    /* Código */
+    .celulas:nth-child(2) {
+        width: 15%;
+    }
+    /* Horário */
+    .celulas:nth-child(3) {
+        width: 20%;
+    }
+    /* Professor */
+    .celulas:nth-child(4) {
+        width: 25%;
+    }
+    
+    .celulas:nth-child(5) {
+        width: 10%;
+    }
+/* Ações */
+
+/* Última coluna - alinhamento "space-around" */
+.acoes {
+    display: flex;
+    justify-content: flex-end; /* Alinha para a direita */
+    align-items: center;
+    gap: 8px; /* Espaço entre botão e checkbox */
+    padding-right: 12px;
+}
