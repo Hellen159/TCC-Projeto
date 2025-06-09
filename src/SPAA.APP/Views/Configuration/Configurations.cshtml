@@ -22,13 +22,14 @@
                 <div class="formularios">
                     <!-- Formulário de Importar Histórico -->
                     <form class="forms" id="formHistorico" asp-controller="Upload" asp-action="UploadHistorico" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="returnAction" value="Index" />
+                        <input type="hidden" name="returnController" value="Home" />
+
                         <div>
                             <label asp-for="Historico">Histórico</label>
                             <input asp-for="Historico" type="file" class="form-control" accept=".pdf" />
                             <span asp-validation-for="Historico" class="text-danger"></span>
                         </div>
-                        <input type="hidden" name="returnAction" value="Configurations" />
-                        <input type="hidden" name="returnController" value="Configuration" />
                         <button type="submit" name="submitButton" value="Salvar Histórico">Salvar Histórico</button>
                     </form>
                     <!-- Formulário perfil usuario -->
@@ -178,3 +179,4 @@
     };
 
 </script>
+

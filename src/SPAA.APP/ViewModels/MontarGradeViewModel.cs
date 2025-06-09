@@ -4,7 +4,6 @@ namespace SPAA.App.ViewModels
 {
     public class MontarGradeViewModel
     {
-        [Required]
-        public List<string> HorariosMarcados { get; set; } // Ex: ["6M2", "2T5"]
+        public string HorariosMarcados { get; set; }
     }
 }
