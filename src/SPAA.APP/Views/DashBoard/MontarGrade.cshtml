@@ -166,89 +166,41 @@
 
 </div>
 
-@{
-    var turmasTeste = new List<TurmaViewModel>
-    {
-        new TurmaViewModel {
-            CodigoTurmaUnico = 1,
-            NomeDisciplina = "Fisica 1",
-            CodigoDisciplina = "IFD001",
-            Horario = "35M12",
-            NomeProfessor = "Fabio Fagundes Fonseca"
-        },
-        new TurmaViewModel {
-            CodigoTurmaUnico = 2,
-            NomeDisciplina = "Humanidades e Cidadania",
-            CodigoDisciplina = "FGA097",
-            Horario = "246T23",
-            NomeProfessor = "Ricardo Flagelo"
-        },
-        new TurmaViewModel {
-            CodigoTurmaUnico = 1,
-            NomeDisciplina = "Fisica 1",
-            CodigoDisciplina = "IFD001",
-            Horario = "35M12",
-            NomeProfessor = "Fabio Fagundes Fonseca"
-        },
-        new TurmaViewModel {
-            CodigoTurmaUnico = 2,
-            NomeDisciplina = "Humanidades e Cidadania",
-            CodigoDisciplina = "FGA097",
-            Horario = "246T23",
-            NomeProfessor = "Ricardo Flagelo"
-        },
-        new TurmaViewModel {
-            CodigoTurmaUnico = 1,
-            NomeDisciplina = "Fisica 1",
-            CodigoDisciplina = "IFD001",
-            Horario = "35M12",
-            NomeProfessor = "Fabio Fagundes Fonseca"
-        },
-        new TurmaViewModel {
-            CodigoTurmaUnico = 2,
-            NomeDisciplina = "Humanidades e Cidadania",
-            CodigoDisciplina = "FGA097",
-            Horario = "246T23",
-            NomeProfessor = "Ricardo Flagelo"
-        },
-        new TurmaViewModel {
-            CodigoTurmaUnico = 1,
-            NomeDisciplina = "Fisica 1",
-            CodigoDisciplina = "IFD001",
-            Horario = "35M12",
-            NomeProfessor = "Fabio Fagundes Fonseca"
-        },
-        new TurmaViewModel {
-            CodigoTurmaUnico = 2,
-            NomeDisciplina = "Humanidades e Cidadania",
-            CodigoDisciplina = "FGA097",
-            Horario = "246T23",
-            NomeProfessor = "Ricardo Flagelo"
-        },
-        new TurmaViewModel {
-            CodigoTurmaUnico = 1,
-            NomeDisciplina = "Fisica 1",
-            CodigoDisciplina = "IFD001",
-            Horario = "35M12",
-            NomeProfessor = "Fabio Fagundes Fonseca"
-        },
-        new TurmaViewModel {
-            CodigoTurmaUnico = 2,
-            NomeDisciplina = "Humanidades e Cidadania",
-            CodigoDisciplina = "FGA097",
-            Horario = "246T23",
-            NomeProfessor = "Ricardo Flagelo"
-        }
-    };
-}
 <div class="gridDoida">
+    <h3>Disciplinas Obrigatórias Pendentes:</h3>
+    @if (Model.Turmas != null && Model.Turmas.Any())
+    {
+        // Criar uma instância de TurmaListaViewModel para a partial view
+        var turmasObrigatoriasViewModel = new TurmaListaViewModel
+                {
+                    Titulo = "Turmas Obrigatórias Disponíveis", // Título customizado
+                    Turmas = Model.Turmas.ToList() // .ToList() é bom aqui para garantir que é uma List<T>
+                };
+        @await Html.PartialAsync("_TurmasDisponiveis", turmasObrigatoriasViewModel)
+    }
+    else
+    {
+        <p>Parabéns! Você não possui disciplinas obrigatórias pendentes.</p>
+    }
 
-    @await Html.PartialAsync("_TurmasDisponiveis", turmasTeste)
+    <hr />
 
-
+    <h3>Disciplinas Optativas:</h3>
+    @if (Model.TurmasOptativas != null && Model.TurmasOptativas.Any())
+    {
+        // Criar uma instância de TurmaListaViewModel para a partial view
+        var turmasOptativasViewModel = new TurmaListaViewModel
+                {
+                    Titulo = "Turmas Optativas Disponíveis", // Título customizado
+                    Turmas = Model.TurmasOptativas.ToList() // .ToList() é bom aqui para garantir que é uma List<T>
+                };
+        @await Html.PartialAsync("_TurmasDisponiveis", turmasOptativasViewModel)
+    }
+    else
+    {
+        <p>Não foram encontradas turmas optativas para o seu currículo ou você não possui um currículo associado.</p>
+    }
 </div>
-
-
 
 <script src="~/js/MontarGrade.js"></script>
 

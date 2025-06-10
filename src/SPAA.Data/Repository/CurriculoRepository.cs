@@ -17,7 +17,7 @@ namespace SPAA.Data.Repository
         {
         }
 
-        public async Task<List<Curriculo>> ObterDisciplinasObrigatoriasPorCurrciulo(string curriculo, int tipoDisciplina)
+        public async Task<List<Curriculo>> ObterDisciplinasPorCurrciulo(string curriculo, int tipoDisciplina)
         {
             return await DbSet
                 .Where(c => c.AnoCurriculo == curriculo && c.TipoDisciplina == tipoDisciplina)

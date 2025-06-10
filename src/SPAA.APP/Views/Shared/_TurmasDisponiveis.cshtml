@@ -1,29 +1,38 @@
-﻿@model IEnumerable<SPAA.App.ViewModels.TurmaViewModel>
+﻿@* SPAA.App.Views/DashBoard/_TurmasDisponiveis.cshtml *@
+@model SPAA.App.ViewModels.TurmaListaViewModel
 
 <div class="tabela-turmas">
-    <!-- Cabeçalho -->
     <div class="tabela-cabecalho">
         <div class="linha cabecalho">
-            <div class="celulas" style="width: 40%">Turmas Disponíveis</div>
-            <div class="celulas" style="width: 10%"></div>
-            <div class="celulas" style="width: 5%"></div>
-            <div class="celulas" style="width: 40%"></div>
-            <div class="celulas" style="width: 5%"></div>
+            <div class="celulas" style="width: 40%">
+                <strong>@Model.Titulo</strong>
+            </div>
+            <div class="celulas" style="width: 10%">Código</div>
+            <div class="celulas" style="width: 5%">Horário</div>
+            <div class="celulas" style="width: 40%">Professor</div>
+            <div class="celulas" style="width: 5%">Ações</div>
         </div>
     </div>
 
-    <!-- Corpo com scroll -->
     <div class="tabela-corpo">
         <div class="corpo-container">
-            @if (Model != null && Model.Any())
+            @if (Model.Turmas != null && Model.Turmas.Any())
             {
-                foreach (var turma in Model)
+                foreach (var turma in Model.Turmas)
                 {
                     <div class="linha">
-                        <div class="celulas" title="@turma.NomeDisciplina">@turma.NomeDisciplina</div>
-                        <div class="celulas" title="@turma.CodigoDisciplina">@turma.CodigoDisciplina</div>
-                        <div class="celulas" title="@turma.Horario">@turma.Horario</div>
-                        <div class="celulas" title="@turma.NomeProfessor">@turma.NomeProfessor</div>
+                        <div class="celulas" title="@turma.NomeDisciplina">
+                            @(string.IsNullOrEmpty(turma.NomeDisciplina) ? "-" : turma.NomeDisciplina)
+                        </div>
+                        <div class="celulas" title="@turma.CodigoDisciplina">
+                            @(string.IsNullOrEmpty(turma.CodigoDisciplina) ? "-" : turma.CodigoDisciplina)
+                        </div>
+                        <div class="celulas" title="@turma.Horario">
+                            @(string.IsNullOrEmpty(turma.Horario) ? "-" : turma.Horario)
+                        </div>
+                        <div class="celulas" title="@turma.NomeProfessor">
+                            @(string.IsNullOrEmpty(turma.NomeProfessor) ? "-" : turma.NomeProfessor)
+                        </div>
                         <div class="celulas acoes">
                             <button class="btn-acoes" title="Detalhes">ℹ️</button>
                             <input type="checkbox" name="turmasSelecionadas" value="@turma.CodigoTurmaUnico" />

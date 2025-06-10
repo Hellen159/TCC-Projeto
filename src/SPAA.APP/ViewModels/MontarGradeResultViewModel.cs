@@ -5,6 +5,7 @@ namespace SPAA.App.ViewModels
     public class MontarGradeResultViewModel
     {
         public string Mensagem { get; set; }
-        public List<Turma> Turmas { get; set; }
+        public List<TurmaViewModel> Turmas { get; set; }
+        public List<TurmaViewModel> TurmasOptativas { get; set; } // Adicione esta linha para as turmas optativas
     }
 }

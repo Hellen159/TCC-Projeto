@@ -22,6 +22,8 @@ namespace SPAA.Business.Services
             _preRequisitoService = preRequisitoService;
             _preRequisitoRepository = preRequisitoRepository;
         }
+
+        //busca disciplinas que tem todos os pre requisitos satisfeitos
         public async Task<List<string>> ObterDisciplinasLiberadas(string matricula)
         {
             var nomesAprovadas = await _alunoDisciplinaRepository.ObterNomeDisciplinasPorSituacao(matricula, "APR");

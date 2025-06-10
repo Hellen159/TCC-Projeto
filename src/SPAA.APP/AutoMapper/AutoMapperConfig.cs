@@ -10,6 +10,7 @@ namespace SPAA.App.AutoMapper
         {
             //mapeando as models para as view models e o reverse é pq é um caminho unico 
             CreateMap<Disciplina, DisciplinaViewModel>().ReverseMap();
+            CreateMap<Turma, TurmaViewModel>().ReverseMap();
         }
     }
 }
