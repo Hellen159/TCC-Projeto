@@ -3,8 +3,8 @@
 }
 
 .tabela-turmas {
-    margin: 1.5rem;
-    width: 70%;
+    margin: 0;
+    width: 100%;
     border-radius: 1rem;
     overflow: hidden;
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
@@ -17,7 +17,7 @@
     background-color: #b8d4f4;
     color: #001d6c;
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 1rem;
     position: sticky;
     top: 0;
     z-index: 2;
@@ -53,7 +53,7 @@
     overflow: hidden; /* Esconde conteúdo extra */
     text-overflow: ellipsis; /* Coloca ... no final */
     padding: 0 12px;
-    font-size: 0.95rem;
+    font-size: 0.70rem;
     text-align: center; /* Texto centralizado por padrão */
     flex-shrink: 0;
 }
@@ -88,4 +88,15 @@
     align-items: center;
     gap: 8px; /* Espaço entre botão e checkbox */
     padding-right: 12px;
+}
+
+.gridDoida {
+    width: 70%;
+    margin: 1.5rem;
+    margin-right: 0;
+}
+
+.divisao {
+    display: flex;
+    width: 100%;
 }
