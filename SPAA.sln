@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAA.Business.Tests", "test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAA.Data.Tests", "tests\SPAA.Data.Tests\SPAA.Data.Tests.csproj", "{52DB8AA2-17E7-4186-97E4-0655F70562CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPAA.App.Tests", "tests\SPAA.App.Tests\SPAA.App.Tests.csproj", "{B6F3DAB2-D8EB-4614-B497-822FD6EDC946}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{52DB8AA2-17E7-4186-97E4-0655F70562CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52DB8AA2-17E7-4186-97E4-0655F70562CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52DB8AA2-17E7-4186-97E4-0655F70562CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6F3DAB2-D8EB-4614-B497-822FD6EDC946}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6F3DAB2-D8EB-4614-B497-822FD6EDC946}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6F3DAB2-D8EB-4614-B497-822FD6EDC946}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6F3DAB2-D8EB-4614-B497-822FD6EDC946}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
