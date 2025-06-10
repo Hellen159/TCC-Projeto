@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="~/css/Components/logo.css" />
     <link rel="stylesheet" href="~/css/Components/grade.css" />
     <link rel="stylesheet" href="~/css/Components/montar-grade.css" />
+    <link rel="stylesheet" href="~/css/Components/turmas-disponiveis.css" />
 }
 
 @{
@@ -164,6 +165,90 @@
 </form>
 
 </div>
+
+@{
+    var turmasTeste = new List<TurmaViewModel>
+    {
+        new TurmaViewModel {
+            CodigoTurmaUnico = 1,
+            NomeDisciplina = "Fisica 1",
+            CodigoDisciplina = "IFD001",
+            Horario = "35M12",
+            NomeProfessor = "Fabio Fagundes Fonseca"
+        },
+        new TurmaViewModel {
+            CodigoTurmaUnico = 2,
+            NomeDisciplina = "Humanidades e Cidadania",
+            CodigoDisciplina = "FGA097",
+            Horario = "246T23",
+            NomeProfessor = "Ricardo Flagelo"
+        },
+        new TurmaViewModel {
+            CodigoTurmaUnico = 1,
+            NomeDisciplina = "Fisica 1",
+            CodigoDisciplina = "IFD001",
+            Horario = "35M12",
+            NomeProfessor = "Fabio Fagundes Fonseca"
+        },
+        new TurmaViewModel {
+            CodigoTurmaUnico = 2,
+            NomeDisciplina = "Humanidades e Cidadania",
+            CodigoDisciplina = "FGA097",
+            Horario = "246T23",
+            NomeProfessor = "Ricardo Flagelo"
+        },
+        new TurmaViewModel {
+            CodigoTurmaUnico = 1,
+            NomeDisciplina = "Fisica 1",
+            CodigoDisciplina = "IFD001",
+            Horario = "35M12",
+            NomeProfessor = "Fabio Fagundes Fonseca"
+        },
+        new TurmaViewModel {
+            CodigoTurmaUnico = 2,
+            NomeDisciplina = "Humanidades e Cidadania",
+            CodigoDisciplina = "FGA097",
+            Horario = "246T23",
+            NomeProfessor = "Ricardo Flagelo"
+        },
+        new TurmaViewModel {
+            CodigoTurmaUnico = 1,
+            NomeDisciplina = "Fisica 1",
+            CodigoDisciplina = "IFD001",
+            Horario = "35M12",
+            NomeProfessor = "Fabio Fagundes Fonseca"
+        },
+        new TurmaViewModel {
+            CodigoTurmaUnico = 2,
+            NomeDisciplina = "Humanidades e Cidadania",
+            CodigoDisciplina = "FGA097",
+            Horario = "246T23",
+            NomeProfessor = "Ricardo Flagelo"
+        },
+        new TurmaViewModel {
+            CodigoTurmaUnico = 1,
+            NomeDisciplina = "Fisica 1",
+            CodigoDisciplina = "IFD001",
+            Horario = "35M12",
+            NomeProfessor = "Fabio Fagundes Fonseca"
+        },
+        new TurmaViewModel {
+            CodigoTurmaUnico = 2,
+            NomeDisciplina = "Humanidades e Cidadania",
+            CodigoDisciplina = "FGA097",
+            Horario = "246T23",
+            NomeProfessor = "Ricardo Flagelo"
+        }
+    };
+}
+<div class="gridDoida">
+
+    @await Html.PartialAsync("_TurmasDisponiveis", turmasTeste)
+
+
+</div>
+
+
 
 <script src="~/js/MontarGrade.js"></script>
 
