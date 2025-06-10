@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SPAA.App.ViewModels;
+using SPAA.Business.Interfaces.Repository;
 using SPAA.Business.Interfaces.Services;
 using SPAA.Business.Models;
 using System.Text.Json; // no topo do arquivo
@@ -10,19 +11,35 @@ namespace SPAA.App.Controllers
     {
         private readonly IDisciplinaService _disciplinaService;
         private readonly ITurmaService _turmaService;
+        private readonly ITurmaRepository _turmaRepository;
 
         public GridController(IDisciplinaService disciplinaService,
-                               ITurmaService turmaService)
+                               ITurmaService turmaService,
+                                ITurmaRepository turmaRepository)
         {
             _disciplinaService = disciplinaService;
             _turmaService = turmaService;
+            _turmaRepository = turmaRepository;
         }
 
         [HttpGet]
-        public IActionResult MontarGrade()
+        public async  Task<IActionResult> MontarGrade()
         {
-            var modelVazio = new MontarGradeResultViewModel();
-            return View("~/Views/DashBoard/MontarGrade.cshtml", modelVazio);
+            var resultado = new MontarGradeResultViewModel();
+            
+            var disciplinasPendentes = await _disciplinaService.ObterDisciplinasLiberadas(User.Identity.Name);
+
+            var turmasLiberadas = new List<Turma>();
+
+            foreach (var disciplinas in disciplinasPendentes)
+            {
+                var turmas = await _turmaRepository.TurmasDisponiveisPorDisciplina(disciplinas);
+                turmasLiberadas.AddRange(turmas);
+            }
+
+            resultado.Turmas = turmasLiberadas;
+
+            return View("~/Views/DashBoard/MontarGrade.cshtml", resultado);
         }
 
         [HttpPost]
