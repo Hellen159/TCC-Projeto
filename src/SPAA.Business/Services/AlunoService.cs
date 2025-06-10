@@ -11,10 +11,13 @@ namespace SPAA.Business.Services
     public class AlunoService : IAlunoService
     {
         private readonly IAlunoRepository _alunoRepository;
+        private readonly ICursoRepository _cursoRepository;
 
-        public AlunoService(IAlunoRepository alunoRepository)
+        public AlunoService(IAlunoRepository alunoRepository,
+                            ICursoRepository cursoRepository)
         {
             _alunoRepository = alunoRepository;
+            _cursoRepository = cursoRepository;
         }
         public async Task<bool> AdicionarCurriculoAluno(string matricula, string curriculo)
         {
@@ -68,6 +71,24 @@ namespace SPAA.Business.Services
             await _alunoRepository.Atualizar(aluno);
 
             return (true, "Histórico processado com sucesso!");
+        }
+
+        public async Task<double> PorcentagemCurso(string matricula)
+        {
+            var aluno = await _alunoRepository.ObterPorId(matricula);
+            var curso = await _cursoRepository.ObterPorId(2);
+
+            if (aluno == null || curso == null)
+            {
+                return 0;
+            }
+
+            var cargaHorariaTotalExigida = curso.CargaHorariaOptativa + curso.CargaHorariaObrigatoria;
+            var cargaHorariaPendente = aluno.HorasObrigatoriasPendentes + aluno.HorasOptativasPendentes;
+
+            var cargaHorariaIntegralizada = cargaHorariaTotalExigida - cargaHorariaPendente;
+
+            return  ((double)cargaHorariaIntegralizada / cargaHorariaTotalExigida) * 100.0;
         }
 
         public async Task<bool> SalvarHorasAluno (string matricula, int optativas, int obrigatoria)

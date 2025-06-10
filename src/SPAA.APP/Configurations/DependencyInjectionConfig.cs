@@ -60,6 +60,8 @@ namespace SPAA.App.Configurations
             services.AddScoped<ICurriculoRepository, CurriculoRepository>();
             services.AddScoped<IPreRequisitoRepository, PreRequisitoRepository>();
             services.AddScoped<IAreaInteresseAlunoRepository, AreaInteresseAlunoRepository>();
+            services.AddScoped<ICursoRepository, CursoRepository>();
+            services.AddScoped<INotificacaoRepository, NotificacaoRepository>();
 
             services.AddScoped<IAulaHorarioService, AulaHorarioService>();
             services.AddScoped<IAlunoDisciplinaService, AlunoDisciplinaService>();

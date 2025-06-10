@@ -14,5 +14,7 @@ namespace SPAA.Business.Interfaces.Services
         Task<bool> AlunoJaAnexouHistorico(string matricula);
         Task<bool> SalvarHorasAluno(string matricula, int optativas, int obrigatoria);
 
+        Task<double> PorcentagemCurso(string matricula);
+
     }
 }
