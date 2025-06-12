@@ -193,7 +193,27 @@ namespace SPAA.App.Controllers
             return View("~/Views/DashBoard/MontarGrade.cshtml", resultado);
         }
 
+        public async Task<IActionResult> SalvarGrade([FromBody] List<TurmaViewModel> turmasSelecionadas)
+        {
+            try
+            {
+                if (turmasSelecionadas == null || !turmasSelecionadas.Any())
+                {
+                    return BadRequest("Nenhuma turma foi selecionada.");
+                }
 
+                // Aqui você processa as turmas (ex: salvar no banco de dados)
+                // Exemplo:
+                // var turmas = _mapper.Map<List<Turma>>(turmasSelecionadas);
+                // await _turmaService.SalvarTurmasParaAluno(User.Identity.Name, turmas);
+
+                return Ok(new { success = true, message = "Grade salva com sucesso!" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao salvar grade: {ex.Message}");
+            }
+        }
         private async Task<Tuple<List<TurmaViewModel>, string>> _CarregarTurmasObrigatorias()
         {
             var turmasViewModel = new List<TurmaViewModel>();

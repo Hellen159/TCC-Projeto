@@ -36,7 +36,7 @@
     });
 
     // === Botão Limpar Seleção ===
-    limparBtn.addEventListener("click", function () {
+    limparBtn.addEventListener("click", async function () {
         selecionadas = [];
         inputOculto.value = '';
         celulas.forEach(celula => {
@@ -46,6 +46,24 @@
 
         // Desmarcar checkboxes
         document.querySelectorAll('input[name="turmasSelecionadas"]').forEach(cb => cb.checked = false);
+
+        // Recarregar as matérias (chamada AJAX)
+        try {
+            const response = await fetch('/Grid/MontarGrade', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                location.reload(); // Recarrega a página com os dados atualizados
+            } else {
+                console.error('Erro ao recarregar as matérias');
+            }
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+        }
     });
 
     // === Evento para checkboxes de turmas ===
@@ -126,5 +144,40 @@
 
             inputOculto.value = JSON.stringify([...new Set(selecionadas)]);
         });
+    });
+    // === BOTÃO SALVAR GRADE ===
+    document.getElementById('salvarGradeBtn').addEventListener('click', function () {
+        const turmasSelecionadas = [];
+
+        // Coleta todas as checkboxes marcadas
+        document.querySelectorAll('input[name="turmasSelecionadas"]:checked').forEach(checkbox => {
+            const linha = checkbox.closest('.linha');
+
+            // Extrai os dados da turma (ajuste os seletores conforme seu HTML)
+            turmasSelecionadas.push({
+                CodigoDisciplina: linha.querySelector('.celulas:nth-child(2)').textContent.trim(),
+                NomeDisciplina: linha.querySelector('.celulas:nth-child(1)').textContent.trim(),
+                Horario: linha.querySelector('.celulas:nth-child(3)').textContent.trim(),
+                NomeProfessor: linha.querySelector('.celulas:nth-child(4)').textContent.trim()
+            });
+        });
+
+        // Envia para o controller via AJAX
+        fetch('/Grid/SalvarGrade', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(turmasSelecionadas)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                } else {
+                    alert("Erro: " + (data.message || "Falha ao salvar grade."));
+                }
+            })
+            .catch(error => {
+                alert("Erro na requisição: " + error.message);
+            });
     });
 });
