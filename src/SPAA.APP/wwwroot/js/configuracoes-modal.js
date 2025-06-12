@@ -1,5 +1,4 @@
-﻿// Validação do Formulário de Alterar Nome
-document.getElementById("formAlterarNome").onsubmit = function (e) {
+﻿document.getElementById("formAlterarNome").onsubmit = function (e) {
     var nome = document.getElementById("NovoNome").value.trim();
     var validationDiv = document.getElementById("validationMessages");
     validationDiv.innerHTML = ""; // limpa mensagens anteriores
