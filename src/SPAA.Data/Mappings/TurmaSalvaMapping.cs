@@ -29,6 +29,10 @@ namespace SPAA.Data.Mappings
                 .HasColumnName("matricula")
                 .HasColumnType("varchar(9)");
 
+            builder.Property(ts => ts.Horario)
+                .HasColumnName("horario")
+                .HasColumnType("varchar(20)");
+
             builder.Property(ts => ts.CodigoDisciplina)
                 .HasColumnName("cd_disciplina")
                 .HasColumnType("varchar(50)");

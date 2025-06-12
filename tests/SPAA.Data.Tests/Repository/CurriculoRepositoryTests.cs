@@ -40,7 +40,7 @@ namespace SPAA.Data.Tests.Repository
             var repo = new CurriculoRepository(contexto);
 
             // Act
-            var resultado = await repo.ObterDisciplinasObrigatoriasPorCurrciulo("2023", 1);
+            var resultado = await repo.ObterDisciplinasPorCurrciulo("2023", 1);
 
             // Assert
             Assert.NotNull(resultado);

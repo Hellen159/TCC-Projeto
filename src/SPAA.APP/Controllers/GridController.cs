@@ -17,13 +17,15 @@ namespace SPAA.App.Controllers
         private readonly IAlunoRepository _alunoRepository;
         private readonly ICurriculoRepository _curriculoRepository;
         private readonly IMapper _mapper;
+        private readonly ITurmaSalvaRepository _turmaSalvaRepository;
 
         public GridController(IDisciplinaService disciplinaService,
                                ITurmaService turmaService,
                                ITurmaRepository turmaRepository,
                                IAlunoRepository alunoRepository,
                                ICurriculoRepository curriculoRepository,
-                               IMapper mapper)
+                               IMapper mapper,
+                               ITurmaSalvaRepository turmaSalvaRepository)
         {
             _disciplinaService = disciplinaService;
             _turmaService = turmaService;
@@ -31,6 +33,7 @@ namespace SPAA.App.Controllers
             _alunoRepository = alunoRepository;
             _curriculoRepository = curriculoRepository;
             _mapper = mapper;
+            _turmaSalvaRepository = turmaSalvaRepository;
         }
 
         // --- Método GET: Carrega a página inicialmente com turmas obrigatórias e optativas ---
@@ -193,6 +196,7 @@ namespace SPAA.App.Controllers
             return View("~/Views/DashBoard/MontarGrade.cshtml", resultado);
         }
 
+        [HttpPost]
         public async Task<IActionResult> SalvarGrade([FromBody] List<TurmaViewModel> turmasSelecionadas)
         {
             try
@@ -204,8 +208,23 @@ namespace SPAA.App.Controllers
 
                 // Aqui você processa as turmas (ex: salvar no banco de dados)
                 // Exemplo:
-                // var turmas = _mapper.Map<List<Turma>>(turmasSelecionadas);
-                // await _turmaService.SalvarTurmasParaAluno(User.Identity.Name, turmas);
+                var turmasParaSalvar = _mapper.Map<List<TurmaSalva>>(turmasSelecionadas);
+
+                string matriculaDoAluno = User.Identity.Name;
+
+                if (string.IsNullOrEmpty(matriculaDoAluno))
+                {
+                    return Unauthorized("Não foi possível identificar a matrícula do usuário.");
+                }
+
+                await _turmaSalvaRepository.ExcluirTurmasSalvasDoAluno(matriculaDoAluno);
+
+                foreach (var turma in turmasParaSalvar)
+                {
+                    turma.Matricula = matriculaDoAluno;
+                    await _turmaSalvaRepository.Adicionar(turma);
+                }
+
 
                 return Ok(new { success = true, message = "Grade salva com sucesso!" });
             }

@@ -151,14 +151,13 @@
 
         // Coleta todas as checkboxes marcadas
         document.querySelectorAll('input[name="turmasSelecionadas"]:checked').forEach(checkbox => {
-            const linha = checkbox.closest('.linha');
-
-            // Extrai os dados da turma (ajuste os seletores conforme seu HTML)
+            // Acessa os dados diretamente dos data-attributes do checkbox
             turmasSelecionadas.push({
-                CodigoDisciplina: linha.querySelector('.celulas:nth-child(2)').textContent.trim(),
-                NomeDisciplina: linha.querySelector('.celulas:nth-child(1)').textContent.trim(),
-                Horario: linha.querySelector('.celulas:nth-child(3)').textContent.trim(),
-                NomeProfessor: linha.querySelector('.celulas:nth-child(4)').textContent.trim()
+                CodigoTurmaUnico: parseInt(checkbox.dataset.codigounicoturma), // Use parseInt para garantir que é um número
+                CodigoDisciplina: checkbox.dataset.codigodisciplina,
+                NomeDisciplina: checkbox.dataset.nomedisciplina,
+                Horario: checkbox.dataset.horario,
+                NomeProfessor: checkbox.dataset.nomeprofessor
             });
         });
 
@@ -171,12 +170,16 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    alert("Grade salva com sucesso!"); // Adicione um feedback visual para o usuário
+                    // Opcional: Recarregar a página ou atualizar a UI após o sucesso
+                    // location.reload();
                 } else {
                     alert("Erro: " + (data.message || "Falha ao salvar grade."));
                 }
             })
             .catch(error => {
                 alert("Erro na requisição: " + error.message);
+                console.error("Erro na requisição AJAX:", error);
             });
     });
 });

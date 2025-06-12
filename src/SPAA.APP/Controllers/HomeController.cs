@@ -26,6 +26,7 @@ namespace SPAA.APP.Controllers
         private readonly IAreaInteresseAlunoRepository _areaInteresseAlunoRepository;
         private readonly ITurmaRepository _turmaRepository;
         private readonly IAlunoService _alunoService;
+        private readonly ITurmaSalvaRepository _turmaSalvaRepository;
 
 
         public HomeController(ILogger<HomeController> logger,
@@ -37,7 +38,8 @@ namespace SPAA.APP.Controllers
                                IPreRequisitoRepository preRequisitoRepository,
                                IAreaInteresseAlunoRepository areaInteresseAlunoRepository,
                                ITurmaRepository turmaRepository,
-                               IAlunoService alunoService)
+                               IAlunoService alunoService,
+                               ITurmaSalvaRepository turmaSalvaRepository)
         {
             _logger = logger;
             _alunoRepository = alunoRepository;
@@ -49,6 +51,7 @@ namespace SPAA.APP.Controllers
             _areaInteresseAlunoRepository = areaInteresseAlunoRepository;
             _turmaRepository = turmaRepository;
             _alunoService = alunoService;
+            _turmaSalvaRepository = turmaSalvaRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -72,6 +75,8 @@ namespace SPAA.APP.Controllers
             //    return RedirectToAction("FormAluno", "Form");
             //}
             var disciplinasViewModel = await ObterDisciplinasAluno(User.Identity.Name);
+
+            var teste = await _turmaSalvaRepository.TodasTurmasSalvasAluno(User.Identity.Name);
 
             ViewData["Aprovadas"] = disciplinasViewModel.Aprovadas;
             ViewData["Pendentes"] = disciplinasViewModel.Pendentes;

@@ -35,7 +35,15 @@
                         </div>
                         <div class="celulas acoes">
                             <button class="btn-acoes" title="Detalhes">ℹ️</button>
-                            <input type="checkbox" name="turmasSelecionadas" value="@turma.CodigoTurmaUnico" />
+                            <!-- ADICIONADO: data-codigounicoturma ao checkbox -->
+                            <input type="checkbox"
+                                   name="turmasSelecionadas"
+                                   value="@turma.CodigoTurmaUnico"
+                                   data-codigounicoturma="@turma.CodigoTurmaUnico"
+                                   data-codigodisciplina="@turma.CodigoDisciplina"
+                                   data-nomedisciplina="@turma.NomeDisciplina"
+                                   data-horario="@turma.Horario"
+                                   data-nomeprofessor="@turma.NomeProfessor" />
                         </div>
                     </div>
                 }

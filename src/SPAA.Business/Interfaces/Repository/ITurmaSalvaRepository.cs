@@ -9,6 +9,8 @@ namespace SPAA.Business.Interfaces.Repository
 {
     public interface ITurmaSalvaRepository : IRepository<TurmaSalva, int>
     {
+        Task<bool> ExcluirTurmasSalvasDoAluno(string matricula);
+        Task<List<TurmaSalva>> TodasTurmasSalvasAluno(string matricula);
 
     }
 }

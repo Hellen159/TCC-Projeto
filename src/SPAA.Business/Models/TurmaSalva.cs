@@ -11,6 +11,7 @@ namespace SPAA.Business.Models
         public int CodigoTurmaSalva { get; set; }
         public int CodigoUnicoTurma{ get; set; }
         public string Matricula { get; set; }
+        public string Horario { get; set; }
         public string CodigoDisciplina { get; set; }
     }
 }
