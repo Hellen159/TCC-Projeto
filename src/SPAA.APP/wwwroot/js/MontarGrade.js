@@ -171,7 +171,6 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert(data.message);
                 } else {
                     alert("Erro: " + (data.message || "Falha ao salvar grade."));
                 }
