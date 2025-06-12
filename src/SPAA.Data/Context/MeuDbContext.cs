@@ -13,6 +13,7 @@ namespace SPAA.Data.Context
         public DbSet<TipoDisciplina> TipoDisciplinas{ get; set; }
         public DbSet<Curso> Cursos { get; set; }
         public DbSet<Turma> Turmas { get; set; }
+        public DbSet<AlunoDisciplina> AlunoDisciplinas { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
