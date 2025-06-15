@@ -63,6 +63,7 @@ namespace SPAA.App.Configurations
             services.AddScoped<ICursoRepository, CursoRepository>();
             services.AddScoped<INotificacaoRepository, NotificacaoRepository>();
             services.AddScoped<ITurmaSalvaRepository, TurmaSalvaRepository>();
+            services.AddScoped<ITarefaAlunoRepository, TarefaAlunoRepository>();
 
             services.AddScoped<IAulaHorarioService, AulaHorarioService>();
             services.AddScoped<IAlunoDisciplinaService, AlunoDisciplinaService>();

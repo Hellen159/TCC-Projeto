@@ -11,6 +11,7 @@ namespace SPAA.Business.Interfaces.Repository
     {
         Task<bool> ExcluirTurmasSalvasDoAluno(string matricula);
         Task<List<TurmaSalva>> TodasTurmasSalvasAluno(string matricula);
+        Task<List<string>> HorariosComAulas(string matricula);
 
     }
 }

@@ -9,9 +9,8 @@ namespace SPAA.Business.Models
     public class TarefaAluno
     {
         public int CodigoTarefaAluno { get; set; }
-        public int CodigoTarefa { get; set; }
+        public string NomeTarefa { get; set; }
         public string Matricula { get; set; }
         public string Horario { get; set; }
-        public string DiaSemana { get; set; }
     }
 }

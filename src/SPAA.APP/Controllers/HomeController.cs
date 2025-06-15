@@ -76,7 +76,7 @@ namespace SPAA.APP.Controllers
             //}
             var disciplinasViewModel = await ObterDisciplinasAluno(User.Identity.Name);
 
-            var teste = await _turmaSalvaRepository.TodasTurmasSalvasAluno(User.Identity.Name);
+            var teste = await _turmaSalvaRepository.HorariosComAulas(User.Identity.Name);
 
             ViewData["Aprovadas"] = disciplinasViewModel.Aprovadas;
             ViewData["Pendentes"] = disciplinasViewModel.Pendentes;

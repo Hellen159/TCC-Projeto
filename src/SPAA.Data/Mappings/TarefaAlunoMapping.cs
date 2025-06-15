@@ -18,11 +18,13 @@ namespace SPAA.Data.Mappings
             builder.HasKey(ta => ta.CodigoTarefaAluno);
 
             builder.Property(ta => ta.CodigoTarefaAluno)
+                .ValueGeneratedOnAdd()
                 .HasColumnName("cd_tarefa_aluno")
                 .IsRequired();
 
-            builder.Property(ta => ta.CodigoTarefa)
-                .HasColumnName("cd_tarefa");
+            builder.Property(ta => ta.NomeTarefa)
+                .HasColumnName("nome_tarefa")
+                .HasColumnType("varchar(255)");
 
             builder.Property(ta => ta.Matricula)
                 .HasColumnName("matricula")
@@ -30,11 +32,8 @@ namespace SPAA.Data.Mappings
 
             builder.Property(ta => ta.Horario)
                 .HasColumnName("horario")
-                .HasColumnType("varchar(5)");
-
-            builder.Property(ta => ta.DiaSemana)
-                .HasColumnName("dia_semana")
                 .HasColumnType("varchar(20)");
+
         }
     }
 }

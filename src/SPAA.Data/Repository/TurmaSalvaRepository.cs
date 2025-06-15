@@ -31,6 +31,17 @@ namespace SPAA.Data.Repository
             return true;
         }
 
+        public async Task<List<string>> HorariosComAulas(string matricula)
+        {
+            var horarios = await DbSet
+                .Where(ts => ts.Matricula == matricula && ts.Horario != null) 
+                .Select(ts => ts.Horario) 
+                .Distinct() 
+                .ToListAsync(); 
+
+            return horarios;
+        }
+
         public async Task<List<TurmaSalva>> TodasTurmasSalvasAluno(string matricula)
         {
             var turmasSalvas = new List<TurmaSalva>();
