@@ -10,6 +10,7 @@
         public string NomeDisciplina { get; set; }
         public string Horario { get; set; }
         public string CodigoDisciplina { get; set; }
+        public string Ementa {  get; set; }
 
     }
 }

@@ -6,6 +6,6 @@ namespace SPAA.App.ViewModels
     {
         public string Mensagem { get; set; }
         public List<TurmaViewModel> Turmas { get; set; }
-        public List<TurmaViewModel> TurmasOptativas { get; set; } // Adicione esta linha para as turmas optativas
+        public List<TurmaViewModel> TurmasOptativas { get; set; } 
     }
 }

@@ -24,8 +24,12 @@ namespace SPAA.Data.Repository
         public async Task<bool> Adicionar(TEntity entity)
         {
             DbSet.Add(entity);
-            await SaveChanges();
-            return true;
+            int savedCount = await SaveChanges(); 
+            if (savedCount > 0)
+            {
+                return true;
+            }
+            return false; // Não salvou nada
         }
 
         public async Task<TEntity> ObterPorId(TKey codigo)

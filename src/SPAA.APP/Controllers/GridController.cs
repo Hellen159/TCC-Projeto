@@ -18,6 +18,7 @@ namespace SPAA.App.Controllers
         private readonly ICurriculoRepository _curriculoRepository;
         private readonly IMapper _mapper;
         private readonly ITurmaSalvaRepository _turmaSalvaRepository;
+        private readonly IDisciplinaRepository _disciplinaRepository;
 
         public GridController(IDisciplinaService disciplinaService,
                                ITurmaService turmaService,
@@ -25,7 +26,8 @@ namespace SPAA.App.Controllers
                                IAlunoRepository alunoRepository,
                                ICurriculoRepository curriculoRepository,
                                IMapper mapper,
-                               ITurmaSalvaRepository turmaSalvaRepository)
+                               ITurmaSalvaRepository turmaSalvaRepository,
+                               IDisciplinaRepository disciplinaRepository)
         {
             _disciplinaService = disciplinaService;
             _turmaService = turmaService;
@@ -34,6 +36,8 @@ namespace SPAA.App.Controllers
             _curriculoRepository = curriculoRepository;
             _mapper = mapper;
             _turmaSalvaRepository = turmaSalvaRepository;
+            _disciplinaRepository = disciplinaRepository;
+
         }
 
         // --- Método GET: Carrega a página inicialmente com turmas obrigatórias e optativas ---
@@ -206,8 +210,6 @@ namespace SPAA.App.Controllers
                     return BadRequest("Nenhuma turma foi selecionada.");
                 }
 
-                // Aqui você processa as turmas (ex: salvar no banco de dados)
-                // Exemplo:
                 var turmasParaSalvar = _mapper.Map<List<TurmaSalva>>(turmasSelecionadas);
 
                 string matriculaDoAluno = User.Identity.Name;
@@ -222,7 +224,7 @@ namespace SPAA.App.Controllers
                 foreach (var turma in turmasParaSalvar)
                 {
                     turma.Matricula = matriculaDoAluno;
-                    await _turmaSalvaRepository.Adicionar(turma);
+                    var teste = await _turmaSalvaRepository.Adicionar(turma);
                 }
 
 
@@ -231,6 +233,47 @@ namespace SPAA.App.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"Erro ao salvar grade: {ex.Message}");
+            }
+        }
+
+        // --- Método Auxiliar para adicionar ementas aos ViewModels ---
+        private async Task _AdicionarEmentasAsTurmasViewModel(List<TurmaViewModel> turmasViewModel)
+        {
+            if (turmasViewModel == null || !turmasViewModel.Any()) return;
+
+            // Para evitar múltiplas chamadas ao banco de dados para a mesma disciplina,
+            // podemos buscar todas as disciplinas necessárias de uma vez.
+            var codigosDisciplinas = turmasViewModel
+                                    .Where(t => !string.IsNullOrEmpty(t.CodigoDisciplina))
+                                    .Select(t => t.CodigoDisciplina)
+                                    .Distinct()
+                                    .ToList();
+
+            var disciplinasComEmenta = new Dictionary<string, string>();
+            foreach (var codigo in codigosDisciplinas)
+            {
+                var disciplina = await _disciplinaRepository.ObterPorCodigo(codigo);
+                if (disciplina != null && !string.IsNullOrEmpty(disciplina.Ementa))
+                {
+                    disciplinasComEmenta[codigo] = disciplina.Ementa;
+                }
+                else
+                {
+                    disciplinasComEmenta[codigo] = "Ementa não disponível."; // Default se não encontrar
+                }
+            }
+
+            // Atribuir as ementas aos ViewModels
+            foreach (var turmaVm in turmasViewModel)
+            {
+                if (disciplinasComEmenta.TryGetValue(turmaVm.CodigoDisciplina, out string ementa))
+                {
+                    turmaVm.Ementa = ementa;
+                }
+                else
+                {
+                    turmaVm.Ementa = "Ementa não disponível.";
+                }
             }
         }
         private async Task<Tuple<List<TurmaViewModel>, string>> _CarregarTurmasObrigatorias()
@@ -247,10 +290,15 @@ namespace SPAA.App.Controllers
                 {
                     foreach (var disciplina in disciplinasPendentes)
                     {
-                        var turmas = await _turmaRepository.TurmasDisponiveisPorDisciplina(disciplina);
+                        var turmas = await _turmaRepository.TurmasDisponiveisPorDisciplina(disciplina); // Usando Nome da Disciplina como você já faz
                         turmasBusiness.AddRange(turmas);
                     }
+
+                    // Mapear as entidades de negócio para ViewModels
                     turmasViewModel = _mapper.Map<List<TurmaViewModel>>(turmasBusiness);
+
+                    // ADICIONAR AS EMENTAS AQUI!
+                    await _AdicionarEmentasAsTurmasViewModel(turmasViewModel);
                 }
                 else
                 {
@@ -277,6 +325,7 @@ namespace SPAA.App.Controllers
 
                 if (aluno != null && aluno.CurriculoAluno != null)
                 {
+                    // Obtendo as disciplinas do currículo optativo
                     var curriculosOptativos = await _curriculoRepository.ObterDisciplinasPorCurrciulo(aluno.CurriculoAluno, 2);
 
                     if (curriculosOptativos != null && curriculosOptativos.Any())
@@ -286,7 +335,12 @@ namespace SPAA.App.Controllers
                             var turmas = await _turmaRepository.TurmasDisponiveisPorDisciplina(curriculo.NomeDisciplina);
                             turmasBusiness.AddRange(turmas);
                         }
+
+                        // Mapear as entidades de negócio para ViewModels
                         turmasViewModel = _mapper.Map<List<TurmaViewModel>>(turmasBusiness);
+
+                        // ADICIONAR AS EMENTAS AQUI!
+                        await _AdicionarEmentasAsTurmasViewModel(turmasViewModel);
                     }
                     else
                     {

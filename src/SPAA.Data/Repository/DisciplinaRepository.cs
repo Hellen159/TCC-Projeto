@@ -14,5 +14,10 @@ namespace SPAA.Data.Repository
         public DisciplinaRepository(MeuDbContext context) : base(context)
         {
         }
+
+        public async Task<Disciplina> ObterPorCodigo(string codigo)
+        {
+            return await DbSet.FirstOrDefaultAsync(d => d.Codigo == codigo);
+        }
     }
 }

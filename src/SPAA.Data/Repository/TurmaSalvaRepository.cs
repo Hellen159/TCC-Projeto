@@ -41,9 +41,6 @@ namespace SPAA.Data.Repository
             if (!turmasSalvas.Any())
                 return turmasSalvas;
 
-            DbSet.RemoveRange(turmasSalvas);
-            await SaveChanges();
-
             return turmasSalvas;
         }
     }

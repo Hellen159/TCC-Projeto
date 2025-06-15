@@ -10,5 +10,6 @@ namespace SPAA.Business.Interfaces.Repository
 {
     public interface IDisciplinaRepository : IRepository<Disciplina, string>
     {
+        Task<Disciplina> ObterPorCodigo(string codigo);
     }
 }
