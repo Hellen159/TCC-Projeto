@@ -180,39 +180,53 @@
 
 </div>
 
-<div class="gridDoida">
-    @if (Model.Turmas != null && Model.Turmas.Any())
-    {
-        // Criar uma instância de TurmaListaViewModel para a partial view
-        var turmasObrigatoriasViewModel = new TurmaListaViewModel
-                {
-                    Titulo = "Turmas Obrigatórias Disponíveis", // Título customizado
-                    Turmas = Model.Turmas.ToList() // .ToList() é bom aqui para garantir que é uma List<T>
-                };
-        @await Html.PartialAsync("_TurmasDisponiveis", turmasObrigatoriasViewModel)
-    }
-    else
-    {
-        <p>Parabéns! Você não possui disciplinas obrigatórias pendentes.</p>
-    }
+<div class="divisao">
+    <div class="gridDoida">
+        @if (Model.Turmas != null && Model.Turmas.Any())
+        {
+            // Criar uma instância de TurmaListaViewModel para a partial view
+            var turmasObrigatoriasViewModel = new TurmaListaViewModel
+                    {
+                        Titulo = "Turmas Obrigatórias Disponíveis", // Título customizado
+                        Turmas = Model.Turmas.ToList() // .ToList() é bom aqui para garantir que é uma List<T>
+                    };
+            @await Html.PartialAsync("_TurmasDisponiveis", turmasObrigatoriasViewModel)
+        }
+        else
+        {
+            <p>Parabéns! Você não possui disciplinas obrigatórias pendentes.</p>
+        }
 
-    <hr />
+        <hr />
 
-    @if (Model.TurmasOptativas != null && Model.TurmasOptativas.Any())
-    {
-        // Criar uma instância de TurmaListaViewModel para a partial view
-        var turmasOptativasViewModel = new TurmaListaViewModel
-                {
-                    Titulo = "Turmas Optativas Disponíveis", // Título customizado
-                    Turmas = Model.TurmasOptativas.ToList() // .ToList() é bom aqui para garantir que é uma List<T>
-                };
-        @await Html.PartialAsync("_TurmasDisponiveis", turmasOptativasViewModel)
-    }
-    else
-    {
-        <p>Não foram encontradas turmas optativas para o seu currículo ou você não possui um currículo associado.</p>
-    }
+        @if (Model.TurmasOptativas != null && Model.TurmasOptativas.Any())
+        {
+            // Criar uma instância de TurmaListaViewModel para a partial view
+            var turmasOptativasViewModel = new TurmaListaViewModel
+                    {
+                        Titulo = "Turmas Optativas Disponíveis", // Título customizado
+                        Turmas = Model.TurmasOptativas.ToList() // .ToList() é bom aqui para garantir que é uma List<T>
+                    };
+            @await Html.PartialAsync("_TurmasDisponiveis", turmasOptativasViewModel)
+        }
+        else
+        {
+            <p>Não foram encontradas turmas optativas para o seu currículo ou você não possui um currículo associado.</p>
+        }
+
+        
+    </div>
+    <div class="tutorial-box">
+        <h4>Como usar esta página?</h4>
+        <ul>
+            <li>Você pode selecionar os dias e horários em que você tem disponibilidade na grade acima.</li>
+            <li>Clique em "Enviar Disponibilidade" para ver as disciplinas compatíveis.</li>
+            <li>Caso queira, pode pular as etapas acima e apenas marcar as turmas que tenha interesse.</li>
+            <li>Use o botão “Salvar Grade” para finalizar sua escolha.</li>
+        </ul>
+    </div>
 </div>
+
 
 <script src="~/js/MontarGrade.js"></script>
 
