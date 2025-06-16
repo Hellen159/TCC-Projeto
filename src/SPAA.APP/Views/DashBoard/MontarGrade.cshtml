@@ -15,6 +15,10 @@
     ViewData["Title"] = "SPAA";
 }
 
+<script>
+    const turmasSalvasCodigos = @Html.Raw(Json.Serialize(ViewData["TurmasSalvasCodigos"] ?? new List<int>()));
+</script>
+
 <a href="/" style="text-decoration:none">
 <div class="toplogo">
     <div class="logoSpaa">

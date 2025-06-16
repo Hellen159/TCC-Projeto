@@ -31,6 +31,55 @@
 
     <!-- Tabela -->
     <div class="tabela-grade">
+        @{
+            string[,] grade = new string[6, 12];
+
+            var turmasSalvas = ViewData["TurmasSalvas"] as List<TurmaViewModel> ?? new();
+
+            foreach (var turma in turmasSalvas)
+            {
+                foreach (var bloco in turma.Horario.Split(','))
+                {
+                    var part = bloco.Trim().ToUpper();
+                    var match = System.Text.RegularExpressions.Regex.Match(part, @"^(\d+)([MTN])(\d+)$");
+
+                    if (!match.Success)
+                        continue;
+
+                    var dias = match.Groups[1].Value.ToCharArray();
+                    var turno = match.Groups[2].Value[0];
+                    var blocos = match.Groups[3].Value.ToCharArray();
+
+                    foreach (var dia in dias)
+                    {
+                        foreach (var blocoNum in blocos)
+                        {
+                            if (int.TryParse(dia.ToString(), out int diaInt) &&
+                            int.TryParse(blocoNum.ToString(), out int blocoInt))
+                            {
+                                int horaIndex = turno switch
+                                {
+                                    'M' => blocoInt - 1,
+                                    'T' => blocoInt + 4,
+                                    'N' => blocoInt + 10,
+                                    _ => -1
+                                };
+
+                                int diaSemana = diaInt - 2; // Segunda é 2 no seu formato
+
+                                if (diaSemana >= 0 && diaSemana < 6 && horaIndex >= 0 && horaIndex < 12)
+                                {
+                                    grade[diaSemana, horaIndex] = turma.CodigoDisciplina;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            string[] horas = { "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00" };
+        }
+
         <table>
             <thead>
                 <tr>
@@ -44,60 +93,25 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="horario">08:00</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                </tr>
-                <tr>
-                    <td class="horario">10:00</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                </tr>
-                <tr>
-                    <td class="horario">12:00</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                </tr>
-                <tr>
-                    <td class="horario">14:00</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                </tr>
-                <tr>
-                    <td class="horario">16:00</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                </tr>
-                <tr>
-                    <td class="horario">18:00</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
-                </tr>
+                @for (int h = 0; h < horas.Length; h++)
+                {
+                    <tr>
+                        <td class="horario">@horas[h]</td>
+                        @for (int d = 0; d < 6; d++) // seg a sáb
+                        {
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(grade[d, h]))
+                                {
+                                    @grade[d, h]
+                                }
+                                else
+                                {
+                                    <text>---</text>
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
             </tbody>
         </table>
     </div>

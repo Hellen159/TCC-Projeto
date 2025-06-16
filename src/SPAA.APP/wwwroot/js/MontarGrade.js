@@ -9,6 +9,28 @@
         return selecionadas.includes(horario);
     }
 
+    // === Preencher seleção com turmas salvas ===
+    const turmasSalvasCodigos = window.turmasSalvasCodigos || [];
+
+    // Função para marcar checkboxes com base nos códigos salvos
+    function marcarCheckboxesSalvas() {
+        document.querySelectorAll('input[name="turmasSelecionadas"]').forEach(checkbox => {
+            const codigoUnico = parseInt(checkbox.dataset.codigounicoturma);
+
+            if (turmasSalvasCodigos.includes(codigoUnico)) {
+                checkbox.checked = true;
+
+                // Simular o evento change para atualizar grade
+                checkbox.dispatchEvent(new Event("change"));
+            }
+        });
+    }
+
+    window.addEventListener("load", function () {
+        console.log("Turmas salvas no JS:", turmasSalvasCodigos);
+        marcarCheckboxesSalvas();
+    });
+
     // === Seleção de células na grade ===
     celulas.forEach(celula => {
         celula.addEventListener("click", function () {
@@ -20,7 +42,12 @@
             if (index === -1) {
                 // Verificar se já existe alguma seleção nesse horário
                 if (temConflito(codigo)) {
-                    alert("Conflito de horário!");
+                    const validationDiv = document.getElementById("validationMessages");
+                    validationDiv.innerHTML = `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        Conflito de horário!
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>`;
                     return;
                 }
 
@@ -72,8 +99,25 @@
             const linhaTurma = this.closest(".linha");
             const horarioString = linhaTurma.querySelector(".celulas:nth-child(3)").textContent.trim();
             const codigoDisciplina = linhaTurma.querySelector(".celulas:nth-child(2)").textContent.trim();
+            const nomeDisciplina = linhaTurma.querySelector(".celulas:nth-child(1)").textContent.trim();
 
             if (!horarioString || horarioString === "-") return;
+
+            const checkboxesMarcados = document.querySelectorAll('input[name="turmasSelecionadas"]:checked');
+            for (let cb of checkboxesMarcados) {
+                if (cb !== this && cb.dataset.nomedisciplina === nomeDisciplina) {
+                    // Mostra mensagem de erro estilizada
+                    const validationDiv = document.getElementById("validationMessages");
+                    validationDiv.innerHTML = `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Você já selecionou outra turma da disciplina: <strong>${nomeDisciplina}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>`;
+
+                    this.checked = false; // Desmarca automaticamente
+                    return;
+                }
+            }
 
             // Função para parse do horário da turma
             function parseHorarioTurma(horarioString) {
@@ -106,7 +150,13 @@
             const haConflito = horariosConvertidos.some(horario => temConflito(horario));
 
             if (haConflito && this.checked) {
-                alert("Conflito de horário! Esta turma tem horário sobreposto com outro já marcado.");
+                const validationDiv = document.getElementById("validationMessages");
+                validationDiv.innerHTML = ""; // Limpa mensagens anteriores
+                validationDiv.innerHTML = `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Conflito de horário! Esta turma tem horário sobreposto com outro já marcado: ${horarioString}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>`;
                 this.checked = false; // Desmarca automaticamente
                 return;
             }
@@ -170,9 +220,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert("Grade salva com sucesso!"); // Adicione um feedback visual para o usuário
-                    // Opcional: Recarregar a página ou atualizar a UI após o sucesso
-                    // location.reload();
+                    window.location.href = "/"; // Redireciona diretamente para a Home
                 } else {
                     alert("Erro: " + (data.message || "Falha ao salvar grade."));
                 }
