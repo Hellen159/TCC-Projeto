@@ -16,7 +16,11 @@ namespace SPAA.App.AutoMapper
             .ForMember(dest => dest.CodigoUnicoTurma, opt => opt.MapFrom(src => src.CodigoTurmaUnico))
             .ForMember(dest => dest.CodigoDisciplina, opt => opt.MapFrom(src => src.CodigoDisciplina))
             .ForMember(dest => dest.Horario, opt => opt.MapFrom(src => src.Horario))
-            .ForMember(dest => dest.Matricula, opt => opt.Ignore()); 
+            .ForMember(dest => dest.Matricula, opt => opt.Ignore());
+            CreateMap<TurmaSalva, TurmaViewModel>()
+            .ForMember(dest => dest.CodigoTurmaUnico, opt => opt.MapFrom(src => src.CodigoUnicoTurma))
+            .ForMember(dest => dest.CodigoDisciplina, opt => opt.MapFrom(src => src.CodigoDisciplina))
+            .ForMember(dest => dest.Horario, opt => opt.MapFrom(src => src.Horario));
         }
     }
 }

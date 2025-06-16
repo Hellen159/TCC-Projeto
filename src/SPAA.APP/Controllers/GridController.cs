@@ -57,6 +57,14 @@ namespace SPAA.App.Controllers
                 var turmasOptativas = await _CarregarTurmasOptativas();
                 resultado.TurmasOptativas = turmasOptativas.Item1; // Item1 é a lista de TurmaViewModel
 
+                // Carregar turmas salvas aqui também
+                var turmasSalvas = await _turmaSalvaRepository.TodasTurmasSalvasAluno(User.Identity.Name);
+                var codigosUnicosSalvos = turmasSalvas.Select(ts => ts.CodigoUnicoTurma).ToList();
+                ViewData["TurmasSalvasCodigos"] = codigosUnicosSalvos;
+
+                Console.WriteLine($"[MontarGrade] - Codigos Unicos Salvos: {codigosUnicosSalvos}");
+
+
                 // Lógica de mensagens pode precisar de ajuste dependendo de como você quer combinar as mensagens
                 if (!resultado.Turmas.Any() && !resultado.TurmasOptativas.Any())
                 {
@@ -187,6 +195,16 @@ namespace SPAA.App.Controllers
 
                 var turmasOptativasRecarregadas = await _CarregarTurmasOptativas();
                 resultado.TurmasOptativas = turmasOptativasRecarregadas.Item1;
+
+                // Carrega turmas salvas do aluno
+                var turmasSalvas = await _turmaSalvaRepository.TodasTurmasSalvasAluno(User.Identity.Name);
+                var codigosUnicosSalvos = turmasSalvas.Select(ts => ts.CodigoUnicoTurma).ToList();
+                var turmasSalvasViewModel = _mapper.Map<List<TurmaViewModel>>(turmasSalvas);
+
+                // Adiciona as turmas salvas à resposta
+                // Envia os códigos para a view
+                ViewData["TurmasSalvasCodigos"] = codigosUnicosSalvos;
+                ViewData["TurmasSalvas"] = turmasSalvasViewModel;
             }
             catch (Exception ex)
             {

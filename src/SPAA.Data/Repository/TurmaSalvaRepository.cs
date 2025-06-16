@@ -33,18 +33,9 @@ namespace SPAA.Data.Repository
 
         public async Task<List<TurmaSalva>> TodasTurmasSalvasAluno(string matricula)
         {
-            var turmasSalvas = new List<TurmaSalva>();
-            turmasSalvas = await DbSet
-                 .Where(ts => ts.Matricula == matricula)
-                 .ToListAsync();
-
-            if (!turmasSalvas.Any())
-                return turmasSalvas;
-
-            DbSet.RemoveRange(turmasSalvas);
-            await SaveChanges();
-
-            return turmasSalvas;
+            return await DbSet
+                .Where(ts => ts.Matricula == matricula)
+                .ToListAsync();
         }
     }
 }
