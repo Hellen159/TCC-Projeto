@@ -172,9 +172,13 @@
 
     <!-- Botões Inferiores -->
         <div class="botoes-inferiores">
-            <button type="submit">Enviar Disponibilidade</button>
-            <button type="button" id="limparBtn">Limpar Seleção</button>
-            <button type="button" id="salvarGradeBtn">Salvar Grade</button>
+            <div class="linha-superior">
+                <button type="submit">Enviar Disponibilidade</button>
+                <button type="button" id="limparBtn">Limpar Seleção</button>
+            </div>
+            <div class="linha-inferior">
+                <button type="button" id="salvarGradeBtn">Salvar Grade</button>
+            </div>
         </div>
 </form>
 
@@ -182,39 +186,63 @@
 
 <div class="divisao">
     <div class="gridDoida">
-        @if (Model.Turmas != null && Model.Turmas.Any())
-        {
-            // Criar uma instância de TurmaListaViewModel para a partial view
-            var turmasObrigatoriasViewModel = new TurmaListaViewModel
-                    {
-                        Titulo = "Turmas Obrigatórias Disponíveis", // Título customizado
-                        Turmas = Model.Turmas.ToList() // .ToList() é bom aqui para garantir que é uma List<T>
-                    };
-            @await Html.PartialAsync("_TurmasDisponiveis", turmasObrigatoriasViewModel)
-        }
-        else
-        {
-            <p>Parabéns! Você não possui disciplinas obrigatórias pendentes.</p>
-        }
+
+        <!-- Turmas Obrigatórias -->
+        <div class="card shadow-sm mb-4" style="border-radius: 1rem;">
+            <div class="card-header" style="
+            color: #001D6C;
+            background-color: rgba(74, 144, 226, 0.4);
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;">
+                Turmas Obrigatórias Disponíveis
+            </div>
+            <div class="card-body p-0">
+                @if (Model.Turmas != null && Model.Turmas.Any())
+                {
+                    var turmasObrigatoriasViewModel = new TurmaListaViewModel
+                {
+                    Titulo = "Turmas Obrigatórias Disponíveis",
+                    Turmas = Model.Turmas.ToList()
+                };
+                    @await Html.PartialAsync("_TurmasDisponiveis", turmasObrigatoriasViewModel)
+                }
+                else
+                {
+                    <p class="m-3 text-muted">Parabéns! Você não possui disciplinas obrigatórias pendentes.</p>
+                }
+            </div>
+        </div>
 
         <hr />
 
-        @if (Model.TurmasOptativas != null && Model.TurmasOptativas.Any())
-        {
-            // Criar uma instância de TurmaListaViewModel para a partial view
-            var turmasOptativasViewModel = new TurmaListaViewModel
-                    {
-                        Titulo = "Turmas Optativas Disponíveis", // Título customizado
-                        Turmas = Model.TurmasOptativas.ToList() // .ToList() é bom aqui para garantir que é uma List<T>
-                    };
-            @await Html.PartialAsync("_TurmasDisponiveis", turmasOptativasViewModel)
-        }
-        else
-        {
-            <p>Não foram encontradas turmas optativas para o seu currículo ou você não possui um currículo associado.</p>
-        }
+        <!-- Turmas Optativas -->
+        <div class="card shadow-sm mb-4" style="border-radius: 1rem;">
+            <div class="card-header" style="
+            color: #001D6C;
+            background-color: rgba(74, 144, 226, 0.4);
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;">
+                Turmas Optativas Disponíveis
+            </div>
+            <div class="card-body p-0">
+                @if (Model.TurmasOptativas != null && Model.TurmasOptativas.Any())
+                {
+                    var turmasOptativasViewModel = new TurmaListaViewModel
+                {
+                    Titulo = "Turmas Optativas Disponíveis",
+                    Turmas = Model.TurmasOptativas.ToList()
+                };
+                    @await Html.PartialAsync("_TurmasDisponiveis", turmasOptativasViewModel)
+                }
+                else
+                {
+                    <p class="m-3 text-muted">
+                        Não foram encontradas turmas optativas para o seu currículo ou você não possui um currículo associado.
+                    </p>
+                }
+            </div>
+        </div>
 
-        
     </div>
     <div class="tutorial-box">
         <h4>Como usar esta página?</h4>

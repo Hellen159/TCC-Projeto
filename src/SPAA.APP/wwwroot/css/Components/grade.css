@@ -72,15 +72,72 @@ W
 /* Botões Inferiores */
 .botoes-inferiores {
     display: flex;
-    gap: 1rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem; /* Espaço entre as linhas */
     margin-top: 1.5rem;
-    margin:  0.8rem auto auto auto;
+    margin: 0.8rem auto auto auto;
     width: 70%;
-
+    flex-direction: column;
 }
 
-    .botoes-inferiores a {
-        flex: 1;
+/* Linha superior com dois botões lado a lado */
+.linha-superior {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Botão inferior ocupando toda a largura da linha inferior */
+.linha-inferior {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Estilização dos botões */
+.botoes-inferiores button {
+    flex: none;
+    width: auto;
+    min-width: 15rem;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0.8rem;
+    background-color: rgba(14, 48, 128, 0.8);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.botoes-inferiores img {
+    width: 1.2rem;
+}
+
+.botoes-inferiores button:hover {
+    background-color: rgba(14, 48, 128, 1);
+}
+
+.a-inferiores {
+    display: flex;
+    flex-wrap: wrap; /* Para responsividade */
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    margin: 0.8rem auto auto auto;
+    width: 70%;
+}
+
+    .a-inferiores a {
+        flex: 1 1 calc(50% - 0.5rem); /* Dois por linha em telas menores */
+        min-width: 200px; /* Evita ficar muito pequeno */
         padding: 0.75rem;
         border: none;
         border-radius: 0.8rem;
@@ -88,37 +145,20 @@ W
         color: #fff;
         font-size: 1rem;
         font-weight: bold;
+        text-align: center;
+        text-decoration: none;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
-        cursor: pointer;
         transition: background-color 0.3s ease;
-        text-decoration: none;
-    }
-
-    .botoes-inferiores button {
-        flex: 1;
-        padding: 0.75rem;
-        border: none;
-        border-radius: 0.8rem;
-        background-color: rgba(14, 48, 128, 0.8);
-        color: #fff;
-        font-size: 1rem;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
         cursor: pointer;
-        transition: background-color 0.3s ease;
-        text-decoration: none;
     }
 
-    .botoes-inferiores img{
-        width: 1.2rem;
-    }
-
-        .botoes-inferiores button:hover {
+        .a-inferiores a:hover {
             background-color: rgba(14, 48, 128, 1);
         }
+
+    .a-inferiores img {
+        width: 1.2rem;
+    }

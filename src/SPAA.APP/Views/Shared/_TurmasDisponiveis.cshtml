@@ -2,18 +2,6 @@
 @model SPAA.App.ViewModels.TurmaListaViewModel
 
 <div class="tabela-turmas">
-    <div class="tabela-cabecalho">
-        <div class="linha cabecalho">
-            <div class="celulas" style="width: 30%">
-                <strong>@Model.Titulo</strong>
-            </div>
-            <div class="celulas" style="width: 14%">Código</div>
-            <div class="celulas" style="width: 20%">Horário</div>
-            <div class="celulas" style="width: 24.5%">Professor</div>
-            <div class="celulas" style="width: 11%">Ações</div>
-        </div>
-    </div>
-
     <div class="tabela-corpo">
         <div class="corpo-container">
             @if (Model.Turmas != null && Model.Turmas.Any())
@@ -55,7 +43,7 @@
             else
             {
                 <div class="linha">
-                    <div class="celulas text-muted text-center" colspan="5">
+                    <div class="celulas text-muted text-center" style="width: 100%">
                         Nenhuma turma disponível no momento.
                     </div>
                 </div>
@@ -114,7 +102,6 @@
         height: 100%;
         overflow: auto;
         background-color: rgba(0, 0, 0, 0.4);
-        z-index: 1050; /* Acima do conteúdo normal */
     }
 
     .modal-content {
