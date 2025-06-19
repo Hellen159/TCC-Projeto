@@ -20,13 +20,14 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/Components/config.css" />
     <link rel="stylesheet" href="~/css/Shared/auth.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
 }
 
 
 @await Html.PartialAsync("_ConfiguracoesModal", configuracaoViewModel)
 
-
-<aside class="sidebar">
+<button id="menu-toggle" class="hamburger-btn">☰</button>
+<aside id="sidebar" class="sidebar">
     <div class="user-dropdown">
         <button class="user-button">
             @Model.NomeAluno
@@ -113,6 +114,8 @@
     </section>
 </aside>
 
+<div id="overlay" class="overlay-hidden"></div>
+
 <div id="modalContainer"></div>
 
 <script>
@@ -153,5 +156,35 @@
                 modal.show();
             });
         }
+    });
+
+            document.addEventListener("DOMContentLoaded", function () {
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+
+        if (!menuToggle) {
+            console.warn("Botão 'menu-toggle' não encontrado.");
+            return;
+        }
+
+        menuToggle.addEventListener('click', function () {
+            if (sidebar) sidebar.classList.toggle('active');
+            if (overlay) overlay.classList.toggle('overlay-active');
+        });
+
+        if (overlay) {
+            overlay.addEventListener('click', function () {
+                if (sidebar) sidebar.classList.remove('active');
+                overlay.classList.remove('overlay-active');
+            });
+        }
+    });
+
+        document.getElementById('menu-toggle').addEventListener('click', function () {
+        const btn = this;
+        btn.classList.add('hide');
+        setTimeout(() => btn.classList.remove('hide'), 120);
     });
 </script>

@@ -126,3 +126,32 @@
     .tutorial-box li {
         margin-bottom: 0.5rem;
     }
+
+@media (max-width: 1400px) {
+    .gridDoida {
+        width: 94%;
+        margin-right: 1.5rem;
+    }
+
+    /* Nome da disciplina */
+    .celulas:nth-child(1) {
+        width: 30%;
+        text-align: left;
+    }
+    /* Código */
+    .celulas:nth-child(2) {
+        width: 15%;
+    }
+    /* Horário */
+    .celulas:nth-child(3) {
+        width: 20%;
+    }
+    /* Professor */
+    .celulas:nth-child(4) {
+        width: 20%;
+    }
+
+    .celulas:nth-child(5) {
+        width: 15%;
+    }
+}

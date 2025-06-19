@@ -51,10 +51,11 @@ body {
 /* Main Content */
 .main-content {
     display: flex;
-    flex: 77;
+    flex: 77;   
     min-height: 100%;
     background-color: #fff;
     padding: 0;
+    margin-right: 22%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     flex-direction: column;
 }
@@ -102,7 +103,7 @@ body {
     color: #fff;
     display: flex;
     align-items: center;
-    margin-right: 3rem;
+    margin-right: 1.5rem;
 }
 
     .user-button.active {
@@ -138,7 +139,7 @@ body {
 }
 
 .dropdown-menu ul {
-    margin-right: 3rem;
+    margin-right: 1.5rem;
 }
 
 .dropdown-menu ul li,
@@ -287,3 +288,80 @@ body {
         font-weight: bold;
         color: #435FA0;
     }
+
+.hamburger-btn {
+    display: none;
+    position: fixed;
+    right: 2rem;
+    top: 1rem;
+    background-color: #435FA0;
+    color: white;
+    border: none;
+    padding: 0.6rem 0.8rem;
+    font-size: 1.5rem;
+    z-index: 1050;
+    border-radius: 5px;
+    transition: opacity 0.2s ease;
+}
+
+    .hamburger-btn.hide {
+        opacity: 0;
+    }
+
+@media (max-width: 1400px) {
+    .hamburger-btn {
+        display: block;
+    }
+
+    body {
+        margin-right: 0 !important;
+    }
+
+    .main-content {
+        width: 100%;
+    }
+
+    .sidebar {
+        position: fixed;
+        max-width: 400px;
+        right: -91%;
+        top: 0;
+        height: 100vh;
+        width: 90%;
+        transition: right 0.2s ease;
+        z-index: 1040;
+        box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+    }
+
+        .sidebar.active {
+            right: 0;
+        }
+
+    .overlay-hidden {
+        display: none;
+    }
+
+    .overlay-active {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1030;
+    }
+
+    .user-dropdown {
+        min-height: 5rem;
+    }
+
+    .user-button {
+        margin-right: 6rem;
+    }
+
+    .dropdown-menu ul {
+        margin-right: 6rem;
+    }
+
+}

@@ -162,3 +162,26 @@ W
     .a-inferiores img {
         width: 1.2rem;
     }
+
+@media (max-width: 500px) {
+
+    .tabela-grade thead tr th {
+        font-size: 0.6rem;
+    }
+
+    .tabela-grade tbody tr td {
+        font-size: 0.6rem;
+    }
+}
+
+body {
+    margin-right: 0 !important;
+}
+
+@media (max-width: 1400px) {
+
+    .botoes-inferiores button {
+        width: 0;
+        min-width: 10rem;
+    }
+}
