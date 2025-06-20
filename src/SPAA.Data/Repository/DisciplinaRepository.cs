@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace SPAA.Data.Repository
 {
-    public class DisciplinaRepository : Repository<Disciplina, string>, IDisciplinaRepository
+    public class DisciplinaRepository : Repository<Disciplina, int>, IDisciplinaRepository
     {
         public DisciplinaRepository(MeuDbContext context) : base(context)
         {
