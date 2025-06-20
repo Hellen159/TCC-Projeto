@@ -13,6 +13,7 @@
     <EmbeddedResource Remove="Validations\**" />
     <None Remove="Notificacoes\**" />
     <None Remove="Validations\**" />
+	<InternalsVisibleTo Include="SPAA.Business.Tests" />
   </ItemGroup>
 
   <ItemGroup>
