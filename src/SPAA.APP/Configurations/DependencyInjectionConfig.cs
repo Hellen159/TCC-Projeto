@@ -36,17 +36,6 @@ namespace SPAA.App.Configurations
             .AddEntityFrameworkStores<MeuDbContext>()
             .AddDefaultTokenProviders();
 
-            var defaultCulture = new CultureInfo("pt-BR");
-            CultureInfo.DefaultThreadCurrentCulture = defaultCulture;
-            CultureInfo.DefaultThreadCurrentUICulture = defaultCulture;
-            services.Configure<RequestLocalizationOptions>(options =>
-            {
-                var supportedCultures = new[] { new CultureInfo("pt-BR") };
-                options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("pt-BR");
-                options.SupportedCultures = supportedCultures;
-                options.SupportedUICultures = supportedCultures;
-            });
-
             // AutoMapper
             services.AddAutoMapper(typeof(Program).Assembly);
 
@@ -78,8 +67,20 @@ namespace SPAA.App.Configurations
             services.AddTransient<IEmailService, EmailService>();
 
             // MVC com views
-            services.AddControllersWithViews();
-
+            services.AddControllersWithViews(o =>
+            {
+                o.ModelBindingMessageProvider.SetAttemptedValueIsInvalidAccessor((x, y) => "O valor preenchido é inválido para este campo.");
+                o.ModelBindingMessageProvider.SetMissingBindRequiredValueAccessor(x => "Este campo precisa ser preenchido.");
+                o.ModelBindingMessageProvider.SetMissingKeyOrValueAccessor(() => "Este campo precisa ser preenchido.");
+                o.ModelBindingMessageProvider.SetMissingRequestBodyRequiredValueAccessor(() => "É necessário que o body na requisição não esteja vazio.");
+                o.ModelBindingMessageProvider.SetNonPropertyAttemptedValueIsInvalidAccessor((x) => "O valor preenchido é inválido para este campo.");
+                o.ModelBindingMessageProvider.SetNonPropertyUnknownValueIsInvalidAccessor(() => "O valor preenchido é inválido para este campo.");
+                o.ModelBindingMessageProvider.SetNonPropertyValueMustBeANumberAccessor(() => "O valor preenchido é inválido para este campo.");
+                o.ModelBindingMessageProvider.SetUnknownValueIsInvalidAccessor((x) => "O valor preenchido é inválido para este campo.");
+                o.ModelBindingMessageProvider.SetValueIsInvalidAccessor((x) => "Este campo precisa ser preenchido.");
+                o.ModelBindingMessageProvider.SetValueMustBeANumberAccessor((x) => "O campo deve ser numérico.");
+                o.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor((x) => "Este campo precisa ser preenchido.");
+            });
             return services;
         }
     }
