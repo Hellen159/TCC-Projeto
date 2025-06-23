@@ -76,7 +76,7 @@ namespace SPAA.Business.Services
             return blocos;
         }
 
-        public async Task<string> ExtrairTextoDePdf(IFormFile arquivoPdf)
+        public virtual async Task<string> ExtrairTextoDePdf(IFormFile arquivoPdf)
         {
             using var memoryStream = new MemoryStream();
             await arquivoPdf.CopyToAsync(memoryStream);
@@ -241,7 +241,7 @@ namespace SPAA.Business.Services
             };
         }
 
-        private static string NormalizarTexto(string texto)
+        public static string NormalizarTexto(string texto)
         {
             if (string.IsNullOrWhiteSpace(texto))
                 return string.Empty;

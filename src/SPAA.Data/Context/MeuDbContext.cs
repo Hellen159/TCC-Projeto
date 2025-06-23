@@ -14,6 +14,12 @@ namespace SPAA.Data.Context
         public DbSet<Curso> Cursos { get; set; }
         public DbSet<Turma> Turmas { get; set; }
         public DbSet<AlunoDisciplina> AlunoDisciplinas { get; set; }
+        public DbSet<Notificacao> Notificacoes { get; set; }
+        public DbSet<PreRequisito> PreRequisitos { get; set; }
+        public DbSet<TarefaAluno> TarefasAlunos { get; set; } // Add this
+        public DbSet<TurmaSalva> TurmasSalvas { get; set; } // Add this line
+        public DbSet<TesteEntity> TesteEntities { get; set; } // Adicione esta linha
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

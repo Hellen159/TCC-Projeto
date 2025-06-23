@@ -49,6 +49,11 @@ namespace SPAA.Business.Services
         {
             var entidade = await _alunoRepository.ObterPorId(matricula);
 
+            if (entidade == null)
+            {
+                return false; // Se o aluno não existe, ele não anexou histórico.
+            }
+
             if (entidade.HistoricoAnexado == false)
             {
                 return false;
@@ -84,6 +89,11 @@ namespace SPAA.Business.Services
             }
 
             var cargaHorariaTotalExigida = curso.CargaHorariaOptativa + curso.CargaHorariaObrigatoria;
+
+            if (cargaHorariaTotalExigida == 0)
+            {
+                return 0; 
+            }
             var cargaHorariaPendente = aluno.HorasObrigatoriasPendentes + aluno.HorasOptativasPendentes;
 
             var cargaHorariaIntegralizada = cargaHorariaTotalExigida - cargaHorariaPendente;

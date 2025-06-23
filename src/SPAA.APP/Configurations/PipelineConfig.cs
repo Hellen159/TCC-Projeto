@@ -1,4 +1,6 @@
-﻿using SPAA.App.Middlewares;
+﻿using Microsoft.AspNetCore.Localization;
+using SPAA.App.Middlewares;
+using System.Globalization;
 
 namespace SPAA.App.Configurations
 {
@@ -15,6 +17,15 @@ namespace SPAA.App.Configurations
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            var defaultCulture = new CultureInfo("pt-BR");
+            var localizationOptions = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(defaultCulture),
+                SupportedCultures = new List<CultureInfo> { defaultCulture },
+                SupportedUICultures = new List<CultureInfo> { defaultCulture }
+            };
+            app.UseRequestLocalization(localizationOptions);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

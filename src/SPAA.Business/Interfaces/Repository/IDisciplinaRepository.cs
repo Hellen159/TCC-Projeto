@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SPAA.Business.Interfaces.Repository
 {
-    public interface IDisciplinaRepository : IRepository<Disciplina, string>
+    public interface IDisciplinaRepository : IRepository<Disciplina, int>
     {
         Task<Disciplina> ObterPorCodigo(string codigo);
     }
