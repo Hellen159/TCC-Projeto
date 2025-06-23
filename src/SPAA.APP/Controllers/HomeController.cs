@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SPAA.App.ViewModels;
 using SPAA.APP.Models;
@@ -93,56 +94,6 @@ namespace SPAA.APP.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-        //metodos privados
-        private async Task<(DisciplinaListaViewModel Aprovadas, DisciplinaListaViewModel Pendentes)> ObterDisciplinasAluno(string matricula)
-        {
-            var dadosAluno = await _alunoRepository.ObterPorId(matricula);
-
-            var nomesAprovadas = await _alunoDisciplinaRepository.ObterNomeDisciplinasPorSituacao(matricula, "APR");
-            var nomesPendentes = await _alunoDisciplinaRepository.ObterNomeDisciplinasPorSituacao(matricula, "PEND");
-
-            //var preferencias = new List<AulaHorario>
-            //    {
-            //        new AulaHorario { DiaSemana = 3, Turno = 'T', Horario = 2 },
-            //        new AulaHorario { DiaSemana = 3, Turno = 'T', Horario = 3 },
-            //        new AulaHorario { DiaSemana = 5, Turno = 'T', Horario = 2 },
-            //        new AulaHorario { DiaSemana = 5, Turno = 'T', Horario = 3 }
-            //    };
-
-            //foreach (var nome in nomesPendentes)
-            //{
-            //    var teste = await _turmaRepository.BuscarTurmasCompativeis(nome, preferencias);
-            //}
-
-            var disciplinasAprovadasViewModel = nomesAprovadas
-                .Select(nome => new DisciplinaViewModel
-                {
-                    NomeDisciplina = nome
-                })
-                .ToList();
-
-            var disciplinasPendentesViewModel = nomesPendentes
-                .Select(nome => new DisciplinaViewModel
-                {
-                    NomeDisciplina = nome
-                })
-                .ToList();
-
-            var aprovadasViewModel = new DisciplinaListaViewModel
-            {
-                Titulo = "Disciplinas Aprovadas",
-                Disciplinas = disciplinasAprovadasViewModel
-            };
-
-            var pendentesViewModel = new DisciplinaListaViewModel
-            {
-                Titulo = "Disciplinas Pendentes",
-                Disciplinas = disciplinasPendentesViewModel
-            };
-
-            return (aprovadasViewModel, pendentesViewModel);
-        }
        
         [HttpPost]
         public async Task<IActionResult> SalvarTarefas([FromBody] List<TarefaViewModel> tarefasRecebidas)
@@ -192,6 +143,50 @@ namespace SPAA.APP.Controllers
                 Console.WriteLine($"Erro ao tentar salvar tarefas no banco de dados: {ex.Message}");
                 return StatusCode(500, new { success = false, message = "Ocorreu um erro interno ao salvar as tarefas.", error = ex.Message });
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ExcluirTarefa(string horarioTarefa)
+        {
+            return StatusCode(500, new { success = false, message = "Ocorreu um erro interno ao salvar as tarefas.", error = "" });
+        }
+
+        //metodos privados
+        private async Task<(DisciplinaListaViewModel Aprovadas, DisciplinaListaViewModel Pendentes)> ObterDisciplinasAluno(string matricula)
+        {
+            var dadosAluno = await _alunoRepository.ObterPorId(matricula);
+
+            var nomesAprovadas = await _alunoDisciplinaRepository.ObterNomeDisciplinasPorSituacao(matricula, "APR");
+            var nomesPendentes = await _alunoDisciplinaRepository.ObterNomeDisciplinasPorSituacao(matricula, "PEND");
+
+
+            var disciplinasAprovadasViewModel = nomesAprovadas
+                .Select(nome => new DisciplinaViewModel
+                {
+                    NomeDisciplina = nome
+                })
+                .ToList();
+
+            var disciplinasPendentesViewModel = nomesPendentes
+                .Select(nome => new DisciplinaViewModel
+                {
+                    NomeDisciplina = nome
+                })
+                .ToList();
+
+            var aprovadasViewModel = new DisciplinaListaViewModel
+            {
+                Titulo = "Disciplinas Aprovadas",
+                Disciplinas = disciplinasAprovadasViewModel
+            };
+
+            var pendentesViewModel = new DisciplinaListaViewModel
+            {
+                Titulo = "Disciplinas Pendentes",
+                Disciplinas = disciplinasPendentesViewModel
+            };
+
+            return (aprovadasViewModel, pendentesViewModel);
         }
     }
 }
