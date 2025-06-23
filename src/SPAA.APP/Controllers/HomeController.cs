@@ -27,6 +27,7 @@ namespace SPAA.APP.Controllers
         private readonly ITurmaRepository _turmaRepository;
         private readonly IAlunoService _alunoService;
         private readonly ITurmaSalvaRepository _turmaSalvaRepository;
+        private readonly ITarefaAlunoRepository _tarefaAlunoRepository;
 
 
         public HomeController(ILogger<HomeController> logger,
@@ -39,7 +40,8 @@ namespace SPAA.APP.Controllers
                                IAreaInteresseAlunoRepository areaInteresseAlunoRepository,
                                ITurmaRepository turmaRepository,
                                IAlunoService alunoService,
-                               ITurmaSalvaRepository turmaSalvaRepository)
+                               ITurmaSalvaRepository turmaSalvaRepository,
+                               ITarefaAlunoRepository tarefaAlunoRepository)
         {
             _logger = logger;
             _alunoRepository = alunoRepository;
@@ -52,6 +54,7 @@ namespace SPAA.APP.Controllers
             _turmaRepository = turmaRepository;
             _alunoService = alunoService;
             _turmaSalvaRepository = turmaSalvaRepository;
+            _tarefaAlunoRepository = tarefaAlunoRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -69,26 +72,18 @@ namespace SPAA.APP.Controllers
 
             var testeTodasTurmas = await _turmaRepository.TurmasDisponiveisPorSemestre("2025.1");
 
-            //var alunoJaTemAreaInteresse = await _areaInteresseAlunoRepository.AlunoJaTemAreaInteresse(User.Identity.Name);
-            //if (!alunoJaTemAreaInteresse)
-            //{
-            //    return RedirectToAction("FormAluno", "Form");
-            //}
             var disciplinasViewModel = await ObterDisciplinasAluno(User.Identity.Name);
 
             var turmasSalvas = await _turmaSalvaRepository.TodasTurmasSalvasAluno(User.Identity.Name);
             var turmasSalvasViewModel = _mapper.Map<List<TurmaViewModel>>(turmasSalvas);
             var teste = await _turmaSalvaRepository.HorariosComAulas(User.Identity.Name);
-            // Traz lista com todos os horarios que o aluno tem aula. Printar com um X na grade(Pra não mexer, ficar bloqueado)
-            // O restante vai estar desbloqueado, quando clica, dá pra digitar e fica salvo bonitinho. 
-            // Criar viewmodel de Tarefa, int codigo tarefa, string tipo tarefa, string horario tarefa, string matricula aluno
-            // Pegar todos os dados que ele digitou(instanciar uma classe e tals), criar uma classe nessa viewmodel(tarefaviewmodel) e
-            // popular ela com o tipo da tarefa(Nome), o horario da terefa(quadradinho). Na controller vai terminar
-            // de popular e salvar no banco de dados.
+            var todasAsTarefasAluno = await _tarefaAlunoRepository.TodasTarefasDoAluno(User.Identity.Name);
+
 
             ViewData["Aprovadas"] = disciplinasViewModel.Aprovadas;
             ViewData["Pendentes"] = disciplinasViewModel.Pendentes;
             ViewData["TurmasSalvas"] = turmasSalvasViewModel;
+            ViewData["TarefasAluno"] = todasAsTarefasAluno; 
 
             return View();
         }
@@ -148,12 +143,55 @@ namespace SPAA.APP.Controllers
 
             return (aprovadasViewModel, pendentesViewModel);
         }
-
-    [HttpPost]
-        public IActionResult SalvarTarefas([FromBody] List<TarefaViewModel> tarefas)
+       
+        [HttpPost]
+        public async Task<IActionResult> SalvarTarefas([FromBody] List<TarefaViewModel> tarefasRecebidas)
         {
-            // Aqui você pode salvar no banco ou processar conforme necessário
-            return Json(new { success = true, message = "Tarefas recebidas", data = tarefas });
+            if (tarefasRecebidas == null || !tarefasRecebidas.Any())
+            {
+                return BadRequest(new { success = false, message = "Nenhuma tarefa para salvar foi fornecida." });
+            }
+
+            string matriculaAluno = User.Identity.Name;
+
+            if (string.IsNullOrEmpty(matriculaAluno))
+            {
+                return Unauthorized(new { success = false, message = "Matrícula do aluno não pode ser determinada. Certifique-se de estar logado." });
+            }
+
+            var tarefasParaSalvar = new List<TarefaAluno>();
+            foreach (var tvm in tarefasRecebidas)
+            {
+                if (!string.IsNullOrWhiteSpace(tvm.Descricao))
+                {
+                    tarefasParaSalvar.Add(new TarefaAluno
+                    {
+                        NomeTarefa = tvm.Descricao,
+                        Matricula = matriculaAluno,
+                        Horario = tvm.Horario
+                    });
+                }
+            }
+
+            if (!tarefasParaSalvar.Any())
+            {
+                return BadRequest(new { success = false, message = "Nenhuma tarefa válida para salvar após a filtragem (descrição vazia)." });
+            }
+
+            try
+            {
+                foreach (var tarefa in tarefasParaSalvar)
+                {
+                    await _tarefaAlunoRepository.Adicionar(tarefa); 
+                }
+
+                return Json(new { success = true, message = "Tarefas salvas com sucesso!", data = tarefasParaSalvar });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao tentar salvar tarefas no banco de dados: {ex.Message}");
+                return StatusCode(500, new { success = false, message = "Ocorreu um erro interno ao salvar as tarefas.", error = ex.Message });
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SPAA.Business.Interfaces.Repository;
+﻿using Microsoft.EntityFrameworkCore;
+using SPAA.Business.Interfaces.Repository;
 using SPAA.Business.Models;
 using SPAA.Data.Context;
 using System;
@@ -13,6 +14,19 @@ namespace SPAA.Data.Repository
     {
         public TarefaAlunoRepository(MeuDbContext context) : base(context)
         {
+        }
+
+        public async Task<List<TarefaAluno>> TodasTarefasDoAluno(string matricula)
+        {
+            var tarefas = new List<TarefaAluno>();
+            tarefas = await DbSet
+                 .Where(ta => ta.Matricula == matricula)
+                 .ToListAsync();
+
+            if (!tarefas.Any())
+                return tarefas;
+
+            return tarefas;
         }
     }
 }
