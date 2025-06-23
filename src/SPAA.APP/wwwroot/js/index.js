@@ -31,7 +31,7 @@
         gradeEditavel.appendChild(novaGrade);
 
         // Adiciona classe específica para scroll
-        gradeEditavel.classList.add("tabela-modal");
+        gradeEditavel.classList.add("tabela-modal1");
     }
 
     // Extrair o horário do dia e bloco

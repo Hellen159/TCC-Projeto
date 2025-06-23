@@ -200,7 +200,7 @@ W
     }
 
 /* Modal overlay */
-.modal-overlay {
+.modal-overlay1 {
     display: none;
     position: fixed;
     top: 0;
@@ -211,15 +211,18 @@ W
     z-index: 1100;
 }
 
-.modal-content {
+.modal-content1 {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: #fff;
+    display: flex;
+    align-items: center;
     padding: 1.5rem;
     border-radius: 1rem;
     width: 70%;
+    flex-direction: column;
     max-width: 94%;
     max-height: 90vh; /* Altura máxima */
     overflow-y: auto; /* Scroll interno se necessário */
@@ -227,13 +230,13 @@ W
     box-sizing: border-box;
 }
 
-.tabela-modal {
+.tabela-modal1 {
     max-height: 94vh; /* Ajuste conforme necessário */
     overflow-y: auto;
     border: none;
 }
 
-.modal-header {
+.modal-header1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
