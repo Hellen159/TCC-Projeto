@@ -122,7 +122,22 @@
             <img src="~/assets/plus.svg" alt="Ícone de Mais" style="margin-right: 0.5rem;" />
             Montar sua grade
         </a>
-        <a class="btn-editar"><img src="~/assets/editDashboard.svg" alt="Ícone de editar" style="margin-right: 0.5rem;" /> Adicionar Tarefa</a>
+        <a id="btn-adicionar-tarefa" class="btn-editar">
+        <img src="~/assets/editDashboard.svg" alt="Ícone de editar" style="margin-right: 0.5rem;" /> Adicionar Tarefa</a>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Adicione suas tarefas</h3>
+            </div>
+            <div id="grade-editavel" class="tabela-grade"></div>
+            <div class="modal-botao">
+                <button id="btn-cancelar" class="btn-modal btn-cancelar">Cancelar</button>
+                <button id="btn-salvar" class="btn-modal btn-salvar">Salvar</button>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -153,3 +168,5 @@
     </div>
 }
 </div>
+
+<script src="~/js/index.js"></script>

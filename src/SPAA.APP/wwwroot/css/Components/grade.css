@@ -20,6 +20,8 @@
         font-size: 1.5rem;
         color: #000;
         font-weight: 700;
+        width: auto;
+        margin-right: auto;
     }
 
 .btn-acoes {
@@ -81,6 +83,16 @@ W
     flex-direction: column;
 }
 
+/* Botões Inferiores */
+.ajuda-inferior {
+    display: flex;
+    flex-direction: column;
+    align-items: self-end;
+    gap: 1rem; /* Espaço entre as linhas */
+    width: 10%;
+    flex-direction: column;
+}
+
 /* Linha superior com dois botões lado a lado */
 .linha-superior {
     display: flex;
@@ -125,6 +137,30 @@ W
     background-color: rgba(14, 48, 128, 1);
 }
 
+.ajuda-inferior button {
+    flex: none;
+    width: auto;
+    min-width: 7rem;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0.8rem;
+    background-color: rgba(14, 48, 128, 0.8);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.ajuda-inferior button:hover {
+    background-color: rgba(14, 48, 128, 1);
+}
+
 .a-inferiores {
     display: flex;
     flex-wrap: wrap; /* Para responsividade */
@@ -163,8 +199,94 @@ W
         width: 1.2rem;
     }
 
-@media (max-width: 500px) {
+/* Modal overlay */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1100;
+}
 
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    width: 70%;
+    max-width: 94%;
+    max-height: 90vh; /* Altura máxima */
+    overflow-y: auto; /* Scroll interno se necessário */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+}
+
+.tabela-modal {
+    max-height: 94vh; /* Ajuste conforme necessário */
+    overflow-y: auto;
+    border: none;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.modal-botao{
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn-modal {
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    min-width: 10rem;
+}
+
+.btn-salvar {
+    background-color: rgba(14, 48, 128, 0.8);
+    color: white;
+}
+
+.btn-cancelar {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-salvar:hover {
+    background-color: #218838;
+}
+
+.btn-cancelar:hover {
+    background-color: #c82333;
+}
+
+.td-editavel {
+    background-color: #f0f0f0 !important;
+}
+
+    .td-editavel input {
+        width: 100%;
+        border: none;
+        background: transparent;
+        text-align: center;
+        font-size: 0.8rem;
+    }
+
+@media (max-width: 500px) {
     .tabela-grade thead tr th {
         font-size: 0.6rem;
     }
@@ -184,4 +306,8 @@ body {
         width: 0;
         min-width: 10rem;
     }
+        .header-grade h2 {
+            max-width: calc(100% - 7rem); /* Ajuste fino para mobile */
+            font-size: 1.2rem;
+        }
 }

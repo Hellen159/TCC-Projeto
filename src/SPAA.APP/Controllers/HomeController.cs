@@ -67,7 +67,7 @@ namespace SPAA.APP.Controllers
                 return RedirectToAction("UploadHistorico", "Upload");
             }
 
-            var testeTodasTurmas =await _turmaRepository.TurmasDisponiveisPorSemestre("2025.1");
+            var testeTodasTurmas = await _turmaRepository.TurmasDisponiveisPorSemestre("2025.1");
 
             //var alunoJaTemAreaInteresse = await _areaInteresseAlunoRepository.AlunoJaTemAreaInteresse(User.Identity.Name);
             //if (!alunoJaTemAreaInteresse)
@@ -79,6 +79,12 @@ namespace SPAA.APP.Controllers
             var turmasSalvas = await _turmaSalvaRepository.TodasTurmasSalvasAluno(User.Identity.Name);
             var turmasSalvasViewModel = _mapper.Map<List<TurmaViewModel>>(turmasSalvas);
             var teste = await _turmaSalvaRepository.HorariosComAulas(User.Identity.Name);
+            // Traz lista com todos os horarios que o aluno tem aula. Printar com um X na grade(Pra não mexer, ficar bloqueado)
+            // O restante vai estar desbloqueado, quando clica, dá pra digitar e fica salvo bonitinho. 
+            // Criar viewmodel de Tarefa, int codigo tarefa, string tipo tarefa, string horario tarefa, string matricula aluno
+            // Pegar todos os dados que ele digitou(instanciar uma classe e tals), criar uma classe nessa viewmodel(tarefaviewmodel) e
+            // popular ela com o tipo da tarefa(Nome), o horario da terefa(quadradinho). Na controller vai terminar
+            // de popular e salvar no banco de dados.
 
             ViewData["Aprovadas"] = disciplinasViewModel.Aprovadas;
             ViewData["Pendentes"] = disciplinasViewModel.Pendentes;
@@ -143,5 +149,11 @@ namespace SPAA.APP.Controllers
             return (aprovadasViewModel, pendentesViewModel);
         }
 
+    [HttpPost]
+        public IActionResult SalvarTarefas([FromBody] List<TarefaViewModel> tarefas)
+        {
+            // Aqui você pode salvar no banco ou processar conforme necessário
+            return Json(new { success = true, message = "Tarefas recebidas", data = tarefas });
+        }
     }
 }
