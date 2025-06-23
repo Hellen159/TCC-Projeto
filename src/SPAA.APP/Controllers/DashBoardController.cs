@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SPAA.App.ViewModels;
 
 namespace SPAA.App.Controllers
 {
+    [Authorize]
     public class DashBoardController : Controller
     {
         public IActionResult Index()
