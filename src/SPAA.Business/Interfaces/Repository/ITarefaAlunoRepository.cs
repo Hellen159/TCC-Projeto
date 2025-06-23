@@ -10,6 +10,6 @@ namespace SPAA.Business.Interfaces.Repository
     public interface ITarefaAlunoRepository : IRepository<TarefaAluno, int>
     {
         Task<List<TarefaAluno>> TodasTarefasDoAluno(string matricula);
-
+        Task<int?> IdTarefa(string horario, string matricula);
     }
 }

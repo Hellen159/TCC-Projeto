@@ -146,9 +146,36 @@ namespace SPAA.APP.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ExcluirTarefa(string horarioTarefa)
+        public async Task<IActionResult> ExcluirTarefa([FromBody] string horarioTarefa) 
         {
-            return StatusCode(500, new { success = false, message = "Ocorreu um erro interno ao salvar as tarefas.", error = "" });
+            string matriculaAluno = User.Identity.Name;
+
+            if (string.IsNullOrEmpty(matriculaAluno))
+            {
+                return Unauthorized(new { success = false, message = "Matrícula do aluno não pode ser determinada." });
+            }
+
+            try
+            {
+                int? idTarefa = await _tarefaAlunoRepository.IdTarefa(horarioTarefa, matriculaAluno);
+
+                if (idTarefa.HasValue) 
+                {
+
+                    await _tarefaAlunoRepository.Remover(idTarefa.Value);
+
+                    return Json(new { success = true, message = "Tarefa removida com sucesso!" });
+                }
+                else
+                {
+                    return NotFound(new { success = false, message = "Tarefa não encontrada para os critérios fornecidos." });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao tentar excluir tarefa: {ex.Message}");
+                return StatusCode(500, new { success = false, message = "Ocorreu um erro ao excluir a tarefa.", error = ex.Message });
+            }
         }
 
         //metodos privados
