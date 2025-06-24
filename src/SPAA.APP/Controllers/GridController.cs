@@ -5,10 +5,13 @@ using SPAA.Business.Interfaces.Repository;
 using SPAA.Business.Interfaces.Services;
 using SPAA.Business.Models;
 using System.Text.Json;
-using System.Linq; // Necessário para .Any() e outros métodos LINQ
+using System.Linq;
+using Microsoft.AspNetCore.Authorization; 
 
 namespace SPAA.App.Controllers
 {
+
+    [Authorize]
     public class GridController : Controller
     {
         private readonly IDisciplinaService _disciplinaService;
