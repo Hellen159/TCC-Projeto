@@ -122,7 +122,7 @@ public class AccountController : Controller
         }
 
         TempData["ErrorMessage"] = "Usuário ou senha incorretos.";
-        return View();
+        return View(loginViewModel);
     }
 
     [HttpPost]
