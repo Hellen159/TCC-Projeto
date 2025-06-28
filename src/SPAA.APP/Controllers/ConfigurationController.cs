@@ -91,11 +91,11 @@ namespace SPAA.App.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]
-        public IActionResult ConfirmarExclusao()
-        {
-            return View();
-        }
+        //[HttpGet]
+        //public IActionResult ConfirmarExclusao()
+        //{
+        //    return RedirectToAction("Index", "Home");
+        //}
 
 
         [HttpPost]
@@ -105,7 +105,7 @@ namespace SPAA.App.Controllers
             if (model.Matricula == null)
             {
                 TempData["ErrorMessage"] = "A matrícula é obrigatória para confirmar a exclusão.";
-                return RedirectToAction("ConfirmarExclusao");
+                return RedirectToAction("Index", "Home");
             }
 
             var user = await _userManager.GetUserAsync(User);
@@ -113,7 +113,7 @@ namespace SPAA.App.Controllers
             if (user == null || user.UserName != model.Matricula)
             {
                 TempData["ErrorMessage"] = "A matrícula informada não corresponde ao usuário.";
-                return RedirectToAction("ConfirmarExclusao");
+                return RedirectToAction("Index", "Home");
             }
 
             var deleteAluno = await _alunoRepository.Remover(user.UserName);
