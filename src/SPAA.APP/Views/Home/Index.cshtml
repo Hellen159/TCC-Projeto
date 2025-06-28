@@ -1,4 +1,5 @@
 ﻿@using SPAA.App.ViewModels
+@using SPAA.Business.Models
 @model List<SPAA.App.ViewModels.DisciplinaListaViewModel>
 
 @section Styles {
@@ -33,16 +34,16 @@
     <div class="tabela-grade">
         @{
             string[,] grade = new string[6, 12];
-
             var turmasSalvas = ViewData["TurmasSalvas"] as List<TurmaViewModel> ?? new();
+            var tarefasAluno = ViewData["TarefasAluno"] as List<TarefaAluno> ?? new();
 
+            // Preencher com turmas primeiro
             foreach (var turma in turmasSalvas)
             {
                 foreach (var bloco in turma.Horario.Split(','))
                 {
                     var part = bloco.Trim().ToUpper();
                     var match = System.Text.RegularExpressions.Regex.Match(part, @"^(\d+)([MTN])(\d+)$");
-
                     if (!match.Success)
                         continue;
 
@@ -64,12 +65,51 @@
                                     'N' => blocoInt + 10,
                                     _ => -1
                                 };
-
                                 int diaSemana = diaInt - 2; // Segunda é 2 no seu formato
 
                                 if (diaSemana >= 0 && diaSemana < 6 && horaIndex >= 0 && horaIndex < 12)
                                 {
                                     grade[diaSemana, horaIndex] = turma.CodigoDisciplina;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Agora preencher com tarefas apenas onde NÃO tem turma
+            foreach (var tarefa in tarefasAluno)
+            {
+                var part = tarefa.Horario.ToUpper();
+                var match = System.Text.RegularExpressions.Regex.Match(part, @"^(\d+)([MTN])(\d+)$");
+                if (!match.Success)
+                    continue;
+
+                var dias = match.Groups[1].Value.ToCharArray();
+                var turno = match.Groups[2].Value[0];
+                var blocos = match.Groups[3].Value.ToCharArray();
+
+                foreach (var dia in dias)
+                {
+                    foreach (var blocoNum in blocos)
+                    {
+                        if (int.TryParse(dia.ToString(), out int diaInt) &&
+                        int.TryParse(blocoNum.ToString(), out int blocoInt))
+                        {
+                            int horaIndex = turno switch
+                            {
+                                'M' => blocoInt - 1,
+                                'T' => blocoInt + 4,
+                                'N' => blocoInt + 10,
+                                _ => -1
+                            };
+                            int diaSemana = diaInt - 2;
+
+                            if (diaSemana >= 0 && diaSemana < 6 && horaIndex >= 0 && horaIndex < 12)
+                            {
+                                if (string.IsNullOrWhiteSpace(grade[diaSemana, horaIndex]))
+                                {
+                                    grade[diaSemana, horaIndex] = tarefa.NomeTarefa;
                                 }
                             }
                         }
@@ -99,10 +139,34 @@
                         <td class="horario">@horas[h]</td>
                         @for (int d = 0; d < 6; d++) // seg a sáb
                         {
-                            <td>
+                            string diaUnb = (d + 2).ToString(); // Segunda é 2
+                            string turno = h switch
+                            {
+                                >= 0 and <= 4 => "M",
+                                >= 5 and <= 10 => "T",
+                                _ => "N"
+                            };
+                            int bloco = h switch
+                            {
+                                >= 0 and <= 4 => h + 1,
+                                >= 5 and <= 10 => h - 4,
+                                _ => h - 10
+                            };
+
+                            string horarioCelula = $"{diaUnb}{turno}{bloco}";
+
+                            <td data-horario="@horarioCelula">
                                 @if (!string.IsNullOrWhiteSpace(grade[d, h]))
                                 {
-                                    @grade[d, h]
+                                    var isTurma = grade[d, h].Contains(" ");
+                                    if (isTurma)
+                                    {
+                                        <span style="color: #001D6C; font-weight: bold;">@grade[d, h]</span>
+                                    }
+                                    else
+                                    {
+                                        <text>@grade[d, h]</text>
+                                    }
                                 }
                                 else
                                 {
