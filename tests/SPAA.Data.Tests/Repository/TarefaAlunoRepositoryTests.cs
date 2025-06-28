@@ -270,5 +270,140 @@ namespace SPAA.Data.Tests.Repository
                 Assert.Equal("15:00", tarefaAlunoAtualizada.Horario);
             }
         }
+
+        // --- NEW TESTS FOR TarefaAlunoRepository specific methods ---
+
+        /// <summary>
+        /// Tests if IdTarefa returns the correct CodeTarefaAluno for an existing matricula and horario.
+        /// </summary>
+        [Fact]
+        public async Task IdTarefa_ComMatriculaEHorarioExistentes_DeveRetornarCodigoTarefaAlunoCorreto()
+        {
+            // Arrange
+            var options = CreateNewContextOptions();
+            var matricula = "M005";
+            var horario = "13:00";
+            var tarefa = new TarefaAluno
+            {
+                NomeTarefa = "Estudar para a prova",
+                Matricula = matricula,
+                Horario = horario
+            };
+            int expectedId;
+
+            using (var context = new MeuDbContext(options))
+            {
+                context.TarefasAlunos.Add(tarefa);
+                await context.SaveChangesAsync();
+                expectedId = tarefa.CodigoTarefaAluno;
+            }
+
+            // Act
+            using (var context = new MeuDbContext(options))
+            {
+                var repository = new TarefaAlunoRepository(context);
+                var resultId = await repository.IdTarefa(horario, matricula);
+
+                // Assert
+                Assert.NotNull(resultId);
+                Assert.Equal(expectedId, resultId.Value);
+            }
+        }
+
+        /// <summary>
+        /// Tests if IdTarefa returns null when no matching matricula and horario are found.
+        /// </summary>
+        [Fact]
+        public async Task IdTarefa_ComMatriculaEHorarioInexistentes_DeveRetornarNull()
+        {
+            // Arrange
+            var options = CreateNewContextOptions();
+            var matricula = "M999";
+            var horario = "23:00";
+
+            // Act
+            using (var context = new MeuDbContext(options))
+            {
+                var repository = new TarefaAlunoRepository(context);
+                var resultId = await repository.IdTarefa(horario, matricula);
+
+                // Assert
+                Assert.Null(resultId);
+            }
+        }
+
+        /// <summary>
+        /// Tests if TodasTarefasDoAluno returns a list of all tasks for a given matricula.
+        /// </summary>
+        [Fact]
+        public async Task TodasTarefasDoAluno_ComMatriculaExistente_DeveRetornarTodasAsTarefasDoAluno()
+        {
+            // Arrange
+            var options = CreateNewContextOptions();
+            var matricula = "M006";
+            using (var context = new MeuDbContext(options))
+            {
+                context.TarefasAlunos.Add(new TarefaAluno { NomeTarefa = "Tarefa 1", Matricula = matricula, Horario = "08:00" });
+                context.TarefasAlunos.Add(new TarefaAluno { NomeTarefa = "Tarefa 2", Matricula = matricula, Horario = "10:00" });
+                context.TarefasAlunos.Add(new TarefaAluno { NomeTarefa = "Tarefa De Outro Aluno", Matricula = "M007", Horario = "11:00" });
+                await context.SaveChangesAsync();
+            }
+
+            // Act
+            using (var context = new MeuDbContext(options))
+            {
+                var repository = new TarefaAlunoRepository(context);
+                var tarefasDoAluno = await repository.TodasTarefasDoAluno(matricula);
+
+                // Assert
+                Assert.NotNull(tarefasDoAluno);
+                Assert.Equal(2, tarefasDoAluno.Count);
+                Assert.True(tarefasDoAluno.All(t => t.Matricula == matricula));
+            }
+        }
+
+        /// <summary>
+        /// Tests if TodasTarefasDoAluno returns an empty list if no tasks are found for the given matricula.
+        /// </summary>
+        [Fact]
+        public async Task TodasTarefasDoAluno_ComMatriculaInexistente_DeveRetornarListaVazia()
+        {
+            // Arrange
+            var options = CreateNewContextOptions();
+            var matricula = "M999"; // Matricula que não existe no banco de dados
+
+            // Act
+            using (var context = new MeuDbContext(options))
+            {
+                var repository = new TarefaAlunoRepository(context);
+                var tarefasDoAluno = await repository.TodasTarefasDoAluno(matricula);
+
+                // Assert
+                Assert.NotNull(tarefasDoAluno);
+                Assert.Empty(tarefasDoAluno);
+            }
+        }
+
+        /// <summary>
+        /// Tests if TodasTarefasDoAluno returns an empty list when the database is empty.
+        /// </summary>
+        [Fact]
+        public async Task TodasTarefasDoAluno_BancoDeDadosVazio_DeveRetornarListaVazia()
+        {
+            // Arrange
+            var options = CreateNewContextOptions();
+            var matricula = "M001"; // Qualquer matrícula, já que o banco estará vazio
+
+            // Act
+            using (var context = new MeuDbContext(options))
+            {
+                var repository = new TarefaAlunoRepository(context);
+                var tarefasDoAluno = await repository.TodasTarefasDoAluno(matricula);
+
+                // Assert
+                Assert.NotNull(tarefasDoAluno);
+                Assert.Empty(tarefasDoAluno);
+            }
+        }
     }
 }

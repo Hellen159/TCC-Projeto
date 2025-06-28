@@ -7,6 +7,10 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+
+	  <Exclude>[*]SPAA.Data.Migrations.*</Exclude>
+	  <ExcludeByFile>**/*Migrations.cs</ExcludeByFile>
+	  <ExcludeByFile>**/Migrations/**/*.cs</ExcludeByFile>
   </PropertyGroup>
 
   <ItemGroup>

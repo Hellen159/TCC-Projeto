@@ -20,7 +20,7 @@ namespace SPAA.Data.Repository
         {
             var tarefa = await DbSet
                                .Where(ta => ta.Matricula == matricula && ta.Horario == horario)
-                               .Select(ta => ta.CodigoTarefaAluno) 
+                               .Select(ta => (int?)ta.CodigoTarefaAluno) 
                                .FirstOrDefaultAsync();
 
             return tarefa;

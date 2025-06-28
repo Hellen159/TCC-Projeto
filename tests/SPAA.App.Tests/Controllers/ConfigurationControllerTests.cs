@@ -260,17 +260,6 @@ namespace SPAA.App.Tests.Controllers
             Assert.Equal("Password too weak.", _tempDataDictionary["ErrorMessage"]); // Verifica a descrição do erro
         }
 
-        // --- Testes para ConfirmarExclusao (HttpGet) ---
-
-        [Fact]
-        public void ConfirmarExclusao_DeveRetornarView()
-        {
-            // Act
-            var result = _controller.ConfirmarExclusao();
-
-            // Assert
-            Assert.IsType<ViewResult>(result);
-        }
 
         // --- Testes para ExcluirConta (HttpPost) ---
 
@@ -285,7 +274,7 @@ namespace SPAA.App.Tests.Controllers
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal("ConfirmarExclusao", result.ActionName);
+            Assert.Equal("Index", result.ActionName);
             Assert.Equal("A matrícula é obrigatória para confirmar a exclusão.", _tempDataDictionary["ErrorMessage"]);
             // Garante que nenhum repositório/service foi chamado
             _mockUserManager.Verify(m => m.GetUserAsync(It.IsAny<ClaimsPrincipal>()), Times.Never);
@@ -304,7 +293,7 @@ namespace SPAA.App.Tests.Controllers
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal("ConfirmarExclusao", result.ActionName);
+            Assert.Equal("Index", result.ActionName);
             Assert.Equal("A matrícula informada não corresponde ao usuário.", _tempDataDictionary["ErrorMessage"]);
             _mockUserManager.Verify(m => m.GetUserAsync(It.IsAny<ClaimsPrincipal>()), Times.Once);
             // Garante que nenhum repositório foi chamado após a verificação do usuário
@@ -326,7 +315,7 @@ namespace SPAA.App.Tests.Controllers
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal("ConfirmarExclusao", result.ActionName);
+            Assert.Equal("Index", result.ActionName);
             Assert.Equal("A matrícula informada não corresponde ao usuário.", _tempDataDictionary["ErrorMessage"]);
             _mockUserManager.Verify(m => m.GetUserAsync(It.IsAny<ClaimsPrincipal>()), Times.Once);
             _mockAlunoRepository.Verify(r => r.Remover(It.IsAny<string>()), Times.Never);
