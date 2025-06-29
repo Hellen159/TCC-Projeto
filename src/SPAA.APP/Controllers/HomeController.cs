@@ -58,7 +58,8 @@ namespace SPAA.APP.Controllers
             _tarefaAlunoRepository = tarefaAlunoRepository;
         }
 
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<IActionResult> Index(string success)
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -84,7 +85,13 @@ namespace SPAA.APP.Controllers
             ViewData["Aprovadas"] = disciplinasViewModel.Aprovadas;
             ViewData["Pendentes"] = disciplinasViewModel.Pendentes;
             ViewData["TurmasSalvas"] = turmasSalvasViewModel;
-            ViewData["TarefasAluno"] = todasAsTarefasAluno; 
+            ViewData["TarefasAluno"] = todasAsTarefasAluno;
+
+            // Se veio da modal com sucesso
+            if (!string.IsNullOrEmpty(success))
+            {
+                TempData["MensagemSucesso"] = "Tarefas salvas com sucesso!";
+            }
 
             return View();
         }

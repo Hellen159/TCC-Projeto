@@ -18,12 +18,11 @@
 
             const horario = cell.getAttribute("data-horario");
             const textoOriginal = cell.textContent.trim();
-            const isTurma = textoOriginal.includes(" ");
+            // Regex para identificar turmas (ex: FGA0208)
+            const padraoTurma = /^[A-Z]{3}\d{3,4}$/i;
 
-            console.log("Processando célula:", cell);
-
-            if (isTurma) {
-                console.log("É uma turma, ignorando...");
+            // Se for turma, ignora
+            if (padraoTurma.test(textoOriginal)) {
                 return;
             }
 
@@ -105,16 +104,43 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('Tarefas salvas com sucesso!');
                     modal.style.display = "none";
-                    location.reload(); // Recarrega pra pegar dados atualizados
+
+                    // Adiciona ?success=1 na URL pra indicar sucesso
+                    window.location.href = window.location.pathname + "?success=1";
                 } else {
-                    alert('Erro ao salvar tarefas.');
+                    mostrarAlerta("Erro ao salvar tarefas.", "erro");
                 }
             })
             .catch(error => {
                 console.error('Erro:', error);
                 alert('Erro ao salvar tarefas.');
             });
+        function mostrarAlerta(mensagem, tipo) {
+            const alerta = document.getElementById("meu-alerta");
+
+            if (!alerta) {
+                console.warn("Elemento 'meu-alerta' não encontrado!");
+                return;
+            }
+
+            // Define estilo baseado no tipo (sucesso ou erro)
+            alerta.textContent = mensagem;
+            alerta.className = "alerta-customizado"; // reseta classes
+            alerta.classList.add("mostrar");
+            alerta.classList.remove("oculto");
+
+            if (tipo === "sucesso") {
+                alerta.style.backgroundColor = "#28a745";
+            } else {
+                alerta.style.backgroundColor = "#dc3545";
+            }
+
+            // Oculta o alerta após 3 segundos
+            setTimeout(() => {
+                alerta.classList.remove("mostrar");
+                alerta.classList.add("oculto");
+            }, 3000);
+        }
     });
 });
