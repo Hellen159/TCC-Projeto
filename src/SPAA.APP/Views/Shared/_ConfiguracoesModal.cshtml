@@ -10,12 +10,12 @@
         width: 100%;
         flex-direction: column-reverse;
     }
-    
-    #configuracoesModal .modal-header h5.modal-title {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: #435FA0;
-    }
+
+        #configuracoesModal .modal-header h5.modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #435FA0;
+        }
 
     /* Estilo geral para labels */
     #configuracoesModal label {
@@ -129,7 +129,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" style="font-weight: bold; color: #435FA0;">Configurações</h5>
+                <h5 class="modal-title">Configurações</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -154,7 +154,7 @@
                     <form class="forms" id="formHistorico" asp-controller="Upload" asp-action="UploadHistorico" method="post" enctype="multipart/form-data">
                         <div>
                             <label asp-for="Historico">Histórico e Formulário</label>
-                            <input asp-for="Historico" type="file" class="form-control" accept=".pdf" />
+                            <input asp-for="Historico" id="Historico" type="file" class="form-control" accept=".pdf" />
                             <span asp-validation-for="Historico" class="text-danger"></span>
                         </div>
                         <input type="hidden" name="returnAction" value="Index" />
@@ -178,29 +178,39 @@
                     </form>
                     <!-- Formulário de Alterar Senha -->
                     <form class="forms" id="formAlterarSenha" asp-controller="Configuration" asp-action="AlterarSenha" method="post">
-                        <label for="NovoNome">Alterar Senha</label>
+                        <label for="SenhaAtual">Alterar Senha</label>
                         <div style="margin-bottom: 1rem; width: 92%;">
-                            <input asp-for="SenhaAtual" placeholder="Senha Atual*" id="SenhaAtual" />
+                            <input asp-for="SenhaAtual" type="password" placeholder="Senha Atual*" id="SenhaAtual" />
                         </div>
                         <div style="margin-bottom: 1rem; width: 92%;">
-                            <input asp-for="NovaSenha" placeholder="Nova Senha*" id="NovaSenha" />
+                            <input asp-for="NovaSenha" type="password" placeholder="Nova Senha*" id="NovaSenha" />
                         </div>
                         <div style="margin-bottom: 1rem; width: 92%;">
-                            <input asp-for="ConfirmacaoSenha" placeholder="Confirme a nova senha*" id="ConfirmacaoSenha" />
+                            <input asp-for="ConfirmacaoSenha" type="password" placeholder="Confirme a nova senha*" id="ConfirmacaoSenha" />
                         </div>
                         <button type="submit" name="submitButton" value="Salvar Senha">Salvar Senha</button>
                     </form>
                 </div>
-                <!-- Botão de Excluir Conta -->
-                <button id="excluir-conta-btn" type="button" style="background-color: red;">Excluir Conta</button>
-
-                <partial name="_ConfirmarExclusaoModal" model="new SPAA.App.ViewModels.ConfirmarExclusaoViewModel()" />
+                <!-- Formulário de Excluir Conta -->
+                <form class="forms" id="formExcluirConta" asp-controller="Configuration" asp-action="ExcluirConta" method="post">
+                    @Html.AntiForgeryToken()
+                    <label for="MatriculaConfirmacao">Excluir sua conta</label>
+                    <div style="margin-bottom: 1rem; width: 92%;">
+                        <input name="Matricula" id="MatriculaConfirmacao" placeholder="Digite sua matrícula para confirmar*" class="form-control" maxlength="9" />
+                    </div>
+                    <button type="button" id="btnExcluirConta" style="background-color: red;">Excluir Conta</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
+
+
 <div id="validationMessages" class="validation-messages"></div>
+
+@section Scripts {
+}
 
 
 <script>
@@ -287,63 +297,54 @@
             };
         }
 
-        // Validação do Formulário de Importar Histórico
-        var formHistorico = document.getElementById("formHistorico");
-        if (formHistorico) {
-            formHistorico.onsubmit = function (e) {
-                var historicoInput = document.getElementById("Historico");
-                var historico = historicoInput ? historicoInput.value : "";
-                var validationDiv = document.getElementById("validationMessages");
-                validationDiv.innerHTML = ""; // Limpa mensagens anteriores
+    // Validação do Formulário de Importar Histórico
+    document.getElementById("formHistorico").onsubmit = function (e) {
+        var historicoInput = document.getElementById("Historico");
+        var historico = historicoInput.value;
+        var validationDiv = document.getElementById("validationMessages");
+        validationDiv.innerHTML = ""; // limpa mensagens anteriores
+        if (!historico) {
+            e.preventDefault();
+            validationDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                'O arquivo de histórico é obrigatório.' +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                '</div>';
+            return false;
+        }
+        var fileExtension = historico.split('.').pop().toLowerCase();
+        if (fileExtension !== 'pdf') {
+            e.preventDefault();
+            validationDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                'Apenas arquivos PDF são permitidos.' +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                '</div>';
+            return false;
+        }
+    };
 
-                if (!historico) {
-                    e.preventDefault();
-                    validationDiv.innerHTML = `
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            O arquivo de histórico é obrigatório.
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>`;
-                    return false;
-                }
+    // *** SCRIPT PARA EXCLUSÃO DE CONTA ***
+    document.getElementById("btnExcluirConta").addEventListener("click", function (e) {
+        e.preventDefault(); // Impede o envio imediato do formulário
 
-                var fileExtension = historico.split('.').pop().toLowerCase();
-                if (fileExtension !== 'pdf') {
-                    e.preventDefault();
-                    validationDiv.innerHTML = `
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            Apenas arquivos PDF são permitidos.
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>`;
-                    return false;
-                }
-            };
+        var matricula = document.getElementById("MatriculaConfirmacao").value.trim();
+        var validationDiv = document.getElementById("validationMessages");
+        validationDiv.innerHTML = ""; // Limpa mensagens de erro anteriores
+
+        // 1. Verifica se o campo de matrícula foi preenchido
+        if (matricula === "") {
+            validationDiv.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                'Por favor, informe sua matrícula para excluir a conta.' +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                '</div>';
+            return; // Para a execução
         }
 
-        // Botão de Excluir Conta - Abre a modal diretamente
-        const excluirBtn = document.getElementById("excluir-conta-btn");
-            if (excluirBtn) {
-                excluirBtn.addEventListener("click", function (e) {
-                    e.preventDefault();
+        // 2. Mostra o pop-up de confirmação
+        var confirmacao = window.confirm("Você tem certeza que deseja excluir sua conta? Esta ação é irreversível e todos os seus dados serão perdidos permanentemente.");
 
-                    // Fecha a modal de configurações, se estiver aberta
-                    const configModalEl = document.getElementById("configuracoesModal");
-                    const configModal = bootstrap.Modal.getInstance(configModalEl);
-                    if (configModal) {
-                        configModal.hide();
-                    }
-
-                    // Abre a modal de confirmação de exclusão
-                    const deleteModalEl = document.getElementById("confirmarExclusaoModal");
-                    if (!deleteModalEl) {
-                        console.error("❌ Modal de exclusão NÃO encontrada.");
-                        return;
-                    }
-
-                    const deleteModal = new bootstrap.Modal(deleteModalEl);
-                    deleteModal.show();
-                });
-            } else {
-                console.warn("⚠️ Botão 'excluir-conta-btn' NÃO encontrado.");
-            }
+        // 3. Se o usuário confirmar, envia o formulário
+        if (confirmacao) {
+            document.getElementById("formExcluirConta").submit();
+        }
     });
 </script>
