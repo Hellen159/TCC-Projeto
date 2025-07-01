@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SPAA.APP.styles.css" asp-append-version="true" />
+    <link rel="icon" href="~/assets/favicon.ico" type="image/x-icon" />
+
     @RenderSection("Styles", required: false)
 
 </head>
@@ -33,7 +35,6 @@
                 <button type="button" class="header-link btn btn-link p-0 m-0" data-bs-toggle="modal" data-bs-target="#aboutModal">
                     Sobre-nós
                 </button>
-                <a href="#docs" class="header-link">Documentação</a>
                 <a href="@linkDestino" class="header-button">
                     <img src="~/assets/buttomLoginRegister.svg" alt="Ícone de usuário" class="icon" />
                     @textoLink
