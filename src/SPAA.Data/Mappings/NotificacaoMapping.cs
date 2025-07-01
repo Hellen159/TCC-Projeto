@@ -24,7 +24,7 @@ namespace SPAA.Data.Mappings
 
             builder.Property(n => n.Mensagem)
                 .HasColumnName("mensagem")
-                .HasColumnType("varchar(255)");
+                .HasColumnType("varchar(5000)");
 
             builder.Property(n => n.StatusNotificacao)
                 .HasColumnName("status");
