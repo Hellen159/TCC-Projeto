@@ -43,28 +43,23 @@ namespace SPAA.App.Controllers
 
         }
 
-        // --- Método GET: Carrega a página inicialmente com turmas obrigatórias e optativas ---
         [HttpGet]
         public async Task<IActionResult> MontarGrade()
         {
             var resultado = new MontarGradeResultViewModel
             {
-                Turmas = new List<TurmaViewModel>(),         // Inicializa
-                TurmasOptativas = new List<TurmaViewModel>() // Inicializa
+                Turmas = new List<TurmaViewModel>(),
+                TurmasOptativas = new List<TurmaViewModel>() 
             };
 
             try
             {
-                // Chama o método privado para carregar as turmas obrigatórias
                 var turmasObrigatorias = await _CarregarTurmasObrigatorias();
-                resultado.Turmas = turmasObrigatorias.Item1; // Item1 é a lista de TurmaViewModel
-                // Item2 é a mensagem, mas aqui não precisamos dela a menos que queira tratar no frontend
+                resultado.Turmas = turmasObrigatorias.Item1; 
 
-                // Chama o método privado para carregar as turmas optativas
                 var turmasOptativas = await _CarregarTurmasOptativas();
-                resultado.TurmasOptativas = turmasOptativas.Item1; // Item1 é a lista de TurmaViewModel
+                resultado.TurmasOptativas = turmasOptativas.Item1; 
 
-                // Carregar turmas salvas aqui também
                 var turmasSalvas = await _turmaSalvaRepository.TodasTurmasSalvasAluno(User.Identity.Name);
                 var codigosUnicosSalvos = turmasSalvas.Select(ts => ts.CodigoUnicoTurma).ToList();
                 ViewData["TurmasSalvasCodigos"] = codigosUnicosSalvos;
@@ -72,7 +67,6 @@ namespace SPAA.App.Controllers
                 Console.WriteLine($"[MontarGrade] - Codigos Unicos Salvos: {codigosUnicosSalvos}");
 
 
-                // Lógica de mensagens pode precisar de ajuste dependendo de como você quer combinar as mensagens
                 if (!resultado.Turmas.Any() && !resultado.TurmasOptativas.Any())
                 {
                     resultado.Mensagem = "Não foram encontradas turmas obrigatórias ou optativas disponíveis no momento.";
@@ -98,17 +92,15 @@ namespace SPAA.App.Controllers
         }
 
 
-        // --- Método POST: Processa a disponibilidade enviada pelo usuário ---
         [HttpPost]
         public async Task<IActionResult> MontarGrade(MontarGradeViewModel model)
         {
             var resultado = new MontarGradeResultViewModel
             {
-                Turmas = new List<TurmaViewModel>(),         // Sempre inicialize
-                TurmasOptativas = new List<TurmaViewModel>() // Sempre inicialize
+                Turmas = new List<TurmaViewModel>(),         
+                TurmasOptativas = new List<TurmaViewModel>() 
             };
 
-            // Lógica para processar as preferências do usuário (se ModelState for válido)
             if (ModelState.IsValid)
             {
                 var preferencias = new List<AulaHorario>();
@@ -116,15 +108,16 @@ namespace SPAA.App.Controllers
                 try
                 {
                     var horarios = JsonSerializer.Deserialize<List<string>>(model.HorariosMarcados);
+                    var aluno = await _alunoRepository.ObterPorId(User.Identity.Name);
 
                     foreach (var horarioString in horarios)
                     {
                         string cleaned = horarioString.Replace(" ", "").ToUpper();
 
                         if (cleaned.Length >= 3 &&
-                            char.IsDigit(cleaned[0]) && // Garante que o primeiro char é um dígito (dia da semana)
-                            char.IsLetter(cleaned[1]) && // Garante que o segundo char é uma letra (turno)
-                            char.IsDigit(cleaned[2]) && // Garante que o terceiro char é um dígito (horário)
+                            char.IsDigit(cleaned[0]) && 
+                            char.IsLetter(cleaned[1]) && 
+                            char.IsDigit(cleaned[2]) && 
                             int.TryParse(cleaned[0].ToString(), out int diaSemana) &&
                             int.TryParse(cleaned.Substring(2), out int horario))
                         {
@@ -140,8 +133,31 @@ namespace SPAA.App.Controllers
                             Console.WriteLine($"Erro ao interpretar o formato do horário: '{horarioString}'");
                         }
                     }
-
+                    var disciplinasOptativasPorCurriculo = new List<Curriculo>();
+                    var turmasOptativasCompativelComHorario = new List<Turma>();
+                    
                     var disciplinasPendentes = await _disciplinaService.ObterDisciplinasLiberadas(User.Identity.Name);
+
+                    if (aluno.CurriculoAluno != null)
+                    {
+                         disciplinasOptativasPorCurriculo = await _curriculoRepository.ObterDisciplinasPorCurrciulo(aluno.CurriculoAluno, 2);
+                    }
+
+                    foreach (var disciplina in disciplinasOptativasPorCurriculo)
+                    {
+                        var turmas = await _turmaService.BuscarTurmasCompativeis(disciplina.NomeDisciplina, preferencias);
+                        turmasOptativasCompativelComHorario.AddRange(turmas);
+                    }
+
+                    if (!turmasOptativasCompativelComHorario.Any())
+                    {
+                        var todasTurmasOptativasDisponivel = await _CarregarTurmasOptativas();
+                        resultado.Turmas = todasTurmasOptativasDisponivel.Item1;
+                    }
+                    else
+                    {
+                        resultado.TurmasOptativas = _mapper.Map<List<TurmaViewModel>>(turmasOptativasCompativelComHorario);
+                    }
 
                     if (disciplinasPendentes == null || !disciplinasPendentes.Any())
                     {
@@ -160,7 +176,6 @@ namespace SPAA.App.Controllers
                         if (!turmasCompativelComHorario.Any())
                         {
                             resultado.Mensagem = "Nenhuma turma compatível foi encontrada. Por isso, estamos exibindo todas as turmas para as quais você já possui os pré-requisitos. Selecione a turma desejada e clique em “Salvar turma”.";
-                            // Se não houver turmas compatíveis, recarregar todas as obrigatórias
                             var todasTurmasDisponiveis = await _CarregarTurmasObrigatorias();
                             resultado.Turmas = todasTurmasDisponiveis.Item1;
                         }
@@ -182,34 +197,30 @@ namespace SPAA.App.Controllers
                     Console.WriteLine($"Erro inesperado em MontarGrade (POST - processamento): {ex.Message}");
                 }
             }
-            else // ModelState.IsValid é false
+            else 
             {
                 resultado.Mensagem = "Erro: Selecione os horários antes de enviar a disponibilidade!";
             }
 
-            // --- Recarregar Turmas Obrigatórias e Optativas em qualquer cenário (sucesso ou falha) ---
-            // Isso garante que as listas de turmas (Turmas e TurmasOptativas)
-            // sejam sempre populadas antes de retornar a view.
             try
             {
-                // Se a lista de turmas obrigatórias já foi preenchida no bloco acima com turmas compatíveis,
-                // não a sobrescrevemos. Caso contrário, recarregamos.
                 if (!resultado.Turmas.Any())
                 {
                     var turmasObrigatoriasRecarregadas = await _CarregarTurmasObrigatorias();
                     resultado.Turmas = turmasObrigatoriasRecarregadas.Item1;
                 }
 
-                var turmasOptativasRecarregadas = await _CarregarTurmasOptativas();
-                resultado.TurmasOptativas = turmasOptativasRecarregadas.Item1;
+                if (!resultado.TurmasOptativas.Any())
+                {
+                    var turmasObrigatoriasRecarregadas = await _CarregarTurmasOptativas();
+                    resultado.Turmas = turmasObrigatoriasRecarregadas.Item1;
+                }
 
-                // Carrega turmas salvas do aluno
                 var turmasSalvas = await _turmaSalvaRepository.TodasTurmasSalvasAluno(User.Identity.Name);
                 var codigosUnicosSalvos = turmasSalvas.Select(ts => ts.CodigoUnicoTurma).ToList();
                 var turmasSalvasViewModel = _mapper.Map<List<TurmaViewModel>>(turmasSalvas);
 
-                // Adiciona as turmas salvas à resposta
-                // Envia os códigos para a view
+
                 ViewData["TurmasSalvasCodigos"] = codigosUnicosSalvos;
                 ViewData["TurmasSalvas"] = turmasSalvasViewModel;
             }
@@ -257,13 +268,10 @@ namespace SPAA.App.Controllers
             }
         }
 
-        // --- Método Auxiliar para adicionar ementas aos ViewModels ---
         private async Task _AdicionarEmentasAsTurmasViewModel(List<TurmaViewModel> turmasViewModel)
         {
             if (turmasViewModel == null || !turmasViewModel.Any()) return;
 
-            // Para evitar múltiplas chamadas ao banco de dados para a mesma disciplina,
-            // podemos buscar todas as disciplinas necessárias de uma vez.
             var codigosDisciplinas = turmasViewModel
                                     .Where(t => !string.IsNullOrEmpty(t.CodigoDisciplina))
                                     .Select(t => t.CodigoDisciplina)
@@ -280,11 +288,10 @@ namespace SPAA.App.Controllers
                 }
                 else
                 {
-                    disciplinasComEmenta[codigo] = "Ementa não disponível."; // Default se não encontrar
+                    disciplinasComEmenta[codigo] = "Ementa não disponível."; 
                 }
             }
 
-            // Atribuir as ementas aos ViewModels
             foreach (var turmaVm in turmasViewModel)
             {
                 if (disciplinasComEmenta.TryGetValue(turmaVm.CodigoDisciplina, out string ementa))
@@ -311,14 +318,12 @@ namespace SPAA.App.Controllers
                 {
                     foreach (var disciplina in disciplinasPendentes)
                     {
-                        var turmas = await _turmaRepository.TurmasDisponiveisPorDisciplina(disciplina); // Usando Nome da Disciplina como você já faz
+                        var turmas = await _turmaRepository.TurmasDisponiveisPorDisciplina(disciplina); 
                         turmasBusiness.AddRange(turmas);
                     }
 
-                    // Mapear as entidades de negócio para ViewModels
                     turmasViewModel = _mapper.Map<List<TurmaViewModel>>(turmasBusiness);
 
-                    // ADICIONAR AS EMENTAS AQUI!
                     await _AdicionarEmentasAsTurmasViewModel(turmasViewModel);
                 }
                 else
@@ -346,7 +351,6 @@ namespace SPAA.App.Controllers
 
                 if (aluno != null && aluno.CurriculoAluno != null)
                 {
-                    // Obtendo as disciplinas do currículo optativo
                     var curriculosOptativos = await _curriculoRepository.ObterDisciplinasPorCurrciulo(aluno.CurriculoAluno, 2);
 
                     if (curriculosOptativos != null && curriculosOptativos.Any())
@@ -357,10 +361,8 @@ namespace SPAA.App.Controllers
                             turmasBusiness.AddRange(turmas);
                         }
 
-                        // Mapear as entidades de negócio para ViewModels
                         turmasViewModel = _mapper.Map<List<TurmaViewModel>>(turmasBusiness);
 
-                        // ADICIONAR AS EMENTAS AQUI!
                         await _AdicionarEmentasAsTurmasViewModel(turmasViewModel);
                     }
                     else
