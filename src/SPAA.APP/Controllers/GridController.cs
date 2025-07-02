@@ -146,7 +146,19 @@ namespace SPAA.App.Controllers
                     foreach (var disciplina in disciplinasOptativasPorCurriculo)
                     {
                         var turmas = await _turmaService.BuscarTurmasCompativeis(disciplina.NomeDisciplina, preferencias);
-                        turmasOptativasCompativelComHorario.AddRange(turmas);
+                        //turmasOptativasCompativelComHorario.AddRange(turmas);
+                        var nomesTurmasComPreRequisitos = await _disciplinaService.VerificaSeCumprePreRequisitos(turmas, aluno.Matricula);
+
+                        if (turmas != null && turmas.Any())
+                        {
+                            foreach (var turma in turmas)
+                            {
+                                if (nomesTurmasComPreRequisitos != null && nomesTurmasComPreRequisitos.Contains(turma.NomeDisciplina)) // Ou turma.Nome, ou a propriedade que 'VerificaSeCumprePreRequisitos' retorna.
+                                {
+                                    turmasOptativasCompativelComHorario.Add(turma);
+                                }
+                            }
+                        }
                     }
 
                     if (!turmasOptativasCompativelComHorario.Any())
@@ -213,7 +225,7 @@ namespace SPAA.App.Controllers
                 if (!resultado.TurmasOptativas.Any())
                 {
                     var turmasObrigatoriasRecarregadas = await _CarregarTurmasOptativas();
-                    resultado.Turmas = turmasObrigatoriasRecarregadas.Item1;
+                    resultado.TurmasOptativas = turmasObrigatoriasRecarregadas.Item1;
                 }
 
                 var turmasSalvas = await _turmaSalvaRepository.TodasTurmasSalvasAluno(User.Identity.Name);
