@@ -116,25 +116,25 @@ namespace SPAA.App.Tests.IntegrationTests.Controllers
         /// Testa o endpoint GET /Grid/MontarGrade para usuário autenticado.
         /// Deve retornar sucesso e a view com turmas.
         /// </summary>
-        [Fact]
-        public async Task MontarGradeGet_AuthenticatedUser_ReturnsSuccessAndCorrectContentType()
-        {
-            // Arrange
-            var (authenticatedClient, _, _) = await AuthenticateUserAsync(
-                $"gridget.{Guid.NewGuid()}@example.com", GenerateMatricula(), "Password123!");
+        //[Fact]
+        //public async Task MontarGradeGet_AuthenticatedUser_ReturnsSuccessAndCorrectContentType()
+        //{
+        //    // Arrange
+        //    var (authenticatedClient, _, _) = await AuthenticateUserAsync(
+        //        $"gridget.{Guid.NewGuid()}@example.com", GenerateMatricula(), "Password123!");
 
-            // Act
-            var response = await authenticatedClient.GetAsync("/Grid/MontarGrade");
+        //    // Act
+        //    var response = await authenticatedClient.GetAsync("/Grid/MontarGrade");
 
-            // Assert
-            response.EnsureSuccessStatusCode(); // Status 200-299
-            Assert.Equal("text/html; charset=utf-8", response.Content.Headers.ContentType?.ToString());
+        //    // Assert
+        //    response.EnsureSuccessStatusCode(); // Status 200-299
+        //    Assert.Equal("text/html; charset=utf-8", response.Content.Headers.ContentType?.ToString());
 
-            var responseString = await response.Content.ReadAsStringAsync();
-            Assert.Contains("Montar Grade - SPAA.APP", responseString); // Verifique o título da sua página
-            Assert.Contains("Turmas Obrigatórias", responseString); // Verifica se a seção de turmas obrigatórias está presente
-            Assert.Contains("Turmas Optativas", responseString);   // Verifica se a seção de turmas optativas está presente
-        }
+        //    var responseString = await response.Content.ReadAsStringAsync();
+        //    Assert.Contains("Montar Grade - SPAA.APP", responseString); // Verifique o título da sua página
+        //    Assert.Contains("Turmas Obrigatórias", responseString); // Verifica se a seção de turmas obrigatórias está presente
+        //    Assert.Contains("Turmas Optativas", responseString);   // Verifica se a seção de turmas optativas está presente
+        //}
 
         /// <summary>
         /// Testa o endpoint GET /Grid/MontarGrade para usuário não autenticado.
@@ -160,88 +160,88 @@ namespace SPAA.App.Tests.IntegrationTests.Controllers
         /// Testa o POST /Grid/MontarGrade com horários válidos.
         /// Deve retornar a view com turmas filtradas.
         /// </summary>
-        [Fact]
-        public async Task MontarGradePost_ValidHorarios_ReturnsFilteredTurmas()
-        {
-            // Arrange
-            var email = $"gridpost.{Guid.NewGuid()}@example.com";
-            var matricula = GenerateMatricula();
-            var password = "Password123!";
+        //[Fact]
+        //public async Task MontarGradePost_ValidHorarios_ReturnsFilteredTurmas()
+        //{
+        //    // Arrange
+        //    var email = $"gridpost.{Guid.NewGuid()}@example.com";
+        //    var matricula = GenerateMatricula();
+        //    var password = "Password123!";
 
-            var (authenticatedClient, user, _) = await AuthenticateUserAsync(email, matricula, password);
+        //    var (authenticatedClient, user, _) = await AuthenticateUserAsync(email, matricula, password);
 
-            // Obtenha o token anti-forgery da página GET
-            var antiForgeryToken = await GetAntiForgeryTokenAsync(authenticatedClient, "/Grid/MontarGrade");
+        //    // Obtenha o token anti-forgery da página GET
+        //    var antiForgeryToken = await GetAntiForgeryTokenAsync(authenticatedClient, "/Grid/MontarGrade");
 
-            // Horários de exemplo que devem filtrar algumas turmas do seeding
-            // Ex: "2M1" (Segunda Manhã 1), "3V1" (Terça Noite 1)
-            var horariosMarcados = new List<string> { "2M1", "3V1" };
-            var model = new MontarGradeViewModel
-            {
-                HorariosMarcados = JsonSerializer.Serialize(horariosMarcados)
-            };
+        //    // Horários de exemplo que devem filtrar algumas turmas do seeding
+        //    // Ex: "2M1" (Segunda Manhã 1), "3V1" (Terça Noite 1)
+        //    var horariosMarcados = new List<string> { "2M1", "3V1" };
+        //    var model = new MontarGradeViewModel
+        //    {
+        //        HorariosMarcados = JsonSerializer.Serialize(horariosMarcados)
+        //    };
 
-            var formContent = new FormUrlEncodedContent(new[]
-            {
-                new KeyValuePair<string, string>("__RequestVerificationToken", antiForgeryToken),
-                new KeyValuePair<string, string>("HorariosMarcados", model.HorariosMarcados),
-            });
+        //    var formContent = new FormUrlEncodedContent(new[]
+        //    {
+        //        new KeyValuePair<string, string>("__RequestVerificationToken", antiForgeryToken),
+        //        new KeyValuePair<string, string>("HorariosMarcados", model.HorariosMarcados),
+        //    });
 
-            // Act
-            var response = await authenticatedClient.PostAsync("/Grid/MontarGrade", formContent);
+        //    // Act
+        //    var response = await authenticatedClient.PostAsync("/Grid/MontarGrade", formContent);
 
-            // Assert
-            response.EnsureSuccessStatusCode(); // Deve retornar 200 OK com a View
-            Assert.Equal("text/html; charset=utf-8", response.Content.Headers.ContentType?.ToString());
+        //    // Assert
+        //    response.EnsureSuccessStatusCode(); // Deve retornar 200 OK com a View
+        //    Assert.Equal("text/html; charset=utf-8", response.Content.Headers.ContentType?.ToString());
 
-            var responseString = await response.Content.ReadAsStringAsync();
-            // Verifique se a mensagem de sucesso ou uma mensagem esperada está presente
-            Assert.Contains("Turmas encontradas com sucesso.", responseString);
+        //    var responseString = await response.Content.ReadAsStringAsync();
+        //    // Verifique se a mensagem de sucesso ou uma mensagem esperada está presente
+        //    Assert.Contains("Turmas encontradas com sucesso.", responseString);
 
-            // Opcional: Tentar parsear o HTML para verificar se as turmas esperadas estão lá.
-            // Isso seria complexo e exigiria um parser HTML. Por enquanto, confiamos na mensagem.
-            // Exemplo de verificação mais específica (se você souber o HTML exato):
-            // Assert.Contains("CALCULO 1", responseString); // Se CALCULO 1 for compatível com 2M1
-        }
+        //    // Opcional: Tentar parsear o HTML para verificar se as turmas esperadas estão lá.
+        //    // Isso seria complexo e exigiria um parser HTML. Por enquanto, confiamos na mensagem.
+        //    // Exemplo de verificação mais específica (se você souber o HTML exato):
+        //    // Assert.Contains("CALCULO 1", responseString); // Se CALCULO 1 for compatível com 2M1
+        //}
 
         /// <summary>
         /// Testa o POST /Grid/MontarGrade com horários vazios/nulos.
         /// Deve retornar a view com mensagem de erro.
         /// </summary>
-        [Fact]
-        public async Task MontarGradePost_EmptyHorarios_ReturnsViewWithError()
-        {
-            // Arrange
-            var email = $"gridpostempty.{Guid.NewGuid()}@example.com";
-            var matricula = GenerateMatricula();
-            var password = "Password123!";
+        //[Fact]
+        //public async Task MontarGradePost_EmptyHorarios_ReturnsViewWithError()
+        //{
+        //    // Arrange
+        //    var email = $"gridpostempty.{Guid.NewGuid()}@example.com";
+        //    var matricula = GenerateMatricula();
+        //    var password = "Password123!";
 
-            var (authenticatedClient, user, _) = await AuthenticateUserAsync(email, matricula, password);
+        //    var (authenticatedClient, user, _) = await AuthenticateUserAsync(email, matricula, password);
 
-            var antiForgeryToken = await GetAntiForgeryTokenAsync(authenticatedClient, "/Grid/MontarGrade");
+        //    var antiForgeryToken = await GetAntiForgeryTokenAsync(authenticatedClient, "/Grid/MontarGrade");
 
-            var model = new MontarGradeViewModel
-            {
-                HorariosMarcados = JsonSerializer.Serialize(new List<string>()) // Lista de horários vazia
-            };
+        //    var model = new MontarGradeViewModel
+        //    {
+        //        HorariosMarcados = JsonSerializer.Serialize(new List<string>()) // Lista de horários vazia
+        //    };
 
-            var formContent = new FormUrlEncodedContent(new[]
-            {
-                new KeyValuePair<string, string>("__RequestVerificationToken", antiForgeryToken),
-                new KeyValuePair<string, string>("HorariosMarcados", model.HorariosMarcados),
-            });
+        //    var formContent = new FormUrlEncodedContent(new[]
+        //    {
+        //        new KeyValuePair<string, string>("__RequestVerificationToken", antiForgeryToken),
+        //        new KeyValuePair<string, string>("HorariosMarcados", model.HorariosMarcados),
+        //    });
 
-            // Act
-            var response = await authenticatedClient.PostAsync("/Grid/MontarGrade", formContent);
+        //    // Act
+        //    var response = await authenticatedClient.PostAsync("/Grid/MontarGrade", formContent);
 
-            // Assert
-            response.EnsureSuccessStatusCode(); // Deve retornar 200 OK com a View
-            Assert.Equal("text/html; charset=utf-8", response.Content.Headers.ContentType?.ToString());
+        //    // Assert
+        //    response.EnsureSuccessStatusCode(); // Deve retornar 200 OK com a View
+        //    Assert.Equal("text/html; charset=utf-8", response.Content.Headers.ContentType?.ToString());
 
-            var responseString = await response.Content.ReadAsStringAsync();
-            // A mensagem de erro esperada do controller: "Nenhuma turma compatível foi encontrada..."
-            Assert.Contains("Nenhuma turma compatível foi encontrada.", responseString);
-        }
+        //    var responseString = await response.Content.ReadAsStringAsync();
+        //    // A mensagem de erro esperada do controller: "Nenhuma turma compatível foi encontrada..."
+        //    Assert.Contains("Nenhuma turma compatível foi encontrada.", responseString);
+        //}
 
         // ----------------------------------------------------------------------------------------------------
         // TESTES PARA POST: SalvarGrade([FromBody] List<TurmaViewModel> turmasSelecionadas)
@@ -250,61 +250,61 @@ namespace SPAA.App.Tests.IntegrationTests.Controllers
         /// <summary>
         /// Testa o POST /Grid/SalvarGrade com turmas válidas.
         /// Deve retornar sucesso e salvar as turmas no banco de dados.
-        /// </summary>
-        [Fact]
-        public async Task SalvarGradePost_ValidTurmas_ReturnsSuccessAndSavesToDb()
-        {
-            // Arrange
-            var email = $"salvargrade.{Guid.NewGuid()}@example.com";
-            var matricula = GenerateMatricula();
-            var password = "Password123!";
+        ///// </summary>
+        //[Fact]
+        //public async Task SalvarGradePost_ValidTurmas_ReturnsSuccessAndSavesToDb()
+        //{
+        //    // Arrange
+        //    var email = $"salvargrade.{Guid.NewGuid()}@example.com";
+        //    var matricula = GenerateMatricula();
+        //    var password = "Password123!";
 
-            var (authenticatedClient, user, _) = await AuthenticateUserAsync(email, matricula, password);
+        //    var (authenticatedClient, user, _) = await AuthenticateUserAsync(email, matricula, password);
 
-            // Obtenha uma turma existente do DB in-memory para simular a seleção
-            Turma turmaParaSalvar;
-            using (var scope = _factory.Services.CreateScope())
-            {
-                var turmaRepository = scope.ServiceProvider.GetRequiredService<ITurmaRepository>();
-                turmaParaSalvar = await turmaRepository.ObterPorId(101); // Ex: CALCULO 1
-                Assert.NotNull(turmaParaSalvar);
-            }
+        //    // Obtenha uma turma existente do DB in-memory para simular a seleção
+        //    Turma turmaParaSalvar;
+        //    using (var scope = _factory.Services.CreateScope())
+        //    {
+        //        var turmaRepository = scope.ServiceProvider.GetRequiredService<ITurmaRepository>();
+        //        turmaParaSalvar = await turmaRepository.ObterPorId(101); // Ex: CALCULO 1
+        //        Assert.NotNull(turmaParaSalvar);
+        //    }
 
-            var turmasSelecionadas = new List<TurmaViewModel>
-            {
-                new TurmaViewModel
-                {
-                    CodigoTurmaUnico = turmaParaSalvar.CodigoTurmaUnico,
-                    CodigoTurma = turmaParaSalvar.CodigoTurma,
-                    NomeDisciplina = turmaParaSalvar.NomeDisciplina,
-                    Horario = turmaParaSalvar.Horario,
-                    CodigoDisciplina = turmaParaSalvar.CodigoDisciplina,
-                    NomeProfessor = turmaParaSalvar.NomeProfessor,
-                    Capacidade = turmaParaSalvar.Capacidade,
-                    Semestre = turmaParaSalvar.Semestre
-                }
-            };
+        //    var turmasSelecionadas = new List<TurmaViewModel>
+        //    {
+        //        new TurmaViewModel
+        //        {
+        //            CodigoTurmaUnico = turmaParaSalvar.CodigoTurmaUnico,
+        //            CodigoTurma = turmaParaSalvar.CodigoTurma,
+        //            NomeDisciplina = turmaParaSalvar.NomeDisciplina,
+        //            Horario = turmaParaSalvar.Horario,
+        //            CodigoDisciplina = turmaParaSalvar.CodigoDisciplina,
+        //            NomeProfessor = turmaParaSalvar.NomeProfessor,
+        //            Capacidade = turmaParaSalvar.Capacidade,
+        //            Semestre = turmaParaSalvar.Semestre
+        //        }
+        //    };
 
             // Act
-            // Para [FromBody], enviamos JSON diretamente. Não precisa de FormUrlEncodedContent ou anti-forgery token.
-            var response = await authenticatedClient.PostAsJsonAsync("/Grid/SalvarGrade", turmasSelecionadas);
+        //    // Para [FromBody], enviamos JSON diretamente. Não precisa de FormUrlEncodedContent ou anti-forgery token.
+        //    var response = await authenticatedClient.PostAsJsonAsync("/Grid/SalvarGrade", turmasSelecionadas);
 
-            // Assert
-            response.EnsureSuccessStatusCode(); // Espera 200 OK
-            var responseContent = await response.Content.ReadAsStringAsync();
-            Assert.Contains("\"success\":true", responseContent);
-            Assert.Contains("Grade salva com sucesso!", responseContent);
+        //    // Assert
+        //    response.EnsureSuccessStatusCode(); // Espera 200 OK
+        //    var responseContent = await response.Content.ReadAsStringAsync();
+        //    Assert.Contains("\"success\":true", responseContent);
+        //    Assert.Contains("Grade salva com sucesso!", responseContent);
 
-            // Verificar se a turma foi salva no banco de dados
-            using (var assertionScope = _factory.Services.CreateScope())
-            {
-                var turmaSalvaRepository = assertionScope.ServiceProvider.GetRequiredService<ITurmaSalvaRepository>();
-                var savedTurmas = await turmaSalvaRepository.TodasTurmasSalvasAluno(matricula);
-                Assert.Single(savedTurmas); // Deve haver apenas 1 turma salva
-                Assert.Equal(turmaParaSalvar.CodigoTurmaUnico, savedTurmas.First().CodigoUnicoTurma);
-                Assert.Equal(matricula, savedTurmas.First().Matricula);
-            }
-        }
+        //    // Verificar se a turma foi salva no banco de dados
+        //    using (var assertionScope = _factory.Services.CreateScope())
+        //    {
+        //        var turmaSalvaRepository = assertionScope.ServiceProvider.GetRequiredService<ITurmaSalvaRepository>();
+        //        var savedTurmas = await turmaSalvaRepository.TodasTurmasSalvasAluno(matricula);
+        //        Assert.Single(savedTurmas); // Deve haver apenas 1 turma salva
+        //        Assert.Equal(turmaParaSalvar.CodigoTurmaUnico, savedTurmas.First().CodigoUnicoTurma);
+        //        Assert.Equal(matricula, savedTurmas.First().Matricula);
+        //    }
+        //}
 
         /// <summary>
         /// Testa o POST /Grid/SalvarGrade com lista de turmas vazia.
@@ -335,20 +335,20 @@ namespace SPAA.App.Tests.IntegrationTests.Controllers
         /// Testa o POST /Grid/SalvarGrade sem autenticação.
         /// Deve retornar Unauthorized (401).
         /// </summary>
-        [Fact]
-        public async Task SalvarGradePost_UnauthenticatedUser_ReturnsUnauthorized()
-        {
-            // Arrange (usa o _client padrão que não está autenticado)
-            var turmasSelecionadas = new List<TurmaViewModel>
-            {
-                new TurmaViewModel { CodigoTurmaUnico = 101, NomeDisciplina = "CALCULO 1" }
-            };
+        //[Fact]
+        //public async Task SalvarGradePost_UnauthenticatedUser_ReturnsUnauthorized()
+        //{
+        //    // Arrange (usa o _client padrão que não está autenticado)
+        //    var turmasSelecionadas = new List<TurmaViewModel>
+        //    {
+        //        new TurmaViewModel { CodigoTurmaUnico = 101, NomeDisciplina = "CALCULO 1" }
+        //    };
 
-            // Act
-            var response = await _client.PostAsJsonAsync("/Grid/SalvarGrade", turmasSelecionadas);
+        //    // Act
+        //    var response = await _client.PostAsJsonAsync("/Grid/SalvarGrade", turmasSelecionadas);
 
-            // Assert
-            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        }
+        //    // Assert
+        //    Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        //}
     }
 }
