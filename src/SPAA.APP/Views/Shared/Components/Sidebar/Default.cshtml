@@ -147,31 +147,16 @@
         aboutModal.show();
     }
 
-        document.getElementById("abrir-config").addEventListener("click", function (e) {
-        e.preventDefault()
-        var configModal = new bootstrap.Modal(document.getElementById('configuracoesModal'))
-        configModal.show()
-
-        // Adicione um listener para o evento "hidden.bs.modal" na modal de configurações
-        document.getElementById('configuracoesModal').addEventListener('hidden.bs.modal', function () {
-            console.log('Modal de configurações foi fechado.')
-        })
-    })
-
-        // No botão de excluir conta
-    document.querySelector('#configuracoesModal button[style*="background-color: red;"]').addEventListener('click', function (e) {
-        e.preventDefault()
-
-        // Feche a modal de configurações antes de abrir a modal de exclusão
-        var configModal = bootstrap.Modal.getInstance(document.getElementById('configuracoesModal'))
-        if (configModal) {
-            configModal.hide()
+    document.addEventListener("DOMContentLoaded", function () {
+        const configLink = document.getElementById("abrir-config");
+        if (configLink) {
+            configLink.addEventListener("click", function (e) {
+                e.preventDefault();
+                var modal = new bootstrap.Modal(document.getElementById('configuracoesModal'));
+                modal.show();
+            });
         }
-
-        // Abra a modal de exclusão
-        var deleteModal = new bootstrap.Modal(document.getElementById('confirmarExclusaoModal'))
-        deleteModal.show()
-    })
+    });
 
             document.addEventListener("DOMContentLoaded", function () {
         const menuToggle = document.getElementById('menu-toggle');
