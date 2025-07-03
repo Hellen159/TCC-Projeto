@@ -58,7 +58,8 @@ namespace SPAA.APP.Controllers
             _tarefaAlunoRepository = tarefaAlunoRepository;
         }
 
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<IActionResult> Index(string success)
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -84,7 +85,13 @@ namespace SPAA.APP.Controllers
             ViewData["Aprovadas"] = disciplinasViewModel.Aprovadas;
             ViewData["Pendentes"] = disciplinasViewModel.Pendentes;
             ViewData["TurmasSalvas"] = turmasSalvasViewModel;
-            ViewData["TarefasAluno"] = todasAsTarefasAluno; 
+            ViewData["TarefasAluno"] = todasAsTarefasAluno;
+
+            // Se veio da modal com sucesso
+            if (!string.IsNullOrEmpty(success))
+            {
+                TempData["MensagemSucesso"] = "Tarefas salvas com sucesso!";
+            }
 
             return View();
         }
@@ -94,54 +101,41 @@ namespace SPAA.APP.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-       
+
         [HttpPost]
         public async Task<IActionResult> SalvarTarefas([FromBody] List<TarefaViewModel> tarefasRecebidas)
         {
-            if (tarefasRecebidas == null || !tarefasRecebidas.Any())
-            {
-                return BadRequest(new { success = false, message = "Nenhuma tarefa para salvar foi fornecida." });
-            }
-
             string matriculaAluno = User.Identity.Name;
-
             if (string.IsNullOrEmpty(matriculaAluno))
-            {
-                return Unauthorized(new { success = false, message = "Matrícula do aluno não pode ser determinada. Certifique-se de estar logado." });
-            }
-
-            var tarefasParaSalvar = new List<TarefaAluno>();
-            foreach (var tvm in tarefasRecebidas)
-            {
-                if (!string.IsNullOrWhiteSpace(tvm.Descricao))
-                {
-                    tarefasParaSalvar.Add(new TarefaAluno
-                    {
-                        NomeTarefa = tvm.Descricao,
-                        Matricula = matriculaAluno,
-                        Horario = tvm.Horario
-                    });
-                }
-            }
-
-            if (!tarefasParaSalvar.Any())
-            {
-                return BadRequest(new { success = false, message = "Nenhuma tarefa válida para salvar após a filtragem (descrição vazia)." });
-            }
+                return Unauthorized(new { success = false, message = "Usuário não autenticado." });
 
             try
             {
-                foreach (var tarefa in tarefasParaSalvar)
+                // 1. Pegar todas as tarefas atuais do aluno
+                var tarefasAntigas = await _tarefaAlunoRepository.TodasTarefasDoAluno(matriculaAluno);
+
+                // 2. Apagar todas as tarefas antigas
+                foreach (var tarefa in tarefasAntigas)
                 {
-                    await _tarefaAlunoRepository.Adicionar(tarefa); 
+                    await _tarefaAlunoRepository.Remover(tarefa.CodigoTarefaAluno);
                 }
 
-                return Json(new { success = true, message = "Tarefas salvas com sucesso!", data = tarefasParaSalvar });
+                // 3. Adicionar as novas tarefas
+                foreach (var tarefa in tarefasRecebidas)
+                {
+                    await _tarefaAlunoRepository.Adicionar(new TarefaAluno
+                    {
+                        NomeTarefa = tarefa.Descricao,
+                        Horario = tarefa.Horario,
+                        Matricula = matriculaAluno
+                    });
+                }
+
+                return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro ao tentar salvar tarefas no banco de dados: {ex.Message}");
-                return StatusCode(500, new { success = false, message = "Ocorreu um erro interno ao salvar as tarefas.", error = ex.Message });
+                return StatusCode(500, new { success = false, message = "Erro ao salvar tarefas.", error = ex.Message });
             }
         }
 

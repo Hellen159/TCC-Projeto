@@ -289,6 +289,51 @@ W
         font-size: 0.8rem;
     }
 
+.td-tarefa {
+    position: relative;
+    cursor: pointer;
+}
+
+.btn-excluir-tarefa {
+    position: absolute;
+    top: 50%;
+    left: 90%; /* Ajuste fino para ficar à direita */
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background-color: rgba(255, 0, 0, 0.9);
+    border-radius: 50%;
+    color: white;
+    font-size: 14px;
+    text-align: center;
+    line-height: 18px;
+    z-index: 10;
+    cursor: pointer;
+    display: none;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+    animation: pulse 2s infinite;
+}
+
+.td-tarefa:hover .btn-excluir-tarefa {
+    display: block;
+    opacity: 1;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.6;
+    }
+}
+
 @media (max-width: 500px) {
     .tabela-grade thead tr th {
         font-size: 0.6rem;

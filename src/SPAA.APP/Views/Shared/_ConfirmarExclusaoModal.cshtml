@@ -1,0 +1,23 @@
+﻿@model SPAA.App.ViewModels.ConfirmarExclusaoViewModel
+
+<!-- Modal de Confirmação de Exclusão -->
+<div class="modal fade" id="confirmarExclusaoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="font-weight: bold; color: #435FA0;">Confirmar Exclusão de Conta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form style="display: flex; flex-direction: column; align-items: center;" asp-controller="Configuration" asp-action="ExcluirConta" method="post">
+                    <div style="display: flex; flex-direction: column;">
+                        <label for="Matricula">Digite sua Matrícula para Confirmar:</label>
+                        <input type="text" id="Matricula" name="Matricula" />
+                        <span asp-validation-for="Matricula" class="text-danger"></span>
+                    </div>
+                    <button style="margin-top:1.5rem; background-color:red; color:white;" type="submit">Confirmar Exclusão</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
