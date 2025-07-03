@@ -6,7 +6,7 @@ using SPAA.Business.Interfaces.Services;
 using SPAA.Business.Models;
 using System.Text.Json;
 using System.Linq;
-using Microsoft.AspNetCore.Authorization; 
+using Microsoft.AspNetCore.Authorization;
 
 namespace SPAA.App.Controllers
 {
@@ -49,16 +49,16 @@ namespace SPAA.App.Controllers
             var resultado = new MontarGradeResultViewModel
             {
                 Turmas = new List<TurmaViewModel>(),
-                TurmasOptativas = new List<TurmaViewModel>() 
+                TurmasOptativas = new List<TurmaViewModel>()
             };
 
             try
             {
                 var turmasObrigatorias = await _CarregarTurmasObrigatorias();
-                resultado.Turmas = turmasObrigatorias.Item1; 
+                resultado.Turmas = turmasObrigatorias.Item1;
 
                 var turmasOptativas = await _CarregarTurmasOptativas();
-                resultado.TurmasOptativas = turmasOptativas.Item1; 
+                resultado.TurmasOptativas = turmasOptativas.Item1;
 
                 var turmasSalvas = await _turmaSalvaRepository.TodasTurmasSalvasAluno(User.Identity.Name);
                 var codigosUnicosSalvos = turmasSalvas.Select(ts => ts.CodigoUnicoTurma).ToList();
@@ -97,8 +97,8 @@ namespace SPAA.App.Controllers
         {
             var resultado = new MontarGradeResultViewModel
             {
-                Turmas = new List<TurmaViewModel>(),         
-                TurmasOptativas = new List<TurmaViewModel>() 
+                Turmas = new List<TurmaViewModel>(),
+                TurmasOptativas = new List<TurmaViewModel>()
             };
 
             if (ModelState.IsValid)
@@ -115,9 +115,9 @@ namespace SPAA.App.Controllers
                         string cleaned = horarioString.Replace(" ", "").ToUpper();
 
                         if (cleaned.Length >= 3 &&
-                            char.IsDigit(cleaned[0]) && 
-                            char.IsLetter(cleaned[1]) && 
-                            char.IsDigit(cleaned[2]) && 
+                            char.IsDigit(cleaned[0]) &&
+                            char.IsLetter(cleaned[1]) &&
+                            char.IsDigit(cleaned[2]) &&
                             int.TryParse(cleaned[0].ToString(), out int diaSemana) &&
                             int.TryParse(cleaned.Substring(2), out int horario))
                         {
@@ -135,12 +135,12 @@ namespace SPAA.App.Controllers
                     }
                     var disciplinasOptativasPorCurriculo = new List<Curriculo>();
                     var turmasOptativasCompativelComHorario = new List<Turma>();
-                    
+
                     var disciplinasPendentes = await _disciplinaService.ObterDisciplinasLiberadas(User.Identity.Name);
 
                     if (aluno.CurriculoAluno != null)
                     {
-                         disciplinasOptativasPorCurriculo = await _curriculoRepository.ObterDisciplinasPorCurrciulo(aluno.CurriculoAluno, 2);
+                        disciplinasOptativasPorCurriculo = await _curriculoRepository.ObterDisciplinasPorCurrciulo(aluno.CurriculoAluno, 2);
                     }
 
                     foreach (var disciplina in disciplinasOptativasPorCurriculo)
@@ -153,7 +153,7 @@ namespace SPAA.App.Controllers
                         {
                             foreach (var turma in turmas)
                             {
-                                if (nomesTurmasComPreRequisitos != null && nomesTurmasComPreRequisitos.Contains(turma.NomeDisciplina)) // Ou turma.Nome, ou a propriedade que 'VerificaSeCumprePreRequisitos' retorna.
+                                if (nomesTurmasComPreRequisitos != null && nomesTurmasComPreRequisitos.Contains(turma.NomeDisciplina))
                                 {
                                     turmasOptativasCompativelComHorario.Add(turma);
                                 }
@@ -169,6 +169,7 @@ namespace SPAA.App.Controllers
                     else
                     {
                         resultado.TurmasOptativas = _mapper.Map<List<TurmaViewModel>>(turmasOptativasCompativelComHorario);
+                        await _AdicionarEmentasAsTurmasViewModel(resultado.TurmasOptativas); // <--- ADIÇÃO AQUI
                     }
 
                     if (disciplinasPendentes == null || !disciplinasPendentes.Any())
@@ -195,6 +196,7 @@ namespace SPAA.App.Controllers
                         {
                             resultado.Mensagem = "Turmas encontradas com sucesso. Selecione a turma desejada e clique em “Salvar turma”.";
                             resultado.Turmas = _mapper.Map<List<TurmaViewModel>>(turmasCompativelComHorario);
+                            await _AdicionarEmentasAsTurmasViewModel(resultado.Turmas); // <--- ADIÇÃO AQUI
                         }
                     }
                 }
@@ -209,7 +211,7 @@ namespace SPAA.App.Controllers
                     Console.WriteLine($"Erro inesperado em MontarGrade (POST - processamento): {ex.Message}");
                 }
             }
-            else 
+            else
             {
                 resultado.Mensagem = "Erro: Selecione os horários antes de enviar a disponibilidade!";
             }
@@ -285,10 +287,10 @@ namespace SPAA.App.Controllers
             if (turmasViewModel == null || !turmasViewModel.Any()) return;
 
             var codigosDisciplinas = turmasViewModel
-                                    .Where(t => !string.IsNullOrEmpty(t.CodigoDisciplina))
-                                    .Select(t => t.CodigoDisciplina)
-                                    .Distinct()
-                                    .ToList();
+                                        .Where(t => !string.IsNullOrEmpty(t.CodigoDisciplina))
+                                        .Select(t => t.CodigoDisciplina)
+                                        .Distinct()
+                                        .ToList();
 
             var disciplinasComEmenta = new Dictionary<string, string>();
             foreach (var codigo in codigosDisciplinas)
@@ -300,7 +302,7 @@ namespace SPAA.App.Controllers
                 }
                 else
                 {
-                    disciplinasComEmenta[codigo] = "Ementa não disponível."; 
+                    disciplinasComEmenta[codigo] = "Ementa não disponível.";
                 }
             }
 
@@ -330,7 +332,7 @@ namespace SPAA.App.Controllers
                 {
                     foreach (var disciplina in disciplinasPendentes)
                     {
-                        var turmas = await _turmaRepository.TurmasDisponiveisPorDisciplina(disciplina); 
+                        var turmas = await _turmaRepository.TurmasDisponiveisPorDisciplina(disciplina);
                         turmasBusiness.AddRange(turmas);
                     }
 
