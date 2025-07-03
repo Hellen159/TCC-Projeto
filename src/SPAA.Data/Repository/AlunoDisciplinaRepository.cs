@@ -74,6 +74,11 @@ namespace SPAA.Data.Repository
 
         public async Task InserirEquivalencias(List<AlunoDisciplina> equivalencias, string matricula)
         {
+            if (equivalencias == null || !equivalencias.Any())
+            {
+                return; 
+            }
+
             foreach (var disciplina in equivalencias)
             {
                 bool jaExiste = await DbSet.AnyAsync(d =>
@@ -86,7 +91,6 @@ namespace SPAA.Data.Repository
                     DbSet.Add(disciplina);
                 }
             }
-
             await SaveChanges();
         }
 
