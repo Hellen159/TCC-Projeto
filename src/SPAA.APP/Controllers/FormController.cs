@@ -23,51 +23,55 @@ namespace SPAA.App.Controllers
         public IActionResult CalcularPerfil([FromBody] List<RespostasPerguntasFormularioAlunoViewModel> respostas)
         {
             if (respostas == null || !respostas.Any())
-                return BadRequest("Nenhuma resposta recebida.");
+                return Json(new { error = "Nenhuma resposta recebida." });
 
-            var perfilNotas = new Dictionary<string, List<int>>();
-            var terciarios = new Dictionary<string, List<int>>();
+            var perfilContagem = new Dictionary<string, int>();
+            int totalValidos = 0;
 
             foreach (var resp in respostas)
             {
-                if (resp.Perfil.StartsWith("Engenharia"))
-                {
-                    if (!terciarios.ContainsKey(resp.Perfil))
-                        terciarios[resp.Perfil] = new List<int>();
+                if (resp.Perfil == "Nada") continue;
 
-                    terciarios[resp.Perfil].Add(resp.Nota);
-                }
-                else
-                {
-                    if (!perfilNotas.ContainsKey(resp.Perfil))
-                        perfilNotas[resp.Perfil] = new List<int>();
+                if (!perfilContagem.ContainsKey(resp.Perfil))
+                    perfilContagem[resp.Perfil] = 0;
 
-                    perfilNotas[resp.Perfil].Add(resp.Nota);
+                perfilContagem[resp.Perfil]++;
+                totalValidos++;
+            }
+
+            // Calcular porcentagens
+            var perfisPorcentagem = perfilContagem
+                .ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => (kvp.Value * 100.0) / totalValidos
+                );
+
+            // Filtrar e ordenar por porcentagem
+            var perfisFiltrados = perfisPorcentagem
+                .Where(kvp => kvp.Value >= 22) // Apenas perfis com pelo menos 35%
+                .OrderByDescending(kvp => kvp.Value)
+                .ToList();
+
+            string principal = null;
+            List<string> secundarios = new List<string>();
+
+            if (perfisFiltrados.Count > 0)
+            {
+                principal = $"{perfisFiltrados[0].Key} ";
+                if (perfisFiltrados.Count > 1)
+                {
+                    secundarios.Add($"{perfisFiltrados[1].Key}");
+                    if (perfisFiltrados.Count > 2)
+                    {
+                        secundarios.Add($"{perfisFiltrados[2].Key}");
+                    }
                 }
             }
 
-            var principais = perfilNotas
-                .Select(p => new { Perfil = p.Key, Media = p.Value.Average() })
-                .OrderByDescending(p => p.Media)
-                .ToList();
-
-            var principal = principais.FirstOrDefault();
-            var secundarios = principais.Skip(1).Where(p => p.Media >= 7).ToList();
-
-            var terciariosSelecionados = terciarios
-                .Select(p => new { Perfil = p.Key, Media = p.Value.Average() })
-                .Where(p => p.Media >= 7)
-                .ToList();
-
-            // Salvar no banco se necessário
-            // _repositorio.SalvarPerfil(usuarioId, principal.Perfil, secundarios, terciariosSelecionados);
-
             return Json(new
             {
-                principal = principal != null ? $"{principal.Perfil} (média {principal.Media:F2})" : "Nenhum perfil detectado.",
-                secundarios = secundarios.Any()
-                    ? string.Join(", ", secundarios.Select(p => $"{p.Perfil} ({p.Media:F2})"))
-                    : "Nenhum perfil secundário detectado."
+                principal = principal ?? "Nenhum perfil detectado.",
+                secundarios = secundarios
             });
         }
     }
