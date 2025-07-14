@@ -32,62 +32,32 @@ namespace SPAA.Data.Mappings
                 new AreaInteresse
                 {
                     CodigoAreaInteresse = 1,
-                    NomeAreaInteresse = "Desenvolvimento Web",
-                    Descricao = "Interesse no desenvolvimento de aplicações frontend/backend, APIs, frameworks modernos."
+                    NomeAreaInteresse = "Programação e Infraestrutura Técnica",
+                    Descricao = "Construção de código, uso de linguagens de programação, redes, sistemas operacionais, bancos de dados e arquitetura de sistemas."
                 },
                 new AreaInteresse
                 {
                     CodigoAreaInteresse = 2,
-                    NomeAreaInteresse = "Inteligência Artificial",
-                    Descricao = "Interesse em machine learning, redes neurais, NLP, etc."
+                    NomeAreaInteresse = "Projeto e Análise de Software",
+                    Descricao = "Relacionado à análise de problemas, levantamento de requisitos, design de soluções, experiência do usuário e modelagem."
                 },
                 new AreaInteresse
                 {
                     CodigoAreaInteresse = 3,
-                    NomeAreaInteresse = "Sistemas e Baixo Nível",
-                    Descricao = "Interesse em sistemas operacionais, compiladores, engenharia reversa, infraestrutura."
+                    NomeAreaInteresse = "Qualidade, Testes e Manutenção",
+                    Descricao = "Inclui atividades de verificação e validação de software, testes automatizados, controle de qualidade e manutenção de sistemas."
                 },
                 new AreaInteresse
                 {
                     CodigoAreaInteresse = 4,
-                    NomeAreaInteresse = "Computação Teórica",
-                    Descricao = "Interesse em fundamentos da computação, autômatos, lógica formal, complexidade."
+                    NomeAreaInteresse = "Gestão de Produtos e Processos",
+                    Descricao = "Envolve definição de escopo, métricas, acompanhamento de equipes e organização de processos de desenvolvimento."
                 },
                 new AreaInteresse
                 {
                     CodigoAreaInteresse = 5,
-                    NomeAreaInteresse = "Engenharia de Software",
-                    Descricao = "Interesse em requisitos, documentação, gestão de projetos, qualidade de software."
-                },
-                new AreaInteresse
-                {
-                    CodigoAreaInteresse = 6,
-                    NomeAreaInteresse = "Desempenho e Algoritmos",
-                    Descricao = "Interesse na criação de algoritmos otimizados e análise de performance."
-                },
-                new AreaInteresse
-                {
-                    CodigoAreaInteresse = 7,
-                    NomeAreaInteresse = "Competição e Programação",
-                    Descricao = "Interesse em maratonas, hackathons, resolução de problemas competitivos."
-                },
-                new AreaInteresse
-                {
-                    CodigoAreaInteresse = 8,
-                    NomeAreaInteresse = "Segurança e Hacking Ético",
-                    Descricao = "Interesse em segurança da informação, criptografia, testes de invasão."
-                },
-                new AreaInteresse
-                {
-                    CodigoAreaInteresse = 9,
-                    NomeAreaInteresse = "Desenvolvimento Profissional",
-                    Descricao = ""
-                },
-                new AreaInteresse
-                {
-                    CodigoAreaInteresse = 10,
-                    NomeAreaInteresse = "Desenvolvimento Acadêmico / Bem-estar",
-                    Descricao = ""
+                    NomeAreaInteresse = "Fundamentos Matemáticos e Computacionais",
+                    Descricao = "Abrange raciocínio lógico, estatística, pesquisa operacional, linguagens formais e construção de algoritmos."
                 }
             );
         }

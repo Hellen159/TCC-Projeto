@@ -10,7 +10,7 @@ namespace SPAA.Business.Models
     {
         public int CodigoAreaInteresseAluno { get; set; }
         public string Matricula { get; set; }
-        public int CodigoAreaInteresse { get; set; }
-        public string NivelInteresse { get; set; }
+        public string AreaInteressePrincipal { get; set; }
+        public string AreaInteresseSecundaria { get; set; }
     }
 }
