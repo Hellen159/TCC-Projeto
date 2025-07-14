@@ -1,4 +1,6 @@
-﻿const perguntas = [
+﻿let calculatedProfileData = null; // Para armazenar o perfil principal e secundários
+
+const perguntas = [
     {
         id: "1",
         texto: "Durante o desenvolvimento de um sistema para uma organização, a equipe precisa tomar decisões críticas. Uma delas é escolher entre priorizar a estrutura robusta do backend ou focar primeiro na prototipação rápida da interface. O prazo é apertado, e ambas são importantes. Diante disso, qual decisão você defenderia com mais convicção?",
@@ -171,6 +173,9 @@ function enviarRespostas() {
             return res.json();
         })
         .then(resultado => {
+            // Armazena o resultado para uso posterior
+            calculatedProfileData = resultado;
+
             document.getElementById("step2").classList.remove("active");
             document.getElementById("step3").classList.add("active");
 
@@ -204,3 +209,71 @@ function enviarRespostas() {
         `;
         });
 }
+
+function finalizarFormulario() {
+    if (!calculatedProfileData) {
+        console.error("Nenhum perfil calculado para salvar.");
+        document.getElementById("validationMessages").innerHTML = `
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        Não foi possível salvar o perfil. Por favor, refaça o questionário.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    `;
+        return;
+    }
+
+    // Requisição para salvar o perfil
+    fetch('/Form/SalvarPerfil', { // Este é o endpoint que criaremos no C#
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            Principal: calculatedProfileData.principal,
+            Secundarios: calculatedProfileData.secundarios
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                // Se a resposta HTTP não for 2xx (ex: 400, 500)
+                return response.text().then(text => { throw new Error(text); }); // Tentar ler como texto para ver a mensagem de erro do servidor
+            }
+            return response.json(); // Esperamos um JSON do servidor
+        })
+        .then(data => {
+            if (data.success) {
+                // Sucesso: exibe mensagem e redireciona
+                alert(data.message); // Ou usa um sistema de notificação mais elegante
+                // Redireciona para a página inicial (ou para onde o servidor disser)
+                window.location.href = data.redirectUrl || '/Home/Index';
+            } else {
+                // Erro: exibe mensagem na div de validação
+                document.getElementById("validationMessages").innerHTML = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          ${data.message || 'Erro desconhecido ao salvar perfil.'}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      `;
+            }
+        })
+        .catch(error => {
+            console.error("Erro ao finalizar formulário:", error);
+            document.getElementById("validationMessages").innerHTML = `
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        Ocorreu um erro inesperado ao salvar o perfil. (${error.message})
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    `;
+        });
+}
+
+// Adiciona o event listener ao botão ANTES de qualquer função que possa depender disso, idealmente no final do script ou em um DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+    const btnTerminar = document.getElementById('btnTerminarFormulario');
+    if (btnTerminar) {
+        btnTerminar.addEventListener('click', finalizarFormulario);
+    }
+});
+
+// Se preferir, pode manter o onclick="finalizarFormulario()" diretamente no HTML do botão e remover o addEventListener
+// Mas o addEventListener é geralmente mais limpo e flexível.

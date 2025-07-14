@@ -10,5 +10,6 @@ namespace SPAA.Business.Interfaces.Repository
     public interface IAreaInteresseAlunoRepository : IRepository<AreaInteresseAluno, int>
     {
         Task<bool> AlunoJaTemAreaInteresse(string matricula);
+        Task<bool> ExcluirAreaInteresseAluno(string matricula);
     }
 }

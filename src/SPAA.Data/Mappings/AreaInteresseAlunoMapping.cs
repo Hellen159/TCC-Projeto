@@ -20,16 +20,17 @@ namespace SPAA.Data.Mappings
             builder.Property(ai => ai.CodigoAreaInteresseAluno)
                 .HasColumnName("cd_area_interesse_aluno");
 
-            builder.Property(ai => ai.CodigoAreaInteresse)
-                .HasColumnName("cd_area_interesse");
-
             builder.Property(ai => ai.Matricula)
                 .HasColumnType("varchar(9)")
                 .HasColumnName("matricula");
 
-            builder.Property(ai => ai.NivelInteresse)
+            builder.Property(ai => ai.AreaInteressePrincipal)
                 .HasColumnType("varchar(100)")
-                .HasColumnName("nivel_interesse");
+                .HasColumnName("area_interesse_principal");
+
+            builder.Property(ai => ai.AreaInteresseSecundaria)
+                .HasColumnType("varchar(100)")
+                .HasColumnName("area_interesse_secundaria");
         }
     }
 }

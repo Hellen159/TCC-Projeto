@@ -20,5 +20,20 @@ namespace SPAA.Data.Repository
         {
             return await DbSet.AnyAsync(ai => ai.Matricula == matricula);
         }
+
+        public async Task<bool> ExcluirAreaInteresseAluno (string matricula)
+        {
+            var areaInteresseAluno = await DbSet
+                .Where(aia => aia.Matricula == matricula)
+                .ToListAsync();
+
+            if (!areaInteresseAluno.Any())
+                return false;
+
+            DbSet.RemoveRange(areaInteresseAluno);
+            await SaveChanges();
+
+            return true;
+        }
     }
 }
