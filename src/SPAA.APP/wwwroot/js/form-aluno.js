@@ -14,7 +14,7 @@ const perguntas = [
         id: "2",
         texto: "Uma funcionalidade lançada recentemente começou a apresentar falhas intermitentes. A equipe precisa resolver a situação rapidamente. Diante da pressão do tempo, qual seria seu primeiro passo?",
         opcoes: [
-            { valor: "A", texto: "Investigar causas profundas, revisar decisões anteriores e entender o impacto no design.", perfil: "Projeto e Análise de Software" },
+            { valor: "A", texto: "Investigar causas profundas, revisar as decisões anteriores e entender o impacto no design.", perfil: "Projeto e Análise de Software" },
             { valor: "B", texto: "Eu começaria por qualquer um dos dois caminhos, dependendo de quem me pedisse para agir primeiro.", perfil: "Nada" },
             { valor: "C", texto: "Aplicar testes automatizados, revisar logs e garantir estabilidade antes de investigar causas profundas.", perfil: "Qualidade, Testes e Manutenção" }
         ]
@@ -42,7 +42,7 @@ const perguntas = [
         texto: "Uma startup quer desenvolver um sistema que funcione para milhões de usuários, com alta performance e segurança. Antes de começar, é preciso decidir qual aspecto discutir primeiro. Qual você priorizaria?",
         opcoes: [
             { valor: "A", texto: "Arquitetura escalável, banco de dados eficiente e servidores bem distribuídos.", perfil: "Programação e Infraestrutura Técnica" },
-            { valor: "B", texto: "Eu seguiria a decisão da maioria do time ou do líder do projeto.", perfil: "Nada" },
+            { valor: "B", texto: "Eu simplesmente seguiria a decisão da maioria do time ou do líder do projeto.", perfil: "Nada" },
             { valor: "C", texto: "Entender o usuário final e mapear suas necessidades reais antes de projetar a infra.", perfil: "Projeto e Análise de Software" }
         ]
     },
@@ -135,6 +135,9 @@ perguntas.forEach((p, index) => {
     const div = document.createElement("div");
     div.className = "question";
     div.innerHTML = `
+        <div class="image-container">
+            <img src="/assets/form/q${index + 1}e_image.png" alt="Imagem da Pergunta ${index + 1}" class="question-image" />
+        </div>
         <h4>${index + 1}. ${p.texto}</h4>
         <div class="rating">
             ${p.opcoes.map(opcao => `
